@@ -90,7 +90,7 @@ def evaluate_scenario_intensity(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
     # good_matches = sorted(good_matches, key = lambda x:x.distance)
     return Prob_True, good_matches, matches
 
-def evaluate_scenario_scale(matcher, KP1, KP2, Dspt1, Dspt2, norm_type, scale):
+def evaluate_scenario_scale    (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, scale):
     if matcher == 0: # Brute-force matcher
         bf = cv2.BFMatcher(norm_type, crossCheck=True) 
         matches = bf.match(Dspt1, Dspt2)
@@ -123,7 +123,7 @@ def evaluate_scenario_scale(matcher, KP1, KP2, Dspt1, Dspt2, norm_type, scale):
     # good_matches = sorted(good_matches, key = lambda x:x.distance)
     return Prob_True, good_matches, matches
 
-def evaluate_scenario_rotation(matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot, rot_matrix):
+def evaluate_scenario_rotation (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot, rot_matrix):
     if matcher == 0: # Brute-force matcher
         bf = cv2.BFMatcher(norm_type, crossCheck=True) 
         matches = bf.match(Dspt1, Dspt2)
@@ -258,7 +258,7 @@ def execute_scenario_intensity(a=100, b=100, drawing=False, save=True):
         saveAverageCSV(Rate_intensity, Exec_time_intensity, "intensity")
         saveAllCSV(Rate_intensity, Exec_time_intensity, "intensity")
 
-def execute_scenario_scale(a=100, b=100, drawing=False, save=True):
+def execute_scenario_scale    (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 2 Scale")
     Rate_scale        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
@@ -356,7 +356,7 @@ def execute_scenario_scale(a=100, b=100, drawing=False, save=True):
         saveAverageCSV(Rate_scale, Exec_time_scale, "scale")
         saveAllCSV(Rate_scale, Exec_time_scale, "scale")
 
-def execute_scenario_rotation(a=100, b=100, drawing=False, save=True):
+def execute_scenario_rotation (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 3 Rotation")
     Rate_rot          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
