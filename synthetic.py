@@ -159,7 +159,7 @@ def evaluate_scenario_rotation (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot,
     # good_matches = sorted(good_matches, key = lambda x:x.distance)
     return Prob_True, good_matches, matches
 
-def execute_scenario_intensity(a=100, b=100, drawing=False, save=True):
+def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 1 Intensity")
     Rate_intensity      = np.load(f"./arrays/Rate_intensity.npy")      if os.path.exists(f"./arrays/Rate_intensity.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
@@ -258,7 +258,7 @@ def execute_scenario_intensity(a=100, b=100, drawing=False, save=True):
         saveAverageCSV(Rate_intensity, Exec_time_intensity, "intensity")
         saveAllCSV(Rate_intensity, Exec_time_intensity, "intensity")
 
-def execute_scenario_scale    (a=100, b=100, drawing=False, save=True):
+def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 2 Scale")
     Rate_scale        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
@@ -356,7 +356,7 @@ def execute_scenario_scale    (a=100, b=100, drawing=False, save=True):
         saveAverageCSV(Rate_scale, Exec_time_scale, "scale")
         saveAllCSV(Rate_scale, Exec_time_scale, "scale")
 
-def execute_scenario_rotation (a=100, b=100, drawing=False, save=True):
+def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 3 Rotation")
     Rate_rot          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)

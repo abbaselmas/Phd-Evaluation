@@ -10,9 +10,9 @@ custom_html = '''
         </span>
         <span style="left: 20px;">
             <label for="minValueInput">Min:</label>
-            <input type="number" id="minValueInput" class="min-range" step="0.1" oninput="applyFilters()">
+            <input type="number" id="minValueInput" min="0" max="999" step="0.05" oninput="applyFilters()">
             <label for="maxValueInput">Max:</label>
-            <input type="number" id="maxValueInput" class="max-range" step="0.1" oninput="applyFilters()">
+            <input type="number" id="maxValueInput" min="0" max="999" step="0.05" oninput="applyFilters()">
         </span>
     </div>
     <script>
@@ -29,14 +29,11 @@ custom_html = '''
         if (isNaN(maxThreshold)) maxThreshold = Infinity;
         var plot = document.querySelectorAll('.js-plotly-plot')[0];
         var data = plot.data;
-        // Apply both filters
         for (i = 0; i < data.length; i++) {
             var traceName = data[i].name || "";
             var yValues = data[i].y;
             var showTrace = false;
-            // Check name filter
             if (traceName.toUpperCase().indexOf(filter) > -1) {
-                // If there's a name filter, check the value filter
                 if (yValues) {
                     for (j = 0; j < yValues.length; j++) {
                         if (yValues[j] >= minThreshold && yValues[j] <= maxThreshold) {
@@ -48,10 +45,8 @@ custom_html = '''
                     showTrace = true; // No y-values, just based on name filter
                 }
             }
-            // Set visibility based on combined filters
             data[i].visible = showTrace ? true : false;
         }
-        // Redraw the plot with updated visibility
         Plotly.redraw(plot);
     }
     </script>
@@ -83,16 +78,16 @@ def synthetic(name='Precision', rate=13):
                     legend_groupfig1 = f'{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}'
                     if not (np.isnan(Rate2_I1).any()):
                         fig1trace_I1    = go.Scatter(x=val_b, y=Rate2_I1, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig1, showlegend=True,  legendgroup=legend_groupfig1)
-                        fig1.add_trace(fig1trace_I1, row=1, col=1)
+                        fig1.add_trace(fig1trace_I1,   row=1, col=1)
                     if not (np.isnan(Rate2_I2).any()):   
                         fig1trace_I2    = go.Scatter(x=val_c, y=Rate2_I2, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig1, showlegend=False, legendgroup=legend_groupfig1)
-                        fig1.add_trace(fig1trace_I2, row=1, col=2)
+                        fig1.add_trace(fig1trace_I2,   row=1, col=2)
                     if not (np.isnan(Rate2_S).any()):              
                         fig1trace_Scale = go.Scatter(x=scale, y=Rate2_S,  mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig1, showlegend=False, legendgroup=legend_groupfig1)
-                        fig1.add_trace(fig1trace_Scale,  row=2, col=1)
+                        fig1.add_trace(fig1trace_Scale, row=2, col=1)
                     if not (np.isnan(Rate2_R).any()):
                         fig1trace_Rot   = go.Scatter(x=rot,   y=Rate2_R,  mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig1, showlegend=False, legendgroup=legend_groupfig1)
-                        fig1.add_trace(fig1trace_Rot,  row=2, col=2)
+                        fig1.add_trace(fig1trace_Rot,   row=2, col=2)
                     color_index += 1
     # Dropdown for Detector
     dropdown_detectors = []

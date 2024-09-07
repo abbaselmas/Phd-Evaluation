@@ -49,11 +49,11 @@ beblid = cv2.xfeatures2d.BEBLID_create(scale_factor=6.25, n_bits=100)
 teblid = cv2.xfeatures2d.TEBLID_create(scale_factor=6.25, n_bits=102)
 boost  = cv2.xfeatures2d.BoostDesc_create(desc=100, use_scale_orientation=True, scale_factor=6.25)
 
-Detectors   = list([sift, akaze, orb, brisk, kaze, fast, mser, agast, gftt, gftt_harris, star, hl, msd, tbmr])
-#                   0     1      2    3      4     5     6     7      8     9            10    11  12   13
-Descriptors = list([sift, akaze, orb, brisk, kaze, daisy, freak, brief, lucid, latch, vgg, beblid, teblid, boost]) 
-#                   0     1      2    3      4     5      6      7      8      9      10   11      12      13
-Normalization    = list([cv2.NORM_L2, cv2.NORM_HAMMING])
+Detectors     = list([sift, akaze, orb, brisk, kaze, fast, mser, agast, gftt, gftt_harris, star, hl, msd, tbmr])
+#                     0     1      2    3      4     5     6     7      8     9            10    11  12   13
+Descriptors   = list([sift, akaze, orb, brisk, kaze, daisy, freak, brief, lucid, latch, vgg, beblid, teblid, boost]) 
+#                     0     1      2    3      4     5      6      7      8      9      10   11      12      13
+Normalization = list([cv2.NORM_L2, cv2.NORM_HAMMING])
 
 def match_with_bf_ratio_test(matcher, Dspt1, Dspt2, norm_type, threshold_ratio=0.8):
     if matcher == 0: # Brute-force matcher
