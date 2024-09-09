@@ -61,9 +61,8 @@ def synthetic(name='Precision', rate=13):
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
                             horizontal_spacing=0.05, vertical_spacing=0.07, y_title=f"{name}")
-    fig1.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=20, r=20, t=60, b=60))
+    fig1.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
-    fig1.update_yaxes(range=[0, 1])
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -103,10 +102,8 @@ def syntheticPR(name='Precision-Recall', x=13, y=12):
     Rate_scale     = np.load('./arrays/Rate_scale.npy')
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title='Recall', y_title='Precision')
-    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=20, r=20, t=60, b=60))
-    fig2.update_xaxes(range=[0, 1])
-    fig2.update_yaxes(range=[0, 1])
+                            horizontal_spacing=0.05, vertical_spacing=0.07)
+    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60),xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1])
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -155,7 +152,7 @@ def synthetic_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
+    fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -212,13 +209,12 @@ def oxford(name='Precision', rate=13):
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.04, vertical_spacing=0.06, y_title=f"{name}")
-    fig4.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=20, r=20, t=60, b=60))
+                            horizontal_spacing=0.04, vertical_spacing=0.06, y_title=name)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
-    fig4.update_layout( xaxis  = dict(tickmode = 'array', tickvals = xvals),xaxis2 = dict(tickmode = 'array', tickvals = xvals),xaxis3 = dict(tickmode = 'array', tickvals = xvals),
+    fig4.update_layout( title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60),
+                        xaxis  = dict(tickmode = 'array', tickvals = xvals),xaxis2 = dict(tickmode = 'array', tickvals = xvals),xaxis3 = dict(tickmode = 'array', tickvals = xvals),
                         xaxis4 = dict(tickmode = 'array', tickvals = xvals),xaxis5 = dict(tickmode = 'array', tickvals = xvals),xaxis6 = dict(tickmode = 'array', tickvals = xvals),
                         xaxis7 = dict(tickmode = 'array', tickvals = xvals),xaxis8 = dict(tickmode = 'array', tickvals = xvals),xaxis9 = dict(tickmode = 'array', tickvals = xvals))
-    fig4.update_yaxes(range=[0, 1])
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -280,10 +276,8 @@ def oxfordPR(name='Precision-Recall', x=13, y=12):
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
     fig5 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.06, vertical_spacing=0.06, x_title='Recall', y_title='Precision')
-    fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=20, r=20, t=60, b=60))
-    fig5.update_xaxes(range=[0, 1])
-    fig5.update_yaxes(range=[0, 1])
+                            horizontal_spacing=0.06, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
+    fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -361,7 +355,7 @@ def oxford_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
+    fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -411,8 +405,7 @@ def drone(name='Precision', rate=13):
     Rate_drone = np.load('./arrays/Rate_drone.npy')
     fig7 = go.Figure()
     xvals = [f'Img{i}' for i in range(153, 188)]
-    fig7.update_layout(title_text=f"Drone Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=20, r=20, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
-    fig7.update_yaxes(range=[0, 1], title_text=f"{name}")
+    fig7.update_layout(title_text=f"Drone Data - {name}", yaxis_title=name, title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -437,9 +430,7 @@ def dronePR(name='Precision-Recall', x=13, y=12):
     Rate_drone = np.load('./arrays/Rate_drone.npy')
     fig8 = go.Figure()
     xvals = [f'Img{i}' for i in range(153, 188)]
-    fig8.update_layout(title_text=f"Drone Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=20, r=20, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
-    fig8.update_yaxes(range=[0, 1], title_text="Precision")
-    fig8.update_xaxes(range=[0, 1], title_text="Recall") 
+    fig8.update_layout(title_text=f"Drone Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -470,7 +461,7 @@ def drone_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig9.update_layout(title_text="Drone Data Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
+    fig9.update_layout(title_text="Drone Data Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -520,8 +511,7 @@ def uav(name='Precision', rate=13):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig10 = go.Figure()
     xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig10.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=20, r=20, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
-    fig10.update_yaxes(range=[0, 1], title_text=f"{name}") 
+    fig10.update_layout(title_text=f"UAV Data - {name}", yaxis_title=name, title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -546,9 +536,7 @@ def uavPR(name='Precision-Recall', x=13, y=12):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig11 = go.Figure()
     xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig11.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=20, r=20, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
-    fig11.update_yaxes(range=[0, 1], title_text="Precision")
-    fig11.update_xaxes(range=[0, 1], title_text="Recall") 
+    fig11.update_layout(title_text=f"UAV Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -579,7 +567,7 @@ def uav_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig12.update_layout(title_text="UAV Data - Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
+    fig12.update_layout(title_text="UAV Data - Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
