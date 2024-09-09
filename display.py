@@ -4,7 +4,7 @@ import numpy as np
 from define import *
 
 custom_html = '''
-    <div style="position: absolute; top: 20px; left: 20px; z-index: 1000;">
+    <div style="position: absolute; bottom: 10px; left: 20px; z-index: 1000;">
         <span style="margin: 20px;">
             <input type="text" id="filterInput" oninput="applyFilters()" placeholder="Method">
         </span>
@@ -61,7 +61,7 @@ def synthetic(name='Precision', rate=13):
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
                             horizontal_spacing=0.05, vertical_spacing=0.07, y_title=f"{name}")
-    fig1.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=0, t=60, b=25))
+    fig1.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=0, t=60, b=60))
     fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
     fig1.update_yaxes(range=[0, 1])
     color_index = 0
@@ -102,9 +102,9 @@ def synthetic(name='Precision', rate=13):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig1.data)},{"title": "Synthetic Dataset - {name}"}])
     fig1.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.04),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.04)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig1.write_html(f"./html/synthetic_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -165,9 +165,9 @@ def syntheticPR(name='Precision-Recall', x=13, y=12):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig1.data)},{"title": "Synthetic Dataset - {name}"}])
     fig1.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig1.write_html(f"./html/synthetic_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -188,7 +188,7 @@ def synthetic_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig25.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, margin=dict(l=20, r=0, t=60, b=25), barmode='stack', height=2600)
+    fig25.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, margin=dict(l=20, r=0, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -238,9 +238,9 @@ def synthetic_timing():
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig25.data)},{"title": "Synthetic Dataset Timings"}])
     fig25.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=0.98, y=1.015),
-            dict(buttons=dropdown_detectors,   x=1.07, y=1.015),
-            dict(buttons=dropdown_descriptors, x=1.14, y=1.015)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig25.write_html("./html/synthetic_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -261,7 +261,7 @@ def oxford(name='Precision', rate=13):
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
     fig2 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
                             horizontal_spacing=0.04, vertical_spacing=0.06, y_title=f"{name}")
-    fig2.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=0, t=60, b=25))
+    fig2.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=0, t=60, b=60))
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     fig2.update_layout( xaxis  = dict(tickmode = 'array', tickvals = xvals),xaxis2 = dict(tickmode = 'array', tickvals = xvals),xaxis3 = dict(tickmode = 'array', tickvals = xvals),
                         xaxis4 = dict(tickmode = 'array', tickvals = xvals),xaxis5 = dict(tickmode = 'array', tickvals = xvals),xaxis6 = dict(tickmode = 'array', tickvals = xvals),
@@ -323,9 +323,9 @@ def oxford(name='Precision', rate=13):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig2.data)},{"title": "Oxford Dataset - {name}"}])
     fig2.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig2.write_html(f"./html/oxford_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -416,9 +416,9 @@ def oxfordPR(name='Precision-Recall', x=13, y=12):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig2.data)},{"title": "Oxford Dataset - {name}"}])
     fig2.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig2.write_html(f"./html/oxford_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -444,7 +444,7 @@ def oxford_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig55.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, margin=dict(l=20, r=0, t=60, b=25), barmode='stack', height=2600)
+    fig55.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, margin=dict(l=20, r=0, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -494,9 +494,9 @@ def oxford_timing():
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig55.data)},{"title": "Oxford Dataset Timings"}])
     fig55.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.01),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.01)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig55.write_html("./html/oxford_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -510,7 +510,7 @@ def drone(name='Precision', rate=13):
     Rate_drone = np.load('./arrays/Rate_drone.npy')
     fig551 = go.Figure()
     xvals = [f'Img{i}' for i in range(153, 188)]
-    fig551.update_layout(title_text=f"Drone Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=0, t=60, b=25), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig551.update_layout(title_text=f"Drone Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=0, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     fig551.update_yaxes(range=[0, 1], title_text=f"{name}")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -537,9 +537,9 @@ def drone(name='Precision', rate=13):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig551.data)},{"title": "Drone Dataset - {name}"}])
     fig551.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig551.write_html(f"./html/drone_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -582,9 +582,9 @@ def dronePR(name='Precision-Recall', x=13, y=12):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig551.data)},{"title": "Drone Dataset - {name}"}])
     fig551.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig551.write_html(f"./html/drone_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -603,7 +603,7 @@ def drone_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig56.update_layout(title_text="Drone Data Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=25), barmode='stack', height=2600)
+    fig56.update_layout(title_text="Drone Data Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -653,9 +653,9 @@ def drone_timing():
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig56.data)},{"title": "Drone Dataset Timings"}])
     fig56.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.01),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.01)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig56.write_html("./html/drone_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -669,7 +669,7 @@ def uav(name='Precision', rate=13):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig552 = go.Figure()
     xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig552.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=0, t=60, b=25), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig552.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=0, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     fig552.update_yaxes(range=[0, 1], title_text=f"{name}") 
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -696,9 +696,9 @@ def uav(name='Precision', rate=13):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig552.data)},{"title": "UAV Dataset - {name}"}])
     fig552.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig552.write_html(f"./html/uav_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -712,7 +712,7 @@ def uavPR(name='Precision-Recall', x=13, y=12):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig552 = go.Figure()
     xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig552.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=20, t=60, b=25), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig552.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, hovermode='x', margin=dict(l=60, r=20, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
     fig552.update_yaxes(range=[0, 1], title_text="Precision")
     fig552.update_xaxes(range=[0, 1], title_text="Recall") 
     color_index = 0
@@ -741,9 +741,9 @@ def uavPR(name='Precision-Recall', x=13, y=12):
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig552.data)},{"title": "UAV Dataset - {name}"}])
     fig552.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.03),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.03)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig552.write_html(f"./html/uav_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -762,7 +762,7 @@ def uav_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig57.update_layout(title_text="UAV Data - Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=25), barmode='stack', height=2600)
+    fig57.update_layout(title_text="UAV Data - Timing", title_x=0.5, margin=dict(l=20, r=20, t=60, b=60), barmode='stack', height=2600)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -813,9 +813,9 @@ def uav_timing():
     reset_button = dict(label="Reset", method="update", args=[{"visible": [True] * len(fig57.data)},{"title": "UAV Dataset Timings"}])
     fig57.update_layout(
         updatemenus=[
-            dict(type="buttons", buttons=[reset_button], x=1.10, y=0),
-            dict(buttons=dropdown_detectors,   x=1.05, y=1.01),
-            dict(buttons=dropdown_descriptors, x=1.15, y=1.01)
+            dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
+            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
+            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
         ]
     )
     fig57.write_html("./html/uav_timing.html", include_plotlyjs='cdn', full_html=True)
