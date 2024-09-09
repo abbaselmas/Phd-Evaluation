@@ -4,7 +4,7 @@ import numpy as np
 from define import *
 
 custom_html = '''
-    <div style="position: absolute; bottom: 10px; left: 20px; z-index: 1000;">
+    <div style="position: absolute; bottom: 12px; left: 20px; z-index: 1000;">
         <span style="margin: 20px;">
             <input type="text" id="filterInput" oninput="applyFilters()" placeholder="Method">
         </span>
@@ -103,8 +103,8 @@ def synthetic(name='Precision', rate=13):
     fig1.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig1.write_html(f"./html/synthetic_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -166,8 +166,8 @@ def syntheticPR(name='Precision-Recall', x=13, y=12):
     fig1.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig1.write_html(f"./html/synthetic_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -239,8 +239,8 @@ def synthetic_timing():
     fig25.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig25.write_html("./html/synthetic_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -324,8 +324,8 @@ def oxford(name='Precision', rate=13):
     fig2.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig2.write_html(f"./html/oxford_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -417,8 +417,8 @@ def oxfordPR(name='Precision-Recall', x=13, y=12):
     fig2.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig2.write_html(f"./html/oxford_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -495,8 +495,8 @@ def oxford_timing():
     fig55.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig55.write_html("./html/oxford_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -538,8 +538,8 @@ def drone(name='Precision', rate=13):
     fig551.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig551.write_html(f"./html/drone_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -583,8 +583,8 @@ def dronePR(name='Precision-Recall', x=13, y=12):
     fig551.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig551.write_html(f"./html/drone_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -654,8 +654,8 @@ def drone_timing():
     fig56.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig56.write_html("./html/drone_timing.html", include_plotlyjs='cdn', full_html=True)
@@ -697,8 +697,8 @@ def uav(name='Precision', rate=13):
     fig552.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig552.write_html(f"./html/uav_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -742,8 +742,8 @@ def uavPR(name='Precision-Recall', x=13, y=12):
     fig552.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig552.write_html(f"./html/uav_{name}.html", include_plotlyjs='cdn', full_html=True)
@@ -814,8 +814,8 @@ def uav_timing():
     fig57.update_layout(
         updatemenus=[
             dict(type="buttons", buttons=[reset_button], x=1.10, y=-0.03),
-            dict(buttons=dropdown_detectors,   x=0.95, y=-0.03),
-            dict(buttons=dropdown_descriptors, x=0.85, y=-0.03)
+            dict(buttons=dropdown_detectors,   direction="up", x=0.90, y=-0.03),
+            dict(buttons=dropdown_descriptors, direction="up", x=1.00, y=-0.03)
         ]
     )
     fig57.write_html("./html/uav_timing.html", include_plotlyjs='cdn', full_html=True)
