@@ -6,46 +6,43 @@ from define import *
 custom_html = '''
     <div style="position: fixed; top: 12px; left: 10px;">
         <span style="margin: 20px;">
-            <input type="text" id="filterInput" oninput="applyFilters()" placeholder="Method">
-        </span>
-        <span style="left: 20px;">
-            <label for="minValueInput">Min:</label>
-            <input type="number" id="minValueInput" min="0" max="999" step="0.05" oninput="applyFilters()">
-            <label for="maxValueInput">Max:</label>
-            <input type="number" id="maxValueInput" min="0" max="999" step="0.05" oninput="applyFilters()">
+            <input type="text" id="filterInput" size="9" oninput="applyFilters()" placeholder="Method">
+            <input type="number" id="minYValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="min y">
+            <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="max y">
+            <input type="number" id="minXValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="min x">
+            <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="max x">
         </span>
     </div>
     <script>
     function applyFilters() {
-        var input, filter, minInput, maxInput, minThreshold, maxThreshold;
         var i, j;
-        input = document.getElementById('filterInput');
-        filter = input.value.toUpperCase();
-        minInput = document.getElementById('minValueInput');
-        maxInput = document.getElementById('maxValueInput');
-        minThreshold = parseFloat(minInput.value);
-        maxThreshold = parseFloat(maxInput.value);
-        if (isNaN(minThreshold)) minThreshold = -Infinity;
-        if (isNaN(maxThreshold)) maxThreshold = Infinity;
+        var filter = document.getElementById('filterInput').value.toUpperCase();
+        var minYThreshold = parseFloat(document.getElementById('minYValueInput').value) || -Infinity;
+        var maxYThreshold = parseFloat(document.getElementById('maxYValueInput').value) || Infinity;
+        var minXThreshold = parseFloat(document.getElementById('minXValueInput').value) || -Infinity;
+        var maxXThreshold = parseFloat(document.getElementById('maxXValueInput').value) || Infinity;
         var plot = document.querySelectorAll('.js-plotly-plot')[0];
         var data = plot.data;
         for (i = 0; i < data.length; i++) {
             var traceName = data[i].name || "";
             var yValues = data[i].y;
+            var xValues = data[i].x;
             var showTrace = false;
-            if (traceName.toUpperCase().indexOf(filter) > -1) {
-                if (yValues) {
-                    for (j = 0; j < yValues.length; j++) {
-                        if (yValues[j] >= minThreshold && yValues[j] <= maxThreshold) {
+            if (traceName.toUpperCase().includes(filter)) {
+                for (j = 0; j < yValues.length; j++) {
+                    if (yValues[j] >= minYThreshold && yValues[j] <= maxYThreshold) {
+                        if (xValues[j] >= minXThreshold && xValues[j] <= maxXThreshold) {
+                            showTrace = true;
+                            break;
+                        }
+                        if (isNaN(xValues[j])) {
                             showTrace = true;
                             break;
                         }
                     }
-                } else {
-                    showTrace = true; // No y-values, just based on name filter
                 }
             }
-            data[i].visible = showTrace ? true : false;
+            data[i].visible = showTrace;
         }
         Plotly.redraw(plot);
     }
@@ -60,7 +57,7 @@ def synthetic(name='Precision', rate=13):
     Rate_scale     = np.load('./arrays/Rate_scale.npy')
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, y_title=f"{name}")
+                            horizontal_spacing=0.05, vertical_spacing=0.07, y_title=name)
     fig1.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
     color_index = 0
@@ -102,21 +99,21 @@ def syntheticPR(name='Precision-Recall', x=13, y=12):
     Rate_scale     = np.load('./arrays/Rate_scale.npy')
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
-                            horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60),xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
+    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate2_I1_x = Rate_intensity[:len(val_b), m, c3, i, j, x]
-                    Rate2_I1_y = Rate_intensity[:len(val_b), m, c3, i, j, y]
-                    Rate2_I2_x = Rate_intensity[len(val_c):, m, c3, i, j, x]
-                    Rate2_I2_y = Rate_intensity[len(val_c):, m, c3, i, j, y]
-                    Rate2_S_x  = Rate_scale    [          :, m, c3, i, j, x]
-                    Rate2_S_y  = Rate_scale    [          :, m, c3, i, j, y]
-                    Rate2_R_x  = Rate_rot      [          :, m, c3, i, j, x]
-                    Rate2_R_y  = Rate_rot      [          :, m, c3, i, j, y]
+                    Rate2_I1_x = np.sort(Rate_intensity[:len(val_b), m, c3, i, j, x])
+                    Rate2_I1_y = np.sort(Rate_intensity[:len(val_b), m, c3, i, j, y])
+                    Rate2_I2_x = np.sort(Rate_intensity[len(val_c):, m, c3, i, j, x])
+                    Rate2_I2_y = np.sort(Rate_intensity[len(val_c):, m, c3, i, j, y])
+                    Rate2_S_x  = np.sort(Rate_scale    [          :, m, c3, i, j, x])
+                    Rate2_S_y  = np.sort(Rate_scale    [          :, m, c3, i, j, y])
+                    Rate2_R_x  = np.sort(Rate_rot      [          :, m, c3, i, j, x])
+                    Rate2_R_y  = np.sort(Rate_rot      [          :, m, c3, i, j, y])
                     color = colors[color_index]
                     style = line_styles[j % len(line_styles)]
                     legend_groupfig2 = f'{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}'
@@ -124,13 +121,13 @@ def syntheticPR(name='Precision-Recall', x=13, y=12):
                         fig2trace_I1    = go.Scatter(x=Rate2_I1_x, y=Rate2_I1_y, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig2, showlegend=True,  legendgroup=legend_groupfig2)
                         fig2.add_trace(fig2trace_I1, row=1, col=1)
                     if not (np.isnan(Rate2_I2_x).any()) and not (np.isnan(Rate2_I2_y).any()):
-                        fig2trace_I2    = go.Scatter(x=Rate2_I2_x, y=Rate2_I2_y, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name='',               showlegend=False, legendgroup=legend_groupfig2)
+                        fig2trace_I2    = go.Scatter(x=Rate2_I2_x, y=Rate2_I2_y, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
                         fig2.add_trace(fig2trace_I2, row=1, col=2)
                     if not (np.isnan(Rate2_S_x).any()) and not (np.isnan(Rate2_S_y).any()):
-                        fig2trace_Scale = go.Scatter(x=Rate2_S_x, y=Rate2_S_y, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name='',               showlegend=False, legendgroup=legend_groupfig2)
+                        fig2trace_Scale = go.Scatter(x=Rate2_S_x, y=Rate2_S_y,   mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
                         fig2.add_trace(fig2trace_Scale, row=2, col=1)
                     if not (np.isnan(Rate2_R_x).any()) and not (np.isnan(Rate2_R_y).any()):
-                        fig2trace_Rot   = go.Scatter(x=Rate2_R_x, y=Rate2_R_y, mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name='',               showlegend=False, legendgroup=legend_groupfig2)
+                        fig2trace_Rot   = go.Scatter(x=Rate2_R_x, y=Rate2_R_y,   mode='lines+markers', marker_symbol=raw_symbols[color_index%56], marker_size=7, line=dict(color=color, dash=style), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
                         fig2.add_trace(fig2trace_Rot, row=2, col=2)
                     color_index += 1
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -209,7 +206,7 @@ def oxford(name='Precision', rate=13):
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.04, vertical_spacing=0.06, y_title=name)
+                            horizontal_spacing=0.05, vertical_spacing=0.07, y_title=name)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     fig4.update_layout( title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60),
                         xaxis  = dict(tickmode = 'array', tickvals = xvals),xaxis2 = dict(tickmode = 'array', tickvals = xvals),xaxis3 = dict(tickmode = 'array', tickvals = xvals),
@@ -276,29 +273,29 @@ def oxfordPR(name='Precision-Recall', x=13, y=12):
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
     fig5 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.06, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf_x  = Rate_graf  [:, m, c3, i, j, x]
-                    Rate_Graf_y  = Rate_graf  [:, m, c3, i, j, y]
-                    Rate_Bikes_x = Rate_bikes [:, m, c3, i, j, x]
-                    Rate_Bikes_y = Rate_bikes [:, m, c3, i, j, y]
-                    Rate_Boat_x  = Rate_boat  [:, m, c3, i, j, x]
-                    Rate_Boat_y  = Rate_boat  [:, m, c3, i, j, y]
-                    Rate_Leuven_x= Rate_leuven[:, m, c3, i, j, x]
-                    Rate_Leuven_y= Rate_leuven[:, m, c3, i, j, y]
-                    Rate_Wall_x  = Rate_wall  [:, m, c3, i, j, x]
-                    Rate_Wall_y  = Rate_wall  [:, m, c3, i, j, y]
-                    Rate_Trees_x = Rate_trees [:, m, c3, i, j, x]
-                    Rate_Trees_y = Rate_trees [:, m, c3, i, j, y]
-                    Rate_Bark_x  = Rate_bark  [:, m, c3, i, j, x]
-                    Rate_Bark_y  = Rate_bark  [:, m, c3, i, j, y]
-                    Rate_Ubc_x   = Rate_ubc   [:, m, c3, i, j, x]
-                    Rate_Ubc_y   = Rate_ubc   [:, m, c3, i, j, y]
+                    Rate_Graf_x  =np.sort(Rate_graf  [:, m, c3, i, j, x])
+                    Rate_Graf_y  =np.sort(Rate_graf  [:, m, c3, i, j, y])
+                    Rate_Bikes_x =np.sort(Rate_bikes [:, m, c3, i, j, x])
+                    Rate_Bikes_y =np.sort(Rate_bikes [:, m, c3, i, j, y])
+                    Rate_Boat_x  =np.sort(Rate_boat  [:, m, c3, i, j, x])
+                    Rate_Boat_y  =np.sort(Rate_boat  [:, m, c3, i, j, y])
+                    Rate_Leuven_x=np.sort(Rate_leuven[:, m, c3, i, j, x])
+                    Rate_Leuven_y=np.sort(Rate_leuven[:, m, c3, i, j, y])
+                    Rate_Wall_x  =np.sort(Rate_wall  [:, m, c3, i, j, x])
+                    Rate_Wall_y  =np.sort(Rate_wall  [:, m, c3, i, j, y])
+                    Rate_Trees_x =np.sort(Rate_trees [:, m, c3, i, j, x])
+                    Rate_Trees_y =np.sort(Rate_trees [:, m, c3, i, j, y])
+                    Rate_Bark_x  =np.sort(Rate_bark  [:, m, c3, i, j, x])
+                    Rate_Bark_y  =np.sort(Rate_bark  [:, m, c3, i, j, y])
+                    Rate_Ubc_x   =np.sort(Rate_ubc   [:, m, c3, i, j, x])
+                    Rate_Ubc_y   =np.sort(Rate_ubc   [:, m, c3, i, j, y])
                     color = colors[color_index]
                     style = line_styles[j % len(line_styles)]
                     legend_groupfig5 = f'{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}'
@@ -429,15 +426,14 @@ def drone(name='Precision', rate=13):
 def dronePR(name='Precision-Recall', x=13, y=12):
     Rate_drone = np.load('./arrays/Rate_drone.npy')
     fig8 = go.Figure()
-    xvals = [f'Img{i}' for i in range(153, 188)]
-    fig8.update_layout(title_text=f"Drone Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig8.update_layout(title_text=f"Drone Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_dr_x = Rate_drone [:, m, c3, i, j, x]
-                    Rate_dr_y = Rate_drone [:, m, c3, i, j, y]
+                    Rate_dr_x = np.sort(Rate_drone [:, m, c3, i, j, x])
+                    Rate_dr_y = np.sort(Rate_drone [:, m, c3, i, j, y])
                     color = colors[color_index%num_combinations]
                     style = line_styles[j % len(line_styles)]
                     if not (np.isnan(Rate_dr_x).any()) and not (np.isnan(Rate_dr_y).any()):
@@ -535,15 +531,14 @@ def uav(name='Precision', rate=13):
 def uavPR(name='Precision-Recall', x=13, y=12):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig11 = go.Figure()
-    xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig11.update_layout(title_text=f"UAV Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig11.update_layout(title_text=f"UAV Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=60, r=60, t=60, b=60))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_u_x = Rate_uav [:, m, c3, i, j, x]
-                    Rate_u_y = Rate_uav [:, m, c3, i, j, y]
+                    Rate_u_x = np.sort(Rate_uav [:, m, c3, i, j, x])
+                    Rate_u_y = np.sort(Rate_uav [:, m, c3, i, j, y])
                     color = colors[color_index%num_combinations]
                     style = line_styles[j % len(line_styles)]
                     if not (np.isnan(Rate_u_x).any()) and not (np.isnan(Rate_u_y).any()):
