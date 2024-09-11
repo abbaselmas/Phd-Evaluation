@@ -6,11 +6,11 @@ from define import *
 custom_html = '''
     <div style="position: fixed; top: 12px; left: 10px;">
         <span style="margin: 20px;">
-            <input type="text" id="filterInput" size="9" oninput="applyFilters()" placeholder="Method">
-            <input type="number" id="minYValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="min y">
-            <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="max y">
-            <input type="number" id="minXValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="min x">
-            <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" oninput="applyFilters()" placeholder="max x">
+            <input type="text" id="filterInput" size="9" onchange="applyFilters()" placeholder="Method">
+            <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
+            <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
+            <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
+            <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max x">
         </span>
     </div>
     <script>
@@ -23,12 +23,13 @@ custom_html = '''
         var maxXThreshold = parseFloat(document.getElementById('maxXValueInput').value) || Infinity;
         var plot = document.querySelectorAll('.js-plotly-plot')[0];
         var data = plot.data;
+        var filterWords = filter.split(" ");
         for (i = 0; i < data.length; i++) {
             var traceName = data[i].name || "";
             var yValues = data[i].y;
             var xValues = data[i].x;
             var showTrace = false;
-            if (traceName.toUpperCase().includes(filter)) {
+            if (filterWords.some(word => traceName.toUpperCase().includes(word))) {
                 for (j = 0; j < yValues.length; j++) {
                     if (yValues[j] >= minYThreshold && yValues[j] <= maxYThreshold) {
                         if (xValues[j] >= minXThreshold && xValues[j] <= maxXThreshold) {
