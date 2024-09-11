@@ -12,12 +12,12 @@ rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15 : 15 : 90
 
 DetectorsLegend   = ['sift', 'akaze', 'orb', 'brisk', 'kaze', 'fast', 'mser', 'agast', 'gftt', 'gftt_harris', 'star', 'hl', 'msd', 'tbmr']
 DescriptorsLegend = ['sift', 'akaze', 'orb', 'brisk', 'kaze', 'daisy', 'freak', 'brief', 'lucid', 'latch', 'vgg', 'beblid', 'teblid', 'boost']
-line_styles = ['solid', 'dash', 'dot', 'dashdot']
+line_styles = ['solid', 'dash', 'dot'] #, 'dashdot']
 Norm = ['L2', 'HAM']
 Matcher = ['BF', 'Flann']
 
 raw_symbols = SymbolValidator().values
-num_combinations = len(DetectorsLegend) * len(DescriptorsLegend) * len(Norm) * len(Matcher)
+num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
 colors = sample_colorscale('Turbo', [i / num_combinations for i in range(num_combinations)])
 
 ### detectors/descriptors 5
