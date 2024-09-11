@@ -6,7 +6,7 @@ from define import *
 custom_html = '''
     <div style="position: fixed; top: 12px; left: 10px;">
         <span style="margin: 20px;">
-            <input type="text" id="filterInput" size="9" onchange="applyFilters()" placeholder="Method">
+            <input type="text" id="filterInput" size="9" onchange="applyFilters()" placeholder="AND OR Method">
             <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
             <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
             <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
@@ -23,13 +23,18 @@ custom_html = '''
         var maxXThreshold = parseFloat(document.getElementById('maxXValueInput').value) || Infinity;
         var plot = document.querySelectorAll('.js-plotly-plot')[0];
         var data = plot.data;
-        var filterWords = filter.split(" ");
+        
+        var filterParts = filter.split(" ");
+        var logicKeyword = filterParts.shift();
+        var filterWords = filterParts;
+        var filterFunction = word => logicKeyword === "AND" ? filterWords.every(filterWord => word.includes(filterWord)) : filterWords.some(filterWord => word.includes(filterWord));
+
         for (i = 0; i < data.length; i++) {
             var traceName = data[i].name || "";
             var yValues = data[i].y;
             var xValues = data[i].x;
             var showTrace = false;
-            if (filterWords.some(word => traceName.toUpperCase().includes(word))) {
+            if (filterFunction(traceName.toUpperCase())) {
                 for (j = 0; j < yValues.length; j++) {
                     if (yValues[j] >= minYThreshold && yValues[j] <= maxYThreshold) {
                         if (xValues[j] >= minXThreshold && xValues[j] <= maxXThreshold) {
