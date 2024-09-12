@@ -6,7 +6,7 @@ from define import *
 custom_html = '''
     <div style="position: fixed; top: 12px; left: 10px;">
         <span style="margin: 20px;">
-            <input type="text" id="filterInput" size="9" onchange="applyFilters()" placeholder="AND OR Method">
+            <input type="text" id="filterInput" size="10" onchange="applyFilters()" placeholder="and|or method">
             <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
             <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
             <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
@@ -25,10 +25,16 @@ custom_html = '''
         var data = plot.data;
         
         var filterParts = filter.split(" ");
-        var logicKeyword = filterParts.shift();
+        var logicKeyword = filterParts.shift() || "";
         var filterWords = filterParts;
-        var filterFunction = word => logicKeyword === "AND" ? filterWords.every(filterWord => word.includes(filterWord)) : filterWords.some(filterWord => word.includes(filterWord));
-
+        var filterFunction = word => {
+            if (logicKeyword === "AND") {
+                return filterWords.every(filterWord => word.includes(filterWord));
+            } else if (logicKeyword === "OR") {
+                return filterWords.some(filterWord => word.includes(filterWord));
+            }
+            return true; // Default case when no filter input is provided
+        };
         for (i = 0; i < data.length; i++) {
             var traceName = data[i].name || "";
             var yValues = data[i].y;
