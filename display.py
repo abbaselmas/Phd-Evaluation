@@ -6,7 +6,7 @@ from define import *
 custom_html = '''
     <div style="position: fixed; top: 12px; left: 10px;">
         <span style="margin: 20px;">
-            <input type="text" id="filterInput" size="10" onchange="applyFilters()" placeholder="and|or method">
+            <input type="text" id="filterInput" size="15" onchange="applyFilters()" placeholder="and|or method">
             <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
             <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
             <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
