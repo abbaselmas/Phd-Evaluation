@@ -16,7 +16,6 @@ line_styles = ['solid', 'dash', 'dot'] #, 'dashdot']
 Norm = ['L2', 'HAM']
 Matcher = ['BF', 'Flann']
 
-raw_symbols = SymbolValidator().values
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
 colors = sample_colorscale('Turbo', [i / num_combinations for i in range(num_combinations)])
 
