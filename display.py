@@ -68,9 +68,10 @@ def synthetic():
     Rate_intensity = np.load('./arrays/Rate_intensity.npy')
     Rate_scale     = np.load('./arrays/Rate_scale.npy')
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
+    fig1 = go.Figure()
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
-                            horizontal_spacing=0.06, vertical_spacing=0.07)
-    fig1.update_layout(title_text="Synthetic Dataset", title_x=0.4, hovermode='x', margin=dict(l=60, r=60, t=60, b=20))
+                            horizontal_spacing=0.04, vertical_spacing=0.04)
+    fig1.update_layout(title_text="Synthetic Dataset", title_x=0.45, title_y=0.965, title_xanchor="right", hovermode='x', margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -102,10 +103,10 @@ def synthetic():
     dropdown_yaxis = ['Precision', 'Recall', 'Repeatibility', 'F1 Score', 'Inliers', 'Matches']
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
-        button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'annotations': [dict(text=y, font=dict(size=18), x=-0.04, y=0.5, xref='paper', yref='paper', showarrow=False, textangle=-90)]}]))
+        button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'yaxis.title': y, 'yaxis2.title': y, 'yaxis3.title': y, 'yaxis4.title': y}]))
     
-    fig1.update_layout(updatemenus=[    dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.06),
-                                        dict(type='dropdown', buttons=button_list, x=0.6, y=1.1)]) 
+    fig1.update_layout(updatemenus=[    dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.045),
+                                        dict(type='dropdown', buttons=button_list, x=0.55, xanchor='left', y=1.045)]) 
     fig1.write_html(f"./html/synthetic.html", include_plotlyjs='cdn', full_html=True)
     with open(f'./html/synthetic.html', 'a') as f:
         f.write(custom_html)
@@ -117,9 +118,10 @@ def syntheticMulti(name='Precision-Recall', x=13, y=12):
     Rate_intensity = np.load('./arrays/Rate_intensity.npy')
     Rate_scale     = np.load('./arrays/Rate_scale.npy')
     Rate_rot       = np.load('./arrays/Rate_rot.npy')
+    fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=['Intensity changing I+b', 'Intensity changing Ixc', 'Scale changing', 'Rotation changing'],
                             horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
-    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='closest', margin=dict(l=60, r=60, t=60, b=60))
+    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode='x')
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -138,17 +140,13 @@ def syntheticMulti(name='Precision-Recall', x=13, y=12):
                     style = line_styles[(i+j) % len(line_styles)]
                     legend_groupfig2 = f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}'
                 # if not (np.isnan(Rate2_I1_x).any()) and not (np.isnan(Rate2_I1_y).any()):
-                    fig2trace_I1    = go.Scatter(x=Rate2_I1_x, y=Rate2_I1_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=True,  legendgroup=legend_groupfig2)
-                    fig2.add_trace(fig2trace_I1, row=1, col=1)
+                    fig2.add_trace(go.Scatter(x=Rate2_I1_x, y=Rate2_I1_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=True,  legendgroup=legend_groupfig2), row=1, col=1)
                 # if not (np.isnan(Rate2_I2_x).any()) and not (np.isnan(Rate2_I2_y).any()):
-                    fig2trace_I2    = go.Scatter(x=Rate2_I2_x, y=Rate2_I2_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
-                    fig2.add_trace(fig2trace_I2, row=1, col=2)
+                    fig2.add_trace(go.Scatter(x=Rate2_I2_x, y=Rate2_I2_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2), row=1, col=2)
                 # if not (np.isnan(Rate2_S_x).any()) and not (np.isnan(Rate2_S_y).any()):
-                    fig2trace_Scale = go.Scatter(x=Rate2_S_x, y=Rate2_S_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
-                    fig2.add_trace(fig2trace_Scale, row=2, col=1)
+                    fig2.add_trace(go.Scatter(x=Rate2_S_x, y=Rate2_S_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2), row=2, col=1)
                 # if not (np.isnan(Rate2_R_x).any()) and not (np.isnan(Rate2_R_y).any()):
-                    fig2trace_Rot   = go.Scatter(x=Rate2_R_x, y=Rate2_R_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2)
-                    fig2.add_trace(fig2trace_Rot, row=2, col=2)
+                    fig2.add_trace(go.Scatter(x=Rate2_R_x, y=Rate2_R_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig2, showlegend=False, legendgroup=legend_groupfig2), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
             color_index += 26
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -163,6 +161,7 @@ def synthetic_timing():
     Exec_time_intensity = np.load('./arrays/Exec_time_intensity.npy')
     Exec_time_scale     = np.load('./arrays/Exec_time_scale.npy')
     Exec_time_rot       = np.load('./arrays/Exec_time_rot.npy')
+    fig3 = go.Figure()
     fig3 = make_subplots(  rows=5, cols=2, subplot_titles=['Average 1k Detect time',
                                                             'Average 1k Describe time',
                                                             'Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)',
@@ -170,7 +169,7 @@ def synthetic_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2000)
+    fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, barmode='stack', height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -213,8 +212,8 @@ def synthetic_timing2():
     Exec_time_intensity = np.load('./arrays/Exec_time_intensity.npy')
     Exec_time_scale     = np.load('./arrays/Exec_time_scale.npy')
     Exec_time_rot       = np.load('./arrays/Exec_time_rot.npy')
-    fig13 = go.Figure()
-    fig13.update_layout(title_text="Synthetic Data - Timings", title_x=0.45, margin=dict(l=60, r=60, t=60, b=20), yaxis_title="1/Inlier Time", hovermode="x")
+    fig15 = go.Figure()
+    fig15.update_layout(title_text="Synthetic Data - Timings", title_x=0.45, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -234,16 +233,16 @@ def synthetic_timing2():
                                     name=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}",
                                     showlegend=True)
                 traces.append(trace)
-                fig13.add_trace(trace)
+                fig15.add_trace(trace)
             color_index = (color_index + 28) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
         button_list.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))    
     
-    fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+    fig15.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig13.write_html(f"./html/synthetic_timing2.html", include_plotlyjs="cdn", full_html=True)
+    fig15.write_html(f"./html/synthetic_timing2.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/synthetic_timing2.html", "a") as f:
         f.write(custom_html)
         
@@ -260,10 +259,11 @@ def oxford():
     Rate_trees  = np.load('./arrays/Rate_trees.npy')
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
+    fig4 = go.Figure()
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.06, vertical_spacing=0.07)
+                            horizontal_spacing=0.04, vertical_spacing=0.05)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
-    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.4, hovermode='x', margin=dict(l=60, r=60, t=60, b=20))
+    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.45, title_xanchor="right", hovermode='x', margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -315,17 +315,17 @@ def oxford():
     dropdown_yaxis = ['Precision', 'Recall', 'Repeatibility', 'F1 Score', 'Inliers', 'Matches']
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
-        button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'annotations': [dict(text=y, font=dict(size=18), x=-0.04, y=0.5, xref='paper', yref='paper', showarrow=False, textangle=-90)]}]))
+        button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'yaxis.title': y, 'yaxis2.title': y, 'yaxis3.title': y, 'yaxis4.title': y, 'yaxis5.title': y, 'yaxis6.title': y, 'yaxis7.title': y, 'yaxis8.title': y, 'yaxis9.title': y}]))
     
     fig4.update_layout(updatemenus=[    dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.06),
-                                        dict(type='dropdown', buttons=button_list, x=0.6, y=1.1)])          
+                                        dict(type='dropdown', buttons=button_list, x=0.55, xanchor='left', y=1.06)])          
     fig4.write_html(f"./html/oxford.html", include_plotlyjs='cdn', full_html=True)
     with open(f'./html/oxford.html', 'a') as f:
         f.write(custom_html)
                     
-#####################################
-# MARK: - Oxford all 8 and Overall PR
-#####################################
+######################
+# MARK: - Oxford Multi
+######################
 def oxfordMulti(name='Precision-Recall', x=13, y=12):
     Rate_graf   = np.load('./arrays/Rate_graf.npy')
     Rate_bikes  = np.load('./arrays/Rate_bikes.npy')
@@ -335,62 +335,56 @@ def oxfordMulti(name='Precision-Recall', x=13, y=12):
     Rate_trees  = np.load('./arrays/Rate_trees.npy')
     Rate_bark   = np.load('./arrays/Rate_bark.npy')
     Rate_ubc    = np.load('./arrays/Rate_ubc.npy')
-    fig5 = make_subplots(   rows=3, cols=3, subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
-    fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode='closest', margin=dict(l=60, r=60, t=60, b=60))
+    fig5 = go.Figure()
+    fig5 = make_subplots(   rows=3, cols=3,subplot_titles=['Graf(Viewpoint)', 'Bikes(Blur)', 'Boat(Zoom + Rotation)', 'Leuven(Light)', 'Wall(Viewpoint)', 'Trees(Blur)', 'Bark(Zoom + Rotation)', 'UBC(JPEG)', 'Overall'],
+                            horizontal_spacing=0.05, vertical_spacing=0.07,
+                            x_title=name.split('-')[0], y_title=name.split('-')[1])
+    fig5.update_layout(hovermode='x', title_text=f"Oxford Affine Dataset - {name}", title_x=0.45)
+
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf_x  =np.sort(Rate_graf  [:, m, c3, i, j, x])
-                    Rate_Graf_y  =np.sort(Rate_graf  [:, m, c3, i, j, y])
-                    Rate_Bikes_x =np.sort(Rate_bikes [:, m, c3, i, j, x])
-                    Rate_Bikes_y =np.sort(Rate_bikes [:, m, c3, i, j, y])
-                    Rate_Boat_x  =np.sort(Rate_boat  [:, m, c3, i, j, x])
-                    Rate_Boat_y  =np.sort(Rate_boat  [:, m, c3, i, j, y])
-                    Rate_Leuven_x=np.sort(Rate_leuven[:, m, c3, i, j, x])
-                    Rate_Leuven_y=np.sort(Rate_leuven[:, m, c3, i, j, y])
-                    Rate_Wall_x  =np.sort(Rate_wall  [:, m, c3, i, j, x])
-                    Rate_Wall_y  =np.sort(Rate_wall  [:, m, c3, i, j, y])
-                    Rate_Trees_x =np.sort(Rate_trees [:, m, c3, i, j, x])
-                    Rate_Trees_y =np.sort(Rate_trees [:, m, c3, i, j, y])
-                    Rate_Bark_x  =np.sort(Rate_bark  [:, m, c3, i, j, x])
-                    Rate_Bark_y  =np.sort(Rate_bark  [:, m, c3, i, j, y])
-                    Rate_Ubc_x   =np.sort(Rate_ubc   [:, m, c3, i, j, x])
-                    Rate_Ubc_y   =np.sort(Rate_ubc   [:, m, c3, i, j, y])
+                    Rate_Graf_x  =np.nanmean(Rate_graf  [:, m, c3, i, j, x])
+                    Rate_Graf_y  =np.nanmean(Rate_graf  [:, m, c3, i, j, y])
+                    Rate_Bikes_x =np.nanmean(Rate_bikes [:, m, c3, i, j, x])
+                    Rate_Bikes_y =np.nanmean(Rate_bikes [:, m, c3, i, j, y])
+                    Rate_Boat_x  =np.nanmean(Rate_boat  [:, m, c3, i, j, x])
+                    Rate_Boat_y  =np.nanmean(Rate_boat  [:, m, c3, i, j, y])
+                    Rate_Leuven_x=np.nanmean(Rate_leuven[:, m, c3, i, j, x])
+                    Rate_Leuven_y=np.nanmean(Rate_leuven[:, m, c3, i, j, y])
+                    Rate_Wall_x  =np.nanmean(Rate_wall  [:, m, c3, i, j, x])
+                    Rate_Wall_y  =np.nanmean(Rate_wall  [:, m, c3, i, j, y])
+                    Rate_Trees_x =np.nanmean(Rate_trees [:, m, c3, i, j, x])
+                    Rate_Trees_y =np.nanmean(Rate_trees [:, m, c3, i, j, y])
+                    Rate_Bark_x  =np.nanmean(Rate_bark  [:, m, c3, i, j, x])
+                    Rate_Bark_y  =np.nanmean(Rate_bark  [:, m, c3, i, j, y])
+                    Rate_Ubc_x   =np.nanmean(Rate_ubc   [:, m, c3, i, j, x])
+                    Rate_Ubc_y   =np.nanmean(Rate_ubc   [:, m, c3, i, j, y])
                     color = colors[color_index%num_combinations]
                     style = line_styles[(i+j) % len(line_styles)]
                     legend_groupfig5 = f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}'
+                    sett = dict(mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5)
                 # if not (np.isnan(Rate_Graf_x).any()) and not (np.isnan(Rate_Graf_y).any()):
-                    fig5trace_Graf   = go.Scatter(x=Rate_Graf_x,   y=Rate_Graf_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=True)
-                    fig5.add_trace(fig5trace_Graf, row=1, col=1)
+                    fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett, showlegend=True),  row=1, col=1)
                 # if not (np.isnan(Rate_Bikes_x).any()) and not (np.isnan(Rate_Bikes_y).any()):
-                    fig5trace_Bikes  = go.Scatter(x=Rate_Bikes_x,  y=Rate_Bikes_y,  mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Bikes, row=1, col=2)
+                    fig5.add_trace(go.Scatter(x=[Rate_Bikes_x],  y=[Rate_Bikes_y],  arg=sett, showlegend=False), row=1, col=2)
                 # if not (np.isnan(Rate_Boat_x).any()) and not (np.isnan(Rate_Boat_y).any()):
-                    fig5trace_Boat   = go.Scatter(x=Rate_Boat_x,   y=Rate_Boat_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Boat, row=1, col=3)
+                    fig5.add_trace(go.Scatter(x=[Rate_Boat_x],   y=[Rate_Boat_y],   arg=sett, showlegend=False), row=1, col=3)
                 # if not (np.isnan(Rate_Leuven_x).any()) and not (np.isnan(Rate_Leuven_y).any()):
-                    fig5trace_Leuven = go.Scatter(x=Rate_Leuven_x, y=Rate_Leuven_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Leuven, row=2, col=1)
+                    fig5.add_trace(go.Scatter(x=[Rate_Leuven_x], y=[Rate_Leuven_y], arg=sett, showlegend=False), row=2, col=1)
                 # if not (np.isnan(Rate_Wall_x).any()) and not (np.isnan(Rate_Wall_y).any()):
-                    fig5trace_Wall   = go.Scatter(x=Rate_Wall_x,   y=Rate_Wall_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Wall, row=2, col=2)
+                    fig5.add_trace(go.Scatter(x=[Rate_Wall_x],   y=[Rate_Wall_y],   arg=sett, showlegend=False), row=2, col=2)
                 # if not (np.isnan(Rate_Trees_x).any()) and not (np.isnan(Rate_Trees_y).any()):
-                    fig5trace_Trees  = go.Scatter(x=Rate_Trees_x,  y=Rate_Trees_y,  mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Trees, row=2, col=3)
+                    fig5.add_trace(go.Scatter(x=[Rate_Trees_x],  y=[Rate_Trees_y],  arg=sett, showlegend=False), row=2, col=3)
                 # if not (np.isnan(Rate_Bark_x).any()) and not (np.isnan(Rate_Bark_y).any()):
-                    fig5trace_Bark   = go.Scatter(x=Rate_Bark_x,   y=Rate_Bark_y,   mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Bark, row=3, col=1)
+                    fig5.add_trace(go.Scatter(x=[Rate_Bark_x],   y=[Rate_Bark_y],   arg=sett, showlegend=False), row=3, col=1)
                 # if not (np.isnan(Rate_Ubc_x).any()) and not (np.isnan(Rate_Ubc_y).any()):
-                    fig5trace_Ubc    = go.Scatter(x=Rate_Ubc_x,    y=Rate_Ubc_y,    mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_Ubc, row=3, col=2)
-                    fig5trace_overall = go.Scatter( x=np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0),
-                                                    y=np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0),
-                                                    mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False)
-                    fig5.add_trace(fig5trace_overall, row=3, col=3)
+                    fig5.add_trace(go.Scatter(x=[Rate_Ubc_x],    y=[Rate_Ubc_y],    arg=sett, showlegend=False), row=3, col=2)
+                    fig5.add_trace(go.Scatter(  x=[np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)],
+                                                y=[np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)], arg=sett, showlegend=False), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
             color_index += 26
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -410,6 +404,7 @@ def oxford_timing():
     Exec_time_trees     = np.load('./arrays/Exec_time_trees.npy')
     Exec_time_bark      = np.load('./arrays/Exec_time_bark.npy')
     Exec_time_ubc       = np.load('./arrays/Exec_time_ubc.npy')
+    fig6 = go.Figure()
     fig6 = make_subplots(  rows=5, cols=2, subplot_titles=['Average 1k Detect time',
                                                             'Average 1k Describe time',
                                                             'Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)',
@@ -417,7 +412,7 @@ def oxford_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2000)
+    fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, barmode='stack', height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -470,8 +465,8 @@ def oxford_timing2():
     Exec_time_trees     = np.load('./arrays/Exec_time_trees.npy')
     Exec_time_bark      = np.load('./arrays/Exec_time_bark.npy')
     Exec_time_ubc       = np.load('./arrays/Exec_time_ubc.npy')
-    fig13 = go.Figure()
-    fig13.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), yaxis_title="1/Inlier Time", hovermode="x")
+    fig14 = go.Figure()
+    fig14.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -491,16 +486,16 @@ def oxford_timing2():
                                     name=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}",
                                     showlegend=True)
                 traces.append(trace)
-                fig13.add_trace(trace)
+                fig14.add_trace(trace)
             color_index = (color_index + 28) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
         button_list.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))    
     
-    fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+    fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig13.write_html(f"./html/oxford_timing2.html", include_plotlyjs="cdn", full_html=True)
+    fig14.write_html(f"./html/oxford_timing2.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/oxford_timing2.html", "a") as f:
         f.write(custom_html)
 
@@ -511,11 +506,10 @@ def drone():
     Rate = np.load('./arrays/Rate_drone.npy')
     fig7 = go.Figure()
     xvals = [f'Img{i}' for i in range(153, 188)]
-    fig7.update_layout(title_text=f"Drone Data", title_x=0.5, hovermode='closest', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig7.update_layout(title_text="Drone Data", title_x=0.45, title_xanchor="right", hovermode='x', yaxis_title="Precision", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
-    visible_traces = []
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
@@ -530,52 +524,48 @@ def drone():
                         Rate[:, m, c3, i, j, 9],   # Inliers
                         Rate[:, m, c3, i, j, 10]   # Matches
                     ]
-                    trace = go.Scatter( x=xvals, y=y_data, mode='lines+markers',
-                                        marker=dict(symbol=symbol_index, color=color, size=9),
-                                        line=dict(color=color, dash=style, width=3),
-                                        name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
-                                        showlegend=True)
-                    traces.append(trace)
-                    visible_trace = go.Scatter( x=xvals, y=y_data[0], mode='lines+markers',
-                                                marker=dict(symbol=symbol_index, color=color, size=8),
+                    traces.append (go.Scatter(  x=xvals, y=y_data, mode='lines+markers',
+                                                marker=dict(symbol=symbol_index, color=color, size=9),
                                                 line=dict(color=color, dash=style, width=3),
                                                 name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
-                                                showlegend=True)
-                    visible_traces.append(visible_trace)
-                    fig7.add_trace(visible_trace)
+                                                showlegend=True))
+                    fig7.add_trace(go.Scatter(  x=xvals, y=y_data[0], mode='lines+markers',
+                                                marker=dict(symbol=symbol_index, color=color, size=9),
+                                                line=dict(color=color, dash=style, width=3),
+                                                name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
+                                                showlegend=True))
                     symbol_index = (symbol_index + 1) % 27
             color_index += 26
-            
     dropdown_yaxis = ['Precision', 'Recall', 'Repeatibility', 'F1 Score', 'Inliers', 'Matches']
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'yaxis.title': y}]))
     
     fig7.update_layout(updatemenus=[   dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.06),
-                                        dict(type='dropdown', buttons=button_list, active=0, x=0.5, y=1.1)])
+                                        dict(type='dropdown', buttons=button_list, active=0, x=0.55, xanchor="left", y=1.06)])
     fig7.write_html(f"./html/drone.html", include_plotlyjs='cdn', full_html=True)
     with open(f'./html/drone.html', 'a') as f:
         f.write(custom_html)
 
-#####################################
-# MARK: - Drone Data Precision-Recall
-#####################################
+#####################
+# MARK: - Drone Multi
+#####################
 def droneMulti(name='Precision-Recall', x=13, y=12):
     Rate_drone = np.load('./arrays/Rate_drone.npy')
     fig8 = go.Figure()
-    fig8.update_layout(title_text=f"Drone Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='closest', margin=dict(l=60, r=60, t=60, b=60))
+    fig8.update_layout(title_text=f"Drone Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='x', margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_dr_x = np.sort(Rate_drone [:, m, c3, i, j, x])
-                    Rate_dr_y = np.sort(Rate_drone [:, m, c3, i, j, y])
+                    Rate_dr_x = np.nanmean(Rate_drone [:, m, c3, i, j, x])
+                    Rate_dr_y = np.nanmean(Rate_drone [:, m, c3, i, j, y])
                     color = colors[color_index%num_combinations]
                     style = line_styles[(i+j) % len(line_styles)]
                     # if not (np.isnan(Rate_dr_x).any()) and not (np.isnan(Rate_dr_y).any()):
-                    fig8trace_Drone  = go.Scatter(x=Rate_dr_x, y=Rate_dr_y, mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}', showlegend=True)
+                    fig8trace_Drone  = go.Scatter(x=[Rate_dr_x], y=[Rate_dr_y], mode='lines+markers', marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}', showlegend=True)
                     fig8.add_trace(fig8trace_Drone)
                     symbol_index = (symbol_index + 1) % 27
             color_index += 26
@@ -588,7 +578,8 @@ def droneMulti(name='Precision-Recall', x=13, y=12):
 # MARK: - Drone Timing
 ######################
 def drone_timing():
-    Exec_time_drone = np.load('./arrays/Exec_time_drone.npy')  
+    Exec_time_drone = np.load('./arrays/Exec_time_drone.npy')
+    fig9 = go.Figure()
     fig9 = make_subplots(  rows=5, cols=2, subplot_titles=['Average 1k Detect time',
                                                             'Average 1k Describe time',
                                                             'Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)',
@@ -596,7 +587,7 @@ def drone_timing():
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
                             specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig9.update_layout(title_text="Drone Data Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2000)
+    fig9.update_layout(title_text="Drone Data Timing", title_x=0.5, barmode='stack', height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -627,7 +618,7 @@ def drone_timing():
         trace_descr_drone = go.Bar(x=[DescriptorsLegend[i]], y=[result2], name=f'-{DescriptorsLegend[i]}',showlegend=True, text=[f'{result2:.3f}'], marker=dict(color = colors[14*i]))
         fig9.add_trace(trace_descr_drone, row=1, col=2)
 
-    fig9.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015)])
+    fig9.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.04)])
     fig9.write_html("./html/drone_timing.html", include_plotlyjs='cdn', full_html=True)
     with open(f'./html/drone_timing.html', 'a') as f:
         f.write(custom_html)
@@ -639,7 +630,8 @@ def uav():
     Rate = np.load('./arrays/Rate_uav.npy')
     fig10 = go.Figure()
     xvals = ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig10.update_layout(title_text='UAV Data', title_x=0.4, hovermode='x', margin=dict(l=60, r=60, t=60, b=60), xaxis = dict(tickmode = 'array', tickvals = xvals))
+    fig10.update_layout(title_text='UAV Data', title_x=0.45, title_xanchor="right", hovermode='x', yaxis_title='Precision',
+                        margin=dict(l=20, r=20, t=20, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -657,27 +649,25 @@ def uav():
                         Rate[:, m, c3, i, j, 9],   # Inliers
                         Rate[:, m, c3, i, j, 10]   # Matches
                     ]
-                    trace = go.Scatter( x=xvals, y=y_data, mode='lines+markers',
-                                        marker=dict(symbol=symbol_index, color=color, size=9),
-                                        line=dict(color=color, dash=style, width=3),
-                                        name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
-                                        showlegend=True)
-                    traces.append(trace)
+                    traces.append(go.Scatter(   x=xvals, y=y_data, mode='lines+markers',
+                                                marker=dict(symbol=symbol_index, color=color, size=9),
+                                                line=dict(color=color, dash=style, width=3),
+                                                name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
+                                                showlegend=True))
                     fig10.add_trace(go.Scatter( x=xvals, y=y_data[0], mode='lines+markers',
-                                                marker=dict(symbol=symbol_index, color=color, size=8),
+                                                marker=dict(symbol=symbol_index, color=color, size=9),
                                                 line=dict(color=color, dash=style, width=3),
                                                 name=f'.{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}',
                                                 showlegend=True))
                     symbol_index = (symbol_index + 1) % 27
             color_index += 26
-    
     dropdown_yaxis = ['Precision', 'Recall', 'Repeatibility', 'F1 Score', 'Inliers', 'Matches']
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method='update', args=[{'y': [trace.y[idx] for trace in traces]}, {'yaxis.title': y}]))
     
-    fig10.update_layout(updatemenus=[   dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.06),
-                                        dict(type='dropdown', buttons=button_list, active=0, x=0.6, y=1.1)])
+    fig10.update_layout(updatemenus=[   dict(type='buttons', buttons=[dict(label='≡ Legend', method='relayout', args=['showlegend', True], args2=['showlegend', False])], x=1, y=1.05),
+                                        dict(type='dropdown', buttons=button_list, x=0.55, xanchor="left", y=1.05)])
     fig10.write_html(f"./html/uav.html", include_plotlyjs='cdn', full_html=True)
     with open(f'./html/uav.html', 'a') as f:
         f.write(custom_html)
@@ -689,7 +679,8 @@ def uav():
 def uavMulti(name='Precision-Recall', x=13, y=12):
     Rate_uav = np.load('./arrays/Rate_uav.npy')
     fig11 = go.Figure()
-    fig11.update_layout(title_text=f"UAV Data - {name}", xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], title_x=0.5, hovermode='closest', margin=dict(l=60, r=60, t=60, b=60))
+    fig11.update_layout(title_text=f"UAV Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
+                        xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode='x')
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -714,15 +705,17 @@ def uavMulti(name='Precision-Recall', x=13, y=12):
 # MARK: - UAV Timing
 ####################
 def uav_timing():
-    Exec_time_uav = np.load('./arrays/Exec_time_uav.npy')  
+    Exec_time_uav = np.load('./arrays/Exec_time_uav.npy')
+    fig12 = go.Figure()
     fig12 = make_subplots(  rows=5, cols=2, subplot_titles=['Average 1k Detect time',
                                                             'Average 1k Describe time',
                                                             'Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)',
                                                             'Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)',
                                                             'Average 1k Total time (Detect + Descript + Match(BF+FL))',
                                                             'Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)',],
-                            specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
-    fig12.update_layout(title_text="UAV Data - Timing", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), barmode='stack', height=2000)
+                            specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]],
+                            horizontal_spacing=0.05, vertical_spacing=0.07)
+    fig12.update_layout(title_text="UAV Data - Timing", title_x=0.5, barmode='stack', height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -763,7 +756,7 @@ def timing2(name="uav"):
     Exec_time = np.load(f"./arrays/Exec_time_{name}.npy")
     Rate = np.load(f"./arrays/Rate_{name}.npy")
     fig13 = go.Figure()
-    fig13.update_layout(title_text=f"{name.upper()} Data - Timings", title_x=0.5, margin=dict(l=60, r=60, t=60, b=60), yaxis_title="1/Inlier Time", hovermode="x")
+    fig13.update_layout(title_text=f"{name.upper()} Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -790,8 +783,8 @@ def timing2(name="uav"):
     for idx, axis in enumerate(dropdown_xaxis):
         button_list.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))    
     
-    fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
-                                        dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
+    fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045),
+                                        dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.03)])
     fig13.write_html(f"./html/{name}_timing2.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/{name}_timing2.html", "a") as f:
         f.write(custom_html)
