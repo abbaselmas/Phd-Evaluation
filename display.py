@@ -72,6 +72,7 @@ def synthetic():
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.04, vertical_spacing=0.04)
     fig1.update_layout(title_text="Synthetic Dataset", title_x=0.45, title_y=0.965, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -83,10 +84,8 @@ def synthetic():
                     Rate2_I2 = [Rate_intensity[len(val_c):, m, c3, i, j, 13], Rate_intensity[len(val_c):, m, c3, i, j, 12], Rate_intensity[len(val_c):, m, c3, i, j, 14], Rate_intensity[len(val_c):, m, c3, i, j, 15], Rate_intensity[len(val_c):, m, c3, i, j, 9], Rate_intensity[len(val_c):, m, c3, i, j, 10]]
                     Rate2_S  = [Rate_scale    [          :, m, c3, i, j, 13], Rate_scale    [          :, m, c3, i, j, 12], Rate_scale    [          :, m, c3, i, j, 14], Rate_scale    [          :, m, c3, i, j, 15], Rate_scale    [          :, m, c3, i, j, 9], Rate_scale    [          :, m, c3, i, j, 10]]
                     Rate2_R  = [Rate_rot      [          :, m, c3, i, j, 13], Rate_rot      [          :, m, c3, i, j, 12], Rate_rot      [          :, m, c3, i, j, 14], Rate_rot      [          :, m, c3, i, j, 15], Rate_rot      [          :, m, c3, i, j, 9], Rate_rot      [          :, m, c3, i, j, 10]]
-                    color = colors[color_index%num_combinations]
-                    style = line_styles[(i+j) % len(line_styles)]
                     legend_groupfig1 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
-                    sett = dict(mode="lines+markers", marker=dict(symbol=symbol_index, size=9, color=color), line=dict(color=color, dash=style, width=3), name=legend_groupfig1, legendgroup=legend_groupfig1)
+                    sett = dict(mode="lines+markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]), line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3), name=legend_groupfig1, legendgroup=legend_groupfig1)
                     if not (np.isnan(Rate2_I1).any()):
                         traces.append (go.Scatter(x=val_b, y=Rate2_I1,    arg=sett, showlegend=True))
                         fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett, showlegend=True),  row=1, col=1)
@@ -100,7 +99,7 @@ def synthetic():
                         traces.append (go.Scatter(x=rot,   y=Rate2_R,     arg=sett, showlegend=False))
                         fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett, showlegend=False), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -123,6 +122,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split("-")[0], y_title=name.split("-")[1])
     fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
+    
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -137,9 +137,8 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     Rate2_S_y  = np.nanmean(Rate_scale    [          :, m, c3, i, j, y])
                     Rate2_R_x  = np.nanmean(Rate_rot      [          :, m, c3, i, j, x])
                     Rate2_R_y  = np.nanmean(Rate_rot      [          :, m, c3, i, j, y])
-                    color = colors[color_index%num_combinations]
                     legend_groupfig2 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
-                    sett = dict(mode="markers", marker=dict(symbol=symbol_index, size=9, color=color), name=legend_groupfig2, legendgroup=legend_groupfig2)
+                    sett = dict(mode="markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]), name=legend_groupfig2, legendgroup=legend_groupfig2)
                     if not (np.isnan(Rate2_I1_x).any()) and not (np.isnan(Rate2_I1_y).any()):
                         fig2.add_trace(go.Scatter(x=[Rate2_I1_x], y=[Rate2_I1_y], arg=sett, showlegend=True), row=1, col=1)
                     if not (np.isnan(Rate2_I2_x).any()) and not (np.isnan(Rate2_I2_y).any()):
@@ -149,7 +148,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     if not (np.isnan(Rate2_R_x).any()) and not (np.isnan(Rate2_R_y).any()):
                         fig2.add_trace(go.Scatter(x=[Rate2_R_x],  y=[Rate2_R_y],  arg=sett, showlegend=False), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
     fig2.write_html(f"./html/synthetic_{name}.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/synthetic_{name}.html", "a") as f:
@@ -175,24 +174,23 @@ def synthetic_timing():
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for m in range(2):
-                color = colors[color_index%num_combinations]
                 result3 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 6], Exec_time_scale[:, m, :, i, j, 6], Exec_time_rot[:, m, :, i, j, 6]), axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7], Exec_time_scale[:, m, :, i, j, 7], Exec_time_rot[:, m, :, i, j, 7]), axis=0))
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
-                                                    text=[f"{result3:.3f}"], marker_color=color,
+                                                    text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig3.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig3.add_trace(trace_match_synt_result3, row=4, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
-                                                    text=[f"{result4:.3f}"], marker_color=color,
+                                                    text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig3.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result4, row=3, col=1)
                 trace_match_synt_result4.showlegend = False
                 fig3.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 28) % num_combinations
+            color_index = (color_index + 26) % num_combinations
         result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
         trace_detect_synt = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True,  text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
         fig3.add_trace(trace_detect_synt, row=1, col=1)
@@ -213,6 +211,7 @@ def synthetic_timing2():
     Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
     fig15 = go.Figure()
     fig15.update_layout(title_text="Synthetic Data - Overall Timings", title_x=0.45, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    color_index = 0
     symbol_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -229,12 +228,13 @@ def synthetic_timing2():
                     ]
                     inlierTime = np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                        marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
+                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig15.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
+            color_index = (color_index + 26) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
@@ -278,10 +278,8 @@ def oxford():
                     Rate_Trees = [Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10]]
                     Rate_Bark  = [Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10]]
                     Rate_Ubc   = [Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10]]
-                    color = colors[color_index%num_combinations]
-                    style = line_styles[(i+j) % len(line_styles)]
                     legend_groupfig4 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
-                    sett = dict(mode="lines+markers", marker_symbol=symbol_index, marker_size=9, line=dict(color=color, dash=style, width=3), name=legend_groupfig4, legendgroup=legend_groupfig4)
+                    sett = dict(mode="lines+markers", marker_symbol=symbol_index, marker_size=9, line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3), name=legend_groupfig4, legendgroup=legend_groupfig4)
                     if not (np.isnan(Rate_Graf).any()):
                         traces.append (go.Scatter(x = xvals, y=Rate_Graf,       arg=sett, showlegend=True))
                         fig4.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett, showlegend=True), row=1, col=1)
@@ -309,7 +307,7 @@ def oxford():
                     traces.append (go.Scatter(x = xvals, y=np.nanmean([Rate_Graf, Rate_Bikes, Rate_Boat, Rate_Leuven, Rate_Wall, Rate_Trees, Rate_Bark, Rate_Ubc], axis=0), arg=sett, showlegend=False))
                     fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett, showlegend=False), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
     button_list = []
@@ -360,10 +358,8 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     Rate_Bark_y  =np.nanmean(Rate_bark  [:, m, c3, i, j, y])
                     Rate_Ubc_x   =np.nanmean(Rate_ubc   [:, m, c3, i, j, x])
                     Rate_Ubc_y   =np.nanmean(Rate_ubc   [:, m, c3, i, j, y])
-                    color = colors[color_index%num_combinations]
-                    style = line_styles[(i+j) % len(line_styles)]
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
-                    sett = dict(mode="lines+markers", marker_symbol=symbol_index, marker_size=7, line=dict(color=color, dash=style, width=3), name=legend_groupfig5, legendgroup=legend_groupfig5)
+                    sett = dict(mode="lines+markers", marker_symbol=symbol_index, marker_size=7, line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3), name=legend_groupfig5, legendgroup=legend_groupfig5)
                     if not (np.isnan(Rate_Graf_x).any()) and not (np.isnan(Rate_Graf_y).any()):
                         fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett, showlegend=True),  row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()) and not (np.isnan(Rate_Bikes_y).any()):
@@ -383,7 +379,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     fig5.add_trace(go.Scatter(  x=[np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)],
                                                 y=[np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)], arg=sett, showlegend=False), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
     fig5.write_html(f"./html/oxford_{name}.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/oxford_{name}.html", "a") as f:
@@ -414,24 +410,23 @@ def oxford_timing():
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for m in range(2):
-                color = colors[color_index%num_combinations]
                 result3 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 6], Exec_time_wall[:, m, :, i, j, 6], Exec_time_trees[:, m, :, i, j, 6], Exec_time_bikes[:, m, :, i, j, 6], Exec_time_bark[:, m, :, i, j, 6], Exec_time_boat[:, m, :, i, j, 6], Exec_time_leuven[:, m, :, i, j, 6], Exec_time_ubc[:, m, :, i, j, 6]), axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7], Exec_time_wall[:, m, :, i, j, 7], Exec_time_trees[:, m, :, i, j, 7], Exec_time_bikes[:, m, :, i, j, 7], Exec_time_bark[:, m, :, i, j, 7], Exec_time_boat[:, m, :, i, j, 7], Exec_time_leuven[:, m, :, i, j, 7], Exec_time_ubc[:, m, :, i, j, 7]), axis=0))
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
-                                                    text=[f"{result3:.3f}"], marker_color=color,
+                                                    text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig6.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig6.add_trace(trace_match_synt_result3, row=4, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
-                                                    text=[f"{result4:.3f}"], marker_color=color,
+                                                    text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig6.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4, row=3, col=1)
                 trace_match_synt_result4.showlegend = False
                 fig6.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 28) % num_combinations            
+            color_index = (color_index + 26) % num_combinations            
         result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
         trace_detect_oxford = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
         fig6.add_trace(trace_detect_oxford, row=1, col=1)
@@ -462,6 +457,7 @@ def oxford_timing2():
     Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
     fig14 = go.Figure()
     fig14.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    color_index = 0
     symbol_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -478,12 +474,13 @@ def oxford_timing2():
                     ]
                     inlierTime = np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                        marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
+                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig14.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
+            color_index = (color_index + 26) % num_combinations 
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
@@ -501,7 +498,7 @@ def oxford_timing2():
 def single(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig7 = go.Figure()
-    xvals = [f"Img{i}" for i in range(153, 188)]
+    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
     fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", hovermode="x", yaxis_title="Precision", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
@@ -521,17 +518,17 @@ def single(data="drone"):
                         Rate[:, m, c3, i, j, 10]   # Matches
                     ]
                     traces.append (go.Scatter(  x=xvals, y=y_data, mode="lines+markers",
-                                                marker=dict(symbol=symbol_index, color=color, size=9),
+                                                marker=dict(symbol=symbol_index, color=colors[color_index], size=9),
                                                 line=dict(color=color, dash=style, width=3),
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                 showlegend=True))
                     fig7.add_trace(go.Scatter(  x=xvals, y=y_data[0], mode="lines+markers",
-                                                marker=dict(symbol=symbol_index, color=color, size=9),
+                                                marker=dict(symbol=symbol_index, color=colors[color_index], size=9),
                                                 line=dict(color=color, dash=style, width=3),
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                 showlegend=True))
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -559,13 +556,12 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
                     Rate_x = np.nanmean(Rate[:, m, c3, i, j, x])
                     Rate_y = np.nanmean(Rate[:, m, c3, i, j, y])
-                    color = colors[color_index%num_combinations]
                     if not (np.isnan(Rate_x).any()) and not (np.isnan(Rate_y).any()):
-                        fig11trace_UAV  = go.Scatter(   x=[Rate_x], y=[Rate_y], mode="markers", marker=dict(symbol=symbol_index, size=9, color=color),
+                        fig11trace_UAV  = go.Scatter(   x=[Rate_x], y=[Rate_y], mode="markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]),
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", showlegend=True)
                         fig11.add_trace(fig11trace_UAV)
                     symbol_index = (symbol_index + 1) % 27
-            color_index += 26
+            color_index = (color_index + 26) % num_combinations
     fig11.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
     fig11.write_html(f"./html/{data}_{name}.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/{data}_{name}.html", "a") as f:
@@ -596,19 +592,19 @@ def single_timing(data="drone"):
                     continue
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
-                                                    text=[f"{result3:.3f}"], marker=dict(color = colors[color_index%num_combinations]),
+                                                    text=[f"{result3:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig12.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig12.add_trace(trace_match_synt_result3, row=4, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
-                                                    text=[f"{result4:.3f}"], marker=dict(color = colors[color_index%num_combinations]),
+                                                    text=[f"{result4:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
                 fig12.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result4, row=3, col=1)
                 trace_match_synt_result4.showlegend = False
                 fig12.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 28) % num_combinations
+            color_index = (color_index + 26) % num_combinations
         result = np.nanmean(Exec_time[:, :, :, i, :, 4])
         trace_detect = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
         fig12.add_trace(trace_detect, row=1, col=1)
@@ -629,6 +625,7 @@ def single_timing2(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig13 = go.Figure()
     fig13.update_layout(title_text=f"{data.upper()} Data - Timings", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    color_index = 0
     symbol_index = 0
     traces = []
     for i in range(len(DetectorsLegend)):
@@ -645,12 +642,13 @@ def single_timing2(data="drone"):
                     ]
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                        marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
+                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig13.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
+            color_index = (color_index + 26) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
