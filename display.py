@@ -71,7 +71,7 @@ def synthetic():
     fig1 = go.Figure()
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.04, vertical_spacing=0.04)
-    fig1.update_layout(title_text="Synthetic Dataset", title_x=0.45, title_y=0.965, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig1.update_layout(title_text="Synthetic Dataset", title_x=0.45, title_y=0.965, title_xanchor="right", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
     color_index = 0
     symbol_index = 0
@@ -121,7 +121,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
     fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split("-")[0], y_title=name.split("-")[1])
-    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
+    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x unified")
     
     color_index = 0
     symbol_index = 0
@@ -210,7 +210,7 @@ def synthetic_timing2():
     Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
     Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
     fig15 = go.Figure()
-    fig15.update_layout(title_text="Synthetic Data - Overall Timings", title_x=0.45, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig15.update_layout(title_text="Synthetic Data - Overall Timings", title_x=0.45, yaxis_title="1/Inlier Time", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -262,7 +262,7 @@ def oxford():
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.04, vertical_spacing=0.05)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
-    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.45, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.45, title_xanchor="right", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -335,7 +335,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.05, vertical_spacing=0.07,
                             x_title=name.split("-")[0], y_title=name.split("-")[1])
-    fig5.update_layout(hovermode="x", title_text=f"Oxford Affine Dataset - {name}", title_x=0.45)
+    fig5.update_layout(hovermode="x unified", title_text=f"Oxford Affine Dataset - {name}", title_x=0.45)
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -456,7 +456,7 @@ def oxford_timing2():
     Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
     Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
     fig14 = go.Figure()
-    fig14.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig14.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -499,7 +499,7 @@ def single(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig7 = go.Figure()
     xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
-    fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", hovermode="x", yaxis_title="Precision", margin=dict(l=20, r=20, t=60, b=20))
+    fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", hovermode="x unified", yaxis_title="Precision", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -547,7 +547,7 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig11 = go.Figure()
     fig11.update_layout(title_text=f"{data.upper()} Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
-                        xaxis_title=name.split("-")[0], yaxis_title=name.split("-")[1], hovermode="x")
+                        xaxis_title=name.split("-")[0], yaxis_title=name.split("-")[1], hovermode="x unified")
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -624,7 +624,7 @@ def single_timing2(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig13 = go.Figure()
-    fig13.update_layout(title_text=f"{data.upper()} Data - Timings", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig13.update_layout(title_text=f"{data.upper()} Data - Timings", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
