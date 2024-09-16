@@ -230,7 +230,7 @@ def synthetic_timing2():
                     inlierTime = np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
                                         marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
-                                        name=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig15.add_trace(trace)
@@ -479,7 +479,7 @@ def oxford_timing2():
                     inlierTime = np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
                                         marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
-                                        name=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig14.add_trace(trace)
@@ -646,7 +646,7 @@ def single_timing2(data="drone"):
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
                     trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
                                         marker=dict(color=colors[m*180], size=10, symbol=symbol_index),
-                                        name=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                         showlegend=True)
                     traces.append(trace)
                     fig13.add_trace(trace)
