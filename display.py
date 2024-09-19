@@ -162,13 +162,15 @@ def synthetic_timing():
     Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
     Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
     fig3 = go.Figure()
-    fig3 = make_subplots(  rows=5, cols=2, subplot_titles=["Average 1k Detect time",
-                                                            "Average 1k Describe time",
+    fig3 = make_subplots(  rows=5, cols=2, subplot_titles=[
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
-                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",],
-                            specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
+                                                            "Average 1k Detect time",
+                                                            "Average 1k Describe time"
+                                                            ],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
     fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -176,28 +178,39 @@ def synthetic_timing():
             for m in range(2):
                 result3 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 6], Exec_time_scale[:, m, :, i, j, 6], Exec_time_rot[:, m, :, i, j, 6]), axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7], Exec_time_scale[:, m, :, i, j, 7], Exec_time_rot[:, m, :, i, j, 7]), axis=0))
+                if np.isnan(result3) or np.isnan(result4):
+                    continue
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig3.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result3, row=3, col=1)
+                fig3.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
-                fig3.add_trace(trace_match_synt_result3, row=4, col=1)
+                fig3.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig3.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result4, row=3, col=1)
+                fig3.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result4, row=2, col=1)
                 trace_match_synt_result4.showlegend = False
-                fig3.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 26) % num_combinations
+                fig3.add_trace(trace_match_synt_result4, row=4, col=1)
+            color_index = (color_index + 28) % num_combinations
         result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
         trace_detect_synt = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True,  text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
-        fig3.add_trace(trace_detect_synt, row=1, col=1)
+        fig3.add_trace(trace_detect_synt, row=5, col=1)
         result2 = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, :, i, 5], Exec_time_scale[:, :, :, :, i, 5], Exec_time_rot[:, :, :, :, i, 5]), axis=0))
         trace_descr_synt = go.Bar(x=[DescriptorsLegend[i]], y=[result2], name=f"-{DescriptorsLegend[i]}", showlegend=True, text=[f"{result2:.3f}"], marker=dict(color = colors[14*i]))
-        fig3.add_trace(trace_descr_synt, row=1, col=2)
-    fig3.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015)])
+        fig3.add_trace(trace_descr_synt, row=5, col=2)
+    fig3.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis.type" : "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis.type" : "log"}])], x=0, xanchor="left", y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
+                                    ])
     fig3.write_html("./html/synthetic_timing.html", include_plotlyjs="cdn", full_html=True)
     with open("./html/synthetic_timing.html", "a") as f:
         f.write(custom_html)
@@ -398,13 +411,15 @@ def oxford_timing():
     Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
     Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
     fig6 = go.Figure()
-    fig6 = make_subplots(  rows=5, cols=2, subplot_titles=["Average 1k Detect time",
-                                                            "Average 1k Describe time",
+    fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
-                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",],
-                            specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
+                                                            "Average 1k Detect time",
+                                                            "Average 1k Describe time"
+                                                            ],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
     fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -412,28 +427,39 @@ def oxford_timing():
             for m in range(2):
                 result3 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 6], Exec_time_wall[:, m, :, i, j, 6], Exec_time_trees[:, m, :, i, j, 6], Exec_time_bikes[:, m, :, i, j, 6], Exec_time_bark[:, m, :, i, j, 6], Exec_time_boat[:, m, :, i, j, 6], Exec_time_leuven[:, m, :, i, j, 6], Exec_time_ubc[:, m, :, i, j, 6]), axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7], Exec_time_wall[:, m, :, i, j, 7], Exec_time_trees[:, m, :, i, j, 7], Exec_time_bikes[:, m, :, i, j, 7], Exec_time_bark[:, m, :, i, j, 7], Exec_time_boat[:, m, :, i, j, 7], Exec_time_leuven[:, m, :, i, j, 7], Exec_time_ubc[:, m, :, i, j, 7]), axis=0))
+                if np.isnan(result3) or np.isnan(result4):
+                    continue
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig6.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3, row=3, col=1)
+                fig6.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
-                fig6.add_trace(trace_match_synt_result3, row=4, col=1)
+                fig6.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig6.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4, row=3, col=1)
+                fig6.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4, row=2, col=1)
                 trace_match_synt_result4.showlegend = False
-                fig6.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 26) % num_combinations            
+                fig6.add_trace(trace_match_synt_result4, row=4, col=1)
+            color_index = (color_index + 28) % num_combinations            
         result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
         trace_detect_oxford = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
-        fig6.add_trace(trace_detect_oxford, row=1, col=1)
+        fig6.add_trace(trace_detect_oxford, row=5, col=1)
         result2 = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, :, i, 5], Exec_time_wall[:, :, :, :, i, 5], Exec_time_trees[:, :, :, :, i, 5], Exec_time_bikes[:, :, :, :, i, 5], Exec_time_bark[:, :, :, :, i, 5], Exec_time_boat[:, :, :, :, i, 5], Exec_time_leuven[:, :, :, :, i, 5], Exec_time_ubc[:, :, :, :, i, 5]), axis=0))
         trace_descr_oxford = go.Bar(x=[DescriptorsLegend[i]], y=[result2], name=f"-{DescriptorsLegend[i]}",showlegend=True, text=[f"{result2:.3f}"], marker=dict(color = colors[14*i]))
-        fig6.add_trace(trace_descr_oxford, row=1, col=2)
-    fig6.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015)])
+        fig6.add_trace(trace_descr_oxford, row=5, col=2)
+    fig6.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis.type" : "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis.type" : "log"}])], x=0, xanchor="left", y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
+                                    ])
     fig6.write_html("./html/oxford_timing.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/oxford_timing.html", "a") as f:
         f.write(custom_html)
@@ -573,13 +599,15 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
 def single_timing(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig12 = go.Figure()
-    fig12 = make_subplots(  rows=5, cols=2, subplot_titles=["Average 1k Detect time",
-                                                            "Average 1k Describe time",
+    fig12 = make_subplots(  rows=5, cols=2, subplot_titles=[
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
-                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",],
-                            specs=[[{}, {}], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None]],
+                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
+                                                            "Average 1k Detect time",
+                                                            "Average 1k Describe time"
+                                                            ],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]],
                             horizontal_spacing=0.05, vertical_spacing=0.07)
     fig12.update_layout(title_text=f"{data.upper()} Data - Timing", title_x=0.5, title_xanchor="right", barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
@@ -588,31 +616,40 @@ def single_timing(data="drone"):
             for m in range(2):
                 result3 = np.nanmean(Exec_time[:, m, :, i, j, 6])
                 result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
-                if (np.isnan(result3) or np.isnan(result4)):
+                if np.isnan(result3) or np.isnan(result4):
                     continue
                 trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig12.add_trace(trace_match_synt_result3, row=2, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result3, row=3, col=1)
+                fig12.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
-                fig12.add_trace(trace_match_synt_result3, row=4, col=1)
+                fig12.add_trace(trace_match_synt_result3, row=3, col=1)
                 trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}")
-                fig12.add_trace(trace_match_synt_result4, row=2, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result4, row=3, col=1)
+                fig12.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result4, row=2, col=1)
                 trace_match_synt_result4.showlegend = False
-                fig12.add_trace(trace_match_synt_result4, row=5, col=1)
-            color_index = (color_index + 26) % num_combinations
+                fig12.add_trace(trace_match_synt_result4, row=4, col=1)
+            color_index = (color_index + 28) % num_combinations
         result = np.nanmean(Exec_time[:, :, :, i, :, 4])
         trace_detect = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
-        fig12.add_trace(trace_detect, row=1, col=1)
+        fig12.add_trace(trace_detect, row=5, col=1)
         result2 = np.nanmean(Exec_time[:, :, :, :, i, 5])
         trace_descr = go.Bar(x=[DescriptorsLegend[i]], y=[result2], name=f"-{DescriptorsLegend[i]}",showlegend=True, text=[f"{result2:.3f}"], marker=dict(color = colors[14*i]))
-        fig12.add_trace(trace_descr, row=1, col=2)
+        fig12.add_trace(trace_descr, row=5, col=2)
         
-    fig12.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015)])
+    fig12.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis.type" : "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis.type" : "log"}])], x=0, xanchor="left", y=1.015),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
+                                        ])
     fig12.write_html(f"./html/{data}_timing.html", include_plotlyjs="cdn", full_html=True)
     with open(f"./html/{data}_timing.html", "a") as f:
         f.write(custom_html)
