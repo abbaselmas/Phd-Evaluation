@@ -99,6 +99,64 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
     inliers_percentage = ((len(inliers) / len(matches)) * 100 if len(matches) > 0 else 0)
     return inliers_percentage, inliers, matches
 
+def draw_matches_with_homography(img1, kp1, img2, kp2, total_matches, good_matches, H, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
+    keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=(255, 0, 0), flags=0)
+    keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=(255, 0, 0), flags=0)
+    # Combine both images side by side
+    h1, w1 = img1.shape[:2]
+    h2, w2 = img2.shape[:2]
+    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype='uint8')
+    combined_img[:h1, :w1] = keypointImage1
+    combined_img[:h2, w1:w1 + w2] = keypointImage2
+    # Project the corners of img1 onto img2 using homography
+    corners_img1 = np.array([[0, 0], [w1, 0], [w1, h1], [0, h1]], dtype=np.float32).reshape(-1, 1, 2)
+    projected_corners_img2 = cv2.perspectiveTransform(corners_img1, H)
+    # Draw the rectangle in the second image showing where img1 fits
+    projected_corners_img2 = projected_corners_img2.astype(int)
+    cv2.polylines(combined_img, [projected_corners_img2 + np.array([w1, 0])], isClosed=True, color=(0, 255, 0), thickness=2)
+    # Filter matches that are inside the projected rectangle
+    rect = projected_corners_img2.astype(int)
+    filtered_matches = [match for match in good_matches if cv2.pointPolygonTest(rect, kp2[match.trainIdx].pt, False) >= 0]
+    # Draw lines for filtered matches
+    for match in filtered_matches:
+        pt1 = tuple(map(int, kp1[match.queryIdx].pt))
+        pt2 = tuple(map(int, kp2[match.trainIdx].pt))
+        pt2 = (pt2[0] + w1, pt2[1])  # Shift pt2 to the right for side-by-side view
+        cv2.line(combined_img, pt1, pt2, (0, 255, 0), 1)  # Green for inliers
+    # Metadata On Image    
+    text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
+                "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
+                "Norm.:", "Matcher:", "Match Rate:", "Inliers:", "All Matches:",
+                "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
+                "Recall", "Precision", "Repeatibility", "F1-Score"]
+    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
+                f"{Rate[5]}",                                           # Keypoint1
+                f"{Rate[6]}",                                           # Keypoint2
+                f"{Exec_time[4]:.4f}",                                  # 1K Detect Time
+                f"{method_dscrpt.getDefaultName().split('.')[-1]}",     # Descriptor
+                f"{Rate[7]}",                                           # Descriptor1
+                f"{Rate[8]}",                                           # Descriptor2
+                f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
+                f"{Norm[c3]}",                                          # Matching
+                f"{Matcher[m]}",                                        # Matcher
+                f"{Rate[11]:.2f}",                                      # Match Rate
+                f"{Rate[9]}",                                           # Inliers
+                f"{Rate[10]}",                                          # All Matches
+                f"{Exec_time[3]:.4f}",                                  # Total Time
+                f"{Exec_time[6]:.4f}",                                  # 1K Match Tot. Time
+                f"{Exec_time[7]:.4f}",                                  # 1K Inliers Time
+                f"{Rate[12]:.4f}",                                      # Recall
+                f"{Rate[13]:.4f}",                                      # Precision
+                f"{Rate[14]:.4f}",                                      # Repeatibility
+                f"{Rate[15]:.4f}"]                                      # F1-Score
+    for idx, txt in enumerate(text1):
+        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    for idx, txt in enumerate(text2):
+        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    return combined_img
+
 def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
     keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=( 255,  0, 0), flags=0)
     keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=( 255,  0, 0), flags=0)

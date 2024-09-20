@@ -89,6 +89,7 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     Rate[k, m, c3, i, j,15] = None
                                     continue
                                 if drawing and k == 3:
+                                    # img_matches = cv2.drawMatches(img[n], keypoints1, img[n+1], keypoints2, good_matches, None, matchColor=(0, 255, 0), flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS) # singlePointColor=(255, 0, 0)
                                     img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
