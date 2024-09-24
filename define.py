@@ -75,6 +75,15 @@ def match_with_bf_ratio_test(matcher, Dspt1, Dspt2, norm_type, threshold_ratio=0
     match_rate = (len(good_matches) / len(matches) * 100 if len(matches) > 0 else 0)
     return match_rate, good_matches, matches
 
+def cross_check_matches(matches1to2, matches2to1):
+    cross_checked_matches = []
+    for match1 in matches1to2:
+        # Find the corresponding match in the reverse direction
+        match2 = next((m for m in matches2to1 if m.queryIdx == match1.trainIdx and m.trainIdx == match1.queryIdx), None)
+        if match2:
+            cross_checked_matches.append(match1)
+    return cross_checked_matches
+
 def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
     if matcher == 0: # Brute-force matcher
         bf = cv2.BFMatcher(norm_type, crossCheck=True) 
@@ -87,7 +96,11 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
             search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
+        # Find matches in both directions
+        matches1to2 = flann.match(Dspt1, Dspt2)
+        matches2to1 = flann.match(Dspt2, Dspt1)
+        # Apply cross-check
+        matches = cross_check_matches(matches1to2, matches2to1)
     # matchesSorted = sorted(matches, key = lambda x:x.distance)
     # matches = matchesSorted[:1000]               
     points1 = np.array([KP1[match.queryIdx].pt for match in matches], dtype=np.float32)

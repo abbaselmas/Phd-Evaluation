@@ -69,7 +69,11 @@ def evaluate_scenario_intensity(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
             search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
+        # Find matches in both directions
+        matches1to2 = flann.match(Dspt1, Dspt2)
+        matches2to1 = flann.match(Dspt2, Dspt1)
+        # Apply cross-check
+        matches = cross_check_matches(matches1to2, matches2to1)
     # matchesSorted = sorted(matches, key = lambda x:x.distance)
     # matches = matchesSorted[:1000]
     Prob_P = Prob_N = 0
@@ -102,7 +106,11 @@ def evaluate_scenario_scale    (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, scal
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
             search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
+        # Find matches in both directions
+        matches1to2 = flann.match(Dspt1, Dspt2)
+        matches2to1 = flann.match(Dspt2, Dspt1)
+        # Apply cross-check
+        matches = cross_check_matches(matches1to2, matches2to1)
     # matchesSorted = sorted(matches, key = lambda x:x.distance)
     # matches = matchesSorted[:1000]
     Prob_P = Prob_N = 0
@@ -135,7 +143,11 @@ def evaluate_scenario_rotation (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot,
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
             search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
+        # Find matches in both directions
+        matches1to2 = flann.match(Dspt1, Dspt2)
+        matches2to1 = flann.match(Dspt2, Dspt1)
+        # Apply cross-check
+        matches = cross_check_matches(matches1to2, matches2to1)
     # matchesSorted = sorted(matches, key = lambda x:x.distance)
     # matches = matchesSorted[:1000]
     Prob_P = Prob_N = 0
@@ -223,7 +235,8 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                                     Rate_intensity[k, m, c3, i, j,10] = len(matches) # All Matches
                                     Rate_intensity[k, m, c3, i, j,12] = (Rate_intensity[k, m, c3, i, j, 9] / Rate_intensity[k, m, c3, i, j, 5]) if Rate_intensity[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
                                     Rate_intensity[k, m, c3, i, j,13] = (Rate_intensity[k, m, c3, i, j, 9] / Rate_intensity[k, m, c3, i, j,10]) if Rate_intensity[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_intensity[k, m, c3, i, j,14] = (Rate_intensity[k, m, c3, i, j,10] / Rate_intensity[k, m, c3, i, j, 5]) if Rate_intensity[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = All Matches / Ground Truth keypoints
+                                    # Rate_intensity[k, m, c3, i, j,14] = (Rate_intensity[k, m, c3, i, j, 9] / Rate_intensity[k, m, c3, i, j, 5]) if Rate_intensity[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = Inliers / Ground Truth keypoints
+                                    Rate_intensity[k, m, c3, i, j,14] = (Rate_intensity[k, m, c3, i, j, 9] / min(Rate_intensity[k, m, c3, i, j, 5], Rate_intensity[k, m, c3, i, j, 6])) if min(Rate_intensity[k, m, c3, i, j, 5], Rate_intensity[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
                                     Rate_intensity[k, m, c3, i, j,15] = (2 * Rate_intensity[k, m, c3, i, j,12] * Rate_intensity[k, m, c3, i, j,13] / (Rate_intensity[k, m, c3, i, j,12] + Rate_intensity[k, m, c3, i, j,13])) if Rate_intensity[k, m, c3, i, j,12] + Rate_intensity[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
                                     Exec_time_intensity[k, m, c3, i, j, 3] = Exec_time_intensity[k, m, c3, i, j, 0] + Exec_time_intensity[k, m, c3, i, j, 1] + Exec_time_intensity[k, m, c3, i, j, 2] # Total Execution Time
                                     Exec_time_intensity[k, m, c3, i, j, 4] = ((Exec_time_intensity[k, m, c3, i, j, 0] / Rate_intensity[k, m, c3, i, j, 6]) * 1000) if Rate_intensity[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
@@ -321,7 +334,8 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                                     Rate_scale[k, m, c3, i, j,10] = len(matches)
                                     Rate_scale[k, m, c3, i, j,12] = (Rate_scale[k, m, c3, i, j, 9] / Rate_scale[k, m, c3, i, j, 5]) if Rate_scale[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
                                     Rate_scale[k, m, c3, i, j,13] = (Rate_scale[k, m, c3, i, j, 9] / Rate_scale[k, m, c3, i, j,10]) if Rate_scale[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_scale[k, m, c3, i, j,14] = (Rate_scale[k, m, c3, i, j,10] / Rate_scale[k, m, c3, i, j, 5]) if Rate_scale[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = All Matches / Ground Truth keypoints
+                                    # Rate_scale[k, m, c3, i, j,14] = (Rate_scale[k, m, c3, i, j, 9] / Rate_scale[k, m, c3, i, j, 5]) if Rate_scale[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = Inliers / Ground Truth keypoints
+                                    Rate_scale[k, m, c3, i, j,14] = (Rate_scale[k, m, c3, i, j, 9] / min(Rate_scale[k, m, c3, i, j, 5], Rate_scale[k, m, c3, i, j, 6])) if min(Rate_scale[k, m, c3, i, j, 5], Rate_scale[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
                                     Rate_scale[k, m, c3, i, j,15] = (2 * Rate_scale[k, m, c3, i, j,12] * Rate_scale[k, m, c3, i, j,13] / (Rate_scale[k, m, c3, i, j,12] + Rate_scale[k, m, c3, i, j,13])) if Rate_scale[k, m, c3, i, j,12] + Rate_scale[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
                                     Exec_time_scale[k, m, c3, i, j, 3] = Exec_time_scale[k, m, c3, i, j, 0] + Exec_time_scale[k, m, c3, i, j, 1] + Exec_time_scale[k, m, c3, i, j, 2] # Total Execution Time
                                     Exec_time_scale[k, m, c3, i, j, 4] = ((Exec_time_scale[k, m, c3, i, j, 0] / Rate_scale[k, m, c3, i, j, 6]) * 1000) if Rate_scale[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
@@ -419,7 +433,8 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                                     Rate_rot[k, m, c3, i, j,10] = len(matches)
                                     Rate_rot[k, m, c3, i, j,12] = (Rate_rot[k, m, c3, i, j, 9] / Rate_rot[k, m, c3, i, j, 5]) if Rate_rot[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
                                     Rate_rot[k, m, c3, i, j,13] = (Rate_rot[k, m, c3, i, j, 9] / Rate_rot[k, m, c3, i, j,10]) if Rate_rot[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_rot[k, m, c3, i, j,14] = (Rate_rot[k, m, c3, i, j,10] / Rate_rot[k, m, c3, i, j, 5]) if Rate_rot[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = All Matches / Ground Truth keypoints
+                                    # Rate_rot[k, m, c3, i, j,14] = (Rate_rot[k, m, c3, i, j, 9] / Rate_rot[k, m, c3, i, j, 5]) if Rate_rot[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = Inliers / Ground Truth keypoints
+                                    Rate_rot[k, m, c3, i, j,14] = (Rate_rot[k, m, c3, i, j, 9] / min(Rate_rot[k, m, c3, i, j, 5], Rate_rot[k, m, c3, i, j, 6])) if min(Rate_rot[k, m, c3, i, j, 5], Rate_rot[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
                                     Rate_rot[k, m, c3, i, j,15] = (2 * Rate_rot[k, m, c3, i, j,12] * Rate_rot[k, m, c3, i, j,13] / (Rate_rot[k, m, c3, i, j,12] + Rate_rot[k, m, c3, i, j,13])) if (Rate_rot[k, m, c3, i, j,12] + Rate_rot[k, m, c3, i, j,13]) != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
                                     Exec_time_rot[k, m, c3, i, j, 3] = Exec_time_rot[k, m, c3, i, j, 0] + Exec_time_rot[k, m, c3, i, j, 1] + Exec_time_rot[k, m, c3, i, j, 2] # Total Execution Time
                                     Exec_time_rot[k, m, c3, i, j, 4] = ((Exec_time_rot[k, m, c3, i, j, 0] / Rate_rot[k, m, c3, i, j, 6]) * 1000) if Rate_rot[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints

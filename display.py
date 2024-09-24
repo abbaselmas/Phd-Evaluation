@@ -129,24 +129,24 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate2_I1_x = np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, x])
-                    Rate2_I1_y = np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, y])
-                    Rate2_I2_x = np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, x])
-                    Rate2_I2_y = np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, y])
-                    Rate2_S_x  = np.nanmean(Rate_scale    [          :, m, c3, i, j, x])
-                    Rate2_S_y  = np.nanmean(Rate_scale    [          :, m, c3, i, j, y])
-                    Rate2_R_x  = np.nanmean(Rate_rot      [          :, m, c3, i, j, x])
-                    Rate2_R_y  = np.nanmean(Rate_rot      [          :, m, c3, i, j, y])
+                    Rate2_I1_x = Rate_intensity[:len(val_b), m, c3, i, j, x]
+                    Rate2_I1_y = Rate_intensity[:len(val_b), m, c3, i, j, y]
+                    Rate2_I2_x = Rate_intensity[len(val_c):, m, c3, i, j, x]
+                    Rate2_I2_y = Rate_intensity[len(val_c):, m, c3, i, j, y]
+                    Rate2_S_x  = Rate_scale    [          :, m, c3, i, j, x]
+                    Rate2_S_y  = Rate_scale    [          :, m, c3, i, j, y]
+                    Rate2_R_x  = Rate_rot      [          :, m, c3, i, j, x]
+                    Rate2_R_y  = Rate_rot      [          :, m, c3, i, j, y]
                     legend_groupfig2 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]), name=legend_groupfig2, legendgroup=legend_groupfig2)
                     if not (np.isnan(Rate2_I1_x).any()) and not (np.isnan(Rate2_I1_y).any()):
-                        fig2.add_trace(go.Scatter(x=[Rate2_I1_x], y=[Rate2_I1_y], arg=sett, showlegend=True), row=1, col=1)
+                        fig2.add_trace(go.Scatter(x=Rate2_I1_x, y=Rate2_I1_y, arg=sett, showlegend=True), row=1, col=1)
                     if not (np.isnan(Rate2_I2_x).any()) and not (np.isnan(Rate2_I2_y).any()):
-                        fig2.add_trace(go.Scatter(x=[Rate2_I2_x], y=[Rate2_I2_y], arg=sett, showlegend=False), row=1, col=2)
+                        fig2.add_trace(go.Scatter(x=Rate2_I2_x, y=Rate2_I2_y, arg=sett, showlegend=False), row=1, col=2)
                     if not (np.isnan(Rate2_S_x).any()) and not (np.isnan(Rate2_S_y).any()):
-                        fig2.add_trace(go.Scatter(x=[Rate2_S_x],  y=[Rate2_S_y],  arg=sett, showlegend=False), row=2, col=1)
+                        fig2.add_trace(go.Scatter(x=Rate2_S_x,  y=Rate2_S_y,  arg=sett, showlegend=False), row=2, col=1)
                     if not (np.isnan(Rate2_R_x).any()) and not (np.isnan(Rate2_R_y).any()):
-                        fig2.add_trace(go.Scatter(x=[Rate2_R_x],  y=[Rate2_R_y],  arg=sett, showlegend=False), row=2, col=2)
+                        fig2.add_trace(go.Scatter(x=Rate2_R_x,  y=Rate2_R_y,  arg=sett, showlegend=False), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -355,42 +355,42 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf_x  =np.nanmean(Rate_graf  [:, m, c3, i, j, x])
-                    Rate_Graf_y  =np.nanmean(Rate_graf  [:, m, c3, i, j, y])
-                    Rate_Bikes_x =np.nanmean(Rate_bikes [:, m, c3, i, j, x])
-                    Rate_Bikes_y =np.nanmean(Rate_bikes [:, m, c3, i, j, y])
-                    Rate_Boat_x  =np.nanmean(Rate_boat  [:, m, c3, i, j, x])
-                    Rate_Boat_y  =np.nanmean(Rate_boat  [:, m, c3, i, j, y])
-                    Rate_Leuven_x=np.nanmean(Rate_leuven[:, m, c3, i, j, x])
-                    Rate_Leuven_y=np.nanmean(Rate_leuven[:, m, c3, i, j, y])
-                    Rate_Wall_x  =np.nanmean(Rate_wall  [:, m, c3, i, j, x])
-                    Rate_Wall_y  =np.nanmean(Rate_wall  [:, m, c3, i, j, y])
-                    Rate_Trees_x =np.nanmean(Rate_trees [:, m, c3, i, j, x])
-                    Rate_Trees_y =np.nanmean(Rate_trees [:, m, c3, i, j, y])
-                    Rate_Bark_x  =np.nanmean(Rate_bark  [:, m, c3, i, j, x])
-                    Rate_Bark_y  =np.nanmean(Rate_bark  [:, m, c3, i, j, y])
-                    Rate_Ubc_x   =np.nanmean(Rate_ubc   [:, m, c3, i, j, x])
-                    Rate_Ubc_y   =np.nanmean(Rate_ubc   [:, m, c3, i, j, y])
+                    Rate_Graf_x  =Rate_graf  [:, m, c3, i, j, x]
+                    Rate_Graf_y  =Rate_graf  [:, m, c3, i, j, y]
+                    Rate_Bikes_x =Rate_bikes [:, m, c3, i, j, x]
+                    Rate_Bikes_y =Rate_bikes [:, m, c3, i, j, y]
+                    Rate_Boat_x  =Rate_boat  [:, m, c3, i, j, x]
+                    Rate_Boat_y  =Rate_boat  [:, m, c3, i, j, y]
+                    Rate_Leuven_x=Rate_leuven[:, m, c3, i, j, x]
+                    Rate_Leuven_y=Rate_leuven[:, m, c3, i, j, y]
+                    Rate_Wall_x  =Rate_wall  [:, m, c3, i, j, x]
+                    Rate_Wall_y  =Rate_wall  [:, m, c3, i, j, y]
+                    Rate_Trees_x =Rate_trees [:, m, c3, i, j, x]
+                    Rate_Trees_y =Rate_trees [:, m, c3, i, j, y]
+                    Rate_Bark_x  =Rate_bark  [:, m, c3, i, j, x]
+                    Rate_Bark_y  =Rate_bark  [:, m, c3, i, j, y]
+                    Rate_Ubc_x   =Rate_ubc   [:, m, c3, i, j, x]
+                    Rate_Ubc_y   =Rate_ubc   [:, m, c3, i, j, y]
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="lines+markers", marker_symbol=symbol_index, marker_size=7, line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3), name=legend_groupfig5, legendgroup=legend_groupfig5)
                     if not (np.isnan(Rate_Graf_x).any()) and not (np.isnan(Rate_Graf_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett, showlegend=True),  row=1, col=1)
+                        fig5.add_trace(go.Scatter(x=Rate_Graf_x,   y=Rate_Graf_y,   arg=sett, showlegend=True),  row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()) and not (np.isnan(Rate_Bikes_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Bikes_x],  y=[Rate_Bikes_y],  arg=sett, showlegend=False), row=1, col=2)
+                        fig5.add_trace(go.Scatter(x=Rate_Bikes_x,  y=Rate_Bikes_y,  arg=sett, showlegend=False), row=1, col=2)
                     if not (np.isnan(Rate_Boat_x).any()) and not (np.isnan(Rate_Boat_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Boat_x],   y=[Rate_Boat_y],   arg=sett, showlegend=False), row=1, col=3)
+                        fig5.add_trace(go.Scatter(x=Rate_Boat_x,   y=Rate_Boat_y,   arg=sett, showlegend=False), row=1, col=3)
                     if not (np.isnan(Rate_Leuven_x).any()) and not (np.isnan(Rate_Leuven_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Leuven_x], y=[Rate_Leuven_y], arg=sett, showlegend=False), row=2, col=1)
+                        fig5.add_trace(go.Scatter(x=Rate_Leuven_x, y=Rate_Leuven_y, arg=sett, showlegend=False), row=2, col=1)
                     if not (np.isnan(Rate_Wall_x).any()) and not (np.isnan(Rate_Wall_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Wall_x],   y=[Rate_Wall_y],   arg=sett, showlegend=False), row=2, col=2)
+                        fig5.add_trace(go.Scatter(x=Rate_Wall_x,   y=Rate_Wall_y,   arg=sett, showlegend=False), row=2, col=2)
                     if not (np.isnan(Rate_Trees_x).any()) and not (np.isnan(Rate_Trees_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Trees_x],  y=[Rate_Trees_y],  arg=sett, showlegend=False), row=2, col=3)
+                        fig5.add_trace(go.Scatter(x=Rate_Trees_x,  y=Rate_Trees_y,  arg=sett, showlegend=False), row=2, col=3)
                     if not (np.isnan(Rate_Bark_x).any()) and not (np.isnan(Rate_Bark_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Bark_x],   y=[Rate_Bark_y],   arg=sett, showlegend=False), row=3, col=1)
+                        fig5.add_trace(go.Scatter(x=Rate_Bark_x,   y=Rate_Bark_y,   arg=sett, showlegend=False), row=3, col=1)
                     if not (np.isnan(Rate_Ubc_x).any()) and not (np.isnan(Rate_Ubc_y).any()):
-                        fig5.add_trace(go.Scatter(x=[Rate_Ubc_x],    y=[Rate_Ubc_y],    arg=sett, showlegend=False), row=3, col=2)
-                    fig5.add_trace(go.Scatter(  x=[np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)],
-                                                y=[np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)], arg=sett, showlegend=False), row=3, col=3)
+                        fig5.add_trace(go.Scatter(x=Rate_Ubc_x,    y=Rate_Ubc_y,    arg=sett, showlegend=False), row=3, col=2)
+                    fig5.add_trace(go.Scatter(  x=np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0),
+                                                y=np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0), arg=sett, showlegend=False), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -580,10 +580,10 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_x = np.nanmean(Rate[:, m, c3, i, j, x])
-                    Rate_y = np.nanmean(Rate[:, m, c3, i, j, y])
+                    Rate_x = Rate[:, m, c3, i, j, x]
+                    Rate_y = Rate[:, m, c3, i, j, y]
                     if not (np.isnan(Rate_x).any()) and not (np.isnan(Rate_y).any()):
-                        fig11trace_UAV  = go.Scatter(   x=[Rate_x], y=[Rate_y], mode="markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]),
+                        fig11trace_UAV  = go.Scatter(   x=Rate_x, y=Rate_y, mode="markers", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]),
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", showlegend=True)
                         fig11.add_trace(fig11trace_UAV)
                     symbol_index = (symbol_index + 1) % 27
