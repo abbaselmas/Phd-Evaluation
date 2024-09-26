@@ -76,12 +76,9 @@ def match_with_bf_ratio_test(matcher, Dspt1, Dspt2, norm_type, threshold_ratio=0
     return match_rate, good_matches, matches
 
 def cross_check_matches(matches1to2, matches2to1):
-    cross_checked_matches = []
-    for match1 in matches1to2:
-        # Find the corresponding match in the reverse direction
-        match2 = next((m for m in matches2to1 if m.queryIdx == match1.trainIdx and m.trainIdx == match1.queryIdx), None)
-        if match2:
-            cross_checked_matches.append(match1)
+    # Create dictionaries for fast lookup
+    matches2to1_dict = { (m.trainIdx, m.queryIdx): m for m in matches2to1 }
+    cross_checked_matches = [m for m in matches1to2 if (m.queryIdx, m.trainIdx) in matches2to1_dict]
     return cross_checked_matches
 
 def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
