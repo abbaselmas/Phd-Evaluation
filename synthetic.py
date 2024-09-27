@@ -245,17 +245,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                                     Exec_time_intensity[k, m, c3, i, j, 7] = ((Exec_time_intensity[k, m, c3, i, j, 3] / Rate_intensity[k, m, c3, i, j, 9]) * 1000) if Rate_intensity[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
                                 except:
                                     Exec_time_intensity[k, m, c3, i, j, :] = None
-                                    Rate_intensity[k, m, c3, i, j, 5] = None
-                                    Rate_intensity[k, m, c3, i, j, 6] = None
-                                    Rate_intensity[k, m, c3, i, j, 7] = None
-                                    Rate_intensity[k, m, c3, i, j, 8] = None
-                                    Rate_intensity[k, m, c3, i, j, 9] = None
-                                    Rate_intensity[k, m, c3, i, j,10] = None
-                                    Rate_intensity[k, m, c3, i, j,11] = None
-                                    Rate_intensity[k, m, c3, i, j,12] = None
-                                    Rate_intensity[k, m, c3, i, j,13] = None
-                                    Rate_intensity[k, m, c3, i, j,14] = None
-                                    Rate_intensity[k, m, c3, i, j,15] = None
+                                    Rate_intensity[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 7:
                                     img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, good_matches, Rate_intensity[k, m, c3, i, j, :], Exec_time_intensity[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
@@ -344,17 +334,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                                     Exec_time_scale[k, m, c3, i, j, 7] = ((Exec_time_scale[k, m, c3, i, j, 3] / Rate_scale[k, m, c3, i, j, 9]) * 1000) if Rate_scale[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
                                 except:
                                     Exec_time_scale[k, m, c3, i, j, :] = None
-                                    Rate_scale[k, m, c3, i, j, 5] = None
-                                    Rate_scale[k, m, c3, i, j, 6] = None
-                                    Rate_scale[k, m, c3, i, j, 7] = None
-                                    Rate_scale[k, m, c3, i, j, 8] = None
-                                    Rate_scale[k, m, c3, i, j, 9] = None
-                                    Rate_scale[k, m, c3, i, j,10] = None
-                                    Rate_scale[k, m, c3, i, j,11] = None
-                                    Rate_scale[k, m, c3, i, j,12] = None
-                                    Rate_scale[k, m, c3, i, j,13] = None
-                                    Rate_scale[k, m, c3, i, j,14] = None
-                                    Rate_scale[k, m, c3, i, j,15] = None
+                                    Rate_scale[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 4:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate_scale[k, m, c3, i, j, :], Exec_time_scale[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
@@ -443,17 +423,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                                     Exec_time_rot[k, m, c3, i, j, 7] = ((Exec_time_rot[k, m, c3, i, j, 3] / Rate_rot[k, m, c3, i, j, 9]) * 1000) if Rate_rot[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
                                 except:
                                     Exec_time_rot[k, m, c3, i, j, :] = None
-                                    Rate_rot[k, m, c3, i, j, 5] = None
-                                    Rate_rot[k, m, c3, i, j, 6] = None
-                                    Rate_rot[k, m, c3, i, j, 7] = None
-                                    Rate_rot[k, m, c3, i, j, 8] = None
-                                    Rate_rot[k, m, c3, i, j, 9] = None
-                                    Rate_rot[k, m, c3, i, j,10] = None
-                                    Rate_rot[k, m, c3, i, j,11] = None
-                                    Rate_rot[k, m, c3, i, j,12] = None
-                                    Rate_rot[k, m, c3, i, j,13] = None
-                                    Rate_rot[k, m, c3, i, j,14] = None
-                                    Rate_rot[k, m, c3, i, j,15] = None
+                                    Rate_rot[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 4:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate_rot[k, m, c3, i, j, :], Exec_time_rot[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)

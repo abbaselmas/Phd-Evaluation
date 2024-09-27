@@ -76,17 +76,7 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / Rate[k, m, c3, i, j, 9]) * 1000) if Rate[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
                                 except:
                                     Exec_time[k, m, c3, i, j, :] = None
-                                    Rate[k, m, c3, i, j, 5] = None
-                                    Rate[k, m, c3, i, j, 6] = None
-                                    Rate[k, m, c3, i, j, 7] = None
-                                    Rate[k, m, c3, i, j, 8] = None
-                                    Rate[k, m, c3, i, j, 9] = None
-                                    Rate[k, m, c3, i, j,10] = None
-                                    Rate[k, m, c3, i, j,11] = None
-                                    Rate[k, m, c3, i, j,12] = None
-                                    Rate[k, m, c3, i, j,13] = None
-                                    Rate[k, m, c3, i, j,14] = None
-                                    Rate[k, m, c3, i, j,15] = None
+                                    Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 3:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
