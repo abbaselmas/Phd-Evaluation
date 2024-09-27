@@ -35,12 +35,6 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                             for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
-                                Exec_time[k, m, c3, i, j, 0] = detect_time / (10 ** 9)
-                                Rate[k, m, c3, i, j, 0] = k
-                                Rate[k, m, c3, i, j, 1] = i
-                                Rate[k, m, c3, i, j, 2] = j
-                                Rate[k, m, c3, i, j, 3] = Normalization[c3]
-                                Rate[k, m, c3, i, j, 4] = m
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -54,25 +48,10 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
                                         descriptors_cache[k+1, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k+1, i, j, 1]
-                                    Exec_time[k, m, c3, i, j, 1] = descript_time / (10 ** 9)
                                     start_time = time.perf_counter_ns()
                                     Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate[k, m, c3, i, j, 5] = len(keypoints1)
-                                    Rate[k, m, c3, i, j, 6] = len(keypoints2)
-                                    Rate[k, m, c3, i, j, 7] = len(descriptors1)
-                                    Rate[k, m, c3, i, j, 8] = len(descriptors2)
-                                    Rate[k, m, c3, i, j, 9] = len(good_matches)
-                                    Rate[k, m, c3, i, j,10] = len(matches)
-                                    Rate[k, m, c3, i, j,12] = (Rate[k, m, c3, i, j, 9] / Rate[k, m, c3, i, j, 5]) if Rate[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
-                                    Rate[k, m, c3, i, j,13] = (Rate[k, m, c3, i, j, 9] / Rate[k, m, c3, i, j,10]) if Rate[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate[k, m, c3, i, j,14] = (Rate[k, m, c3, i, j, 9] / min(Rate[k, m, c3, i, j, 5], Rate[k, m, c3, i, j, 6])) if min(Rate[k, m, c3, i, j, 5], Rate[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
-                                    Rate[k, m, c3, i, j,15] = (2 * Rate[k, m, c3, i, j,12] * Rate[k, m, c3, i, j,13] / (Rate[k, m, c3, i, j,12] + Rate[k, m, c3, i, j,13])) if Rate[k, m, c3, i, j,12] + Rate[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
-                                    Exec_time[k, m, c3, i, j, 3] = Exec_time[k, m, c3, i, j, 0] + Exec_time[k, m, c3, i, j, 1] + Exec_time[k, m, c3, i, j, 2] # Total Execution Time
-                                    Exec_time[k, m, c3, i, j, 4] = ((Exec_time[k, m, c3, i, j, 0] / Rate[k, m, c3, i, j, 6]) * 1000) if Rate[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
-                                    Exec_time[k, m, c3, i, j, 5] = ((Exec_time[k, m, c3, i, j, 1] / Rate[k, m, c3, i, j, 8]) * 1000) if Rate[k, m, c3, i, j, 8] != 0 else 0 # Descript Time per 1K keypoints
-                                    Exec_time[k, m, c3, i, j, 6] = ((Exec_time[k, m, c3, i, j, 3] / Rate[k, m, c3, i, j,10]) * 1000) if Rate[k, m, c3, i, j,10] != 0 else 0 # Total Match Time per 1K keypoints
-                                    Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / Rate[k, m, c3, i, j, 9]) * 1000) if Rate[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None

@@ -109,6 +109,43 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
     inliers_percentage = ((len(inliers) / len(matches)) * 100 if len(matches) > 0 else 0)
     return inliers_percentage, inliers, matches
 
+def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len, desc2_len, good_matches_len, matches_len, detect_time, descript_time):
+    Rate[k, m, c3, i, j, 0] = k
+    Rate[k, m, c3, i, j, 1] = i
+    Rate[k, m, c3, i, j, 2] = j
+    Rate[k, m, c3, i, j, 3] = Normalization[c3]
+    Rate[k, m, c3, i, j, 4] = m
+    Rate[k, m, c3, i, j, 5] = kp1_len
+    Rate[k, m, c3, i, j, 6] = kp2_len
+    Rate[k, m, c3, i, j, 7] = desc1_len
+    Rate[k, m, c3, i, j, 8] = desc2_len
+    Rate[k, m, c3, i, j, 9] = good_matches_len
+    Rate[k, m, c3, i, j, 10] = matches_len
+    
+    # Recall = Inliers / Ground Truth keypoints
+    Rate[k, m, c3, i, j, 12] = (good_matches_len / kp1_len) if kp1_len != 0 else 0
+    # Precision = Inliers / All Matches
+    Rate[k, m, c3, i, j, 13] = (good_matches_len / matches_len) if matches_len != 0 else 0
+    # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
+    Rate[k, m, c3, i, j, 14] = (good_matches_len / min(kp1_len, kp2_len)) if min(kp1_len, kp2_len) != 0 else 0
+    # F1 Score = 2 * Recall * Precision / (Recall + Precision)
+    Rate[k, m, c3, i, j, 15] = (2 * Rate[k, m, c3, i, j, 12] * Rate[k, m, c3, i, j, 13] / (Rate[k, m, c3, i, j, 12] + Rate[k, m, c3, i, j, 13])) if Rate[k, m, c3, i, j, 12] + Rate[k, m, c3, i, j, 13] != 0 else 0
+    # Detect time
+    Exec_time[k, m, c3, i, j, 0] = detect_time / (10 ** 9)
+    # Descriptor time
+    Exec_time[k, m, c3, i, j, 1] = descript_time / (10 ** 9)
+    # Total Execution Time
+    Exec_time[k, m, c3, i, j, 3] = Exec_time[k, m, c3, i, j, 0] + Exec_time[k, m, c3, i, j, 1] + Exec_time[k, m, c3, i, j, 2]
+    # Detect Time per 1K keypoints
+    Exec_time[k, m, c3, i, j, 4] = ((Exec_time[k, m, c3, i, j, 0] / kp2_len) * 1000) if kp2_len != 0 else 0
+    # Descript Time per 1K keypoints
+    Exec_time[k, m, c3, i, j, 5] = ((Exec_time[k, m, c3, i, j, 1] / desc2_len) * 1000) if desc2_len != 0 else 0
+    # Total Match Time per 1K keypoints
+    Exec_time[k, m, c3, i, j, 6] = ((Exec_time[k, m, c3, i, j, 3] / matches_len) * 1000) if matches_len != 0 else 0
+    # Inliers Total Time per 1K keypoints
+    Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / good_matches_len) * 1000) if good_matches_len != 0 else 0
+    return Rate, Exec_time
+
 def draw_matches_with_homography(img1, kp1, img2, kp2, total_matches, good_matches, H, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
     keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=(255, 0, 0), flags=0)
     keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=(255, 0, 0), flags=0)

@@ -174,8 +174,8 @@ def evaluate_scenario_rotation (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot,
 def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 1 Intensity")
-    Rate_intensity      = np.load(f"./arrays/Rate_intensity.npy")      if os.path.exists(f"./arrays/Rate_intensity.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time_intensity = np.load(f"./arrays/Exec_time_intensity.npy") if os.path.exists(f"./arrays/Exec_time_intensity.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate      = np.load(f"./arrays/Rate_intensity.npy")      if os.path.exists(f"./arrays/Rate_intensity.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_intensity.npy") if os.path.exists(f"./arrays/Exec_time_intensity.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache     = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache   = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     img, List8Img = get_intensity_8Img(Image, val_b, val_c)
@@ -204,12 +204,6 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                Exec_time_intensity[k, m, c3, i, j, 0] = detect_time / (10 ** 9)
-                                Rate_intensity[k, m, c3, i, j, 0] = k
-                                Rate_intensity[k, m, c3, i, j, 1] = i
-                                Rate_intensity[k, m, c3, i, j, 2] = j
-                                Rate_intensity[k, m, c3, i, j, 3] = Normalization[c3]
-                                Rate_intensity[k, m, c3, i, j, 4] = m
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img, keypoints1)
@@ -223,31 +217,16 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
-                                    Exec_time_intensity[k, m, c3, i, j, 1] = descript_time / (10 ** 9)
                                     start_time = time.perf_counter_ns()
-                                    Rate_intensity[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_intensity(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
-                                    Exec_time_intensity[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate_intensity[k, m, c3, i, j, 5] = len(keypoints1) # Ground Truth keypoint number
-                                    Rate_intensity[k, m, c3, i, j, 6] = len(keypoints2)
-                                    Rate_intensity[k, m, c3, i, j, 7] = len(descriptors1)
-                                    Rate_intensity[k, m, c3, i, j, 8] = len(descriptors2)
-                                    Rate_intensity[k, m, c3, i, j, 9] = len(good_matches) # Inliers
-                                    Rate_intensity[k, m, c3, i, j,10] = len(matches) # All Matches
-                                    Rate_intensity[k, m, c3, i, j,12] = (Rate_intensity[k, m, c3, i, j, 9] / Rate_intensity[k, m, c3, i, j, 5]) if Rate_intensity[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
-                                    Rate_intensity[k, m, c3, i, j,13] = (Rate_intensity[k, m, c3, i, j, 9] / Rate_intensity[k, m, c3, i, j,10]) if Rate_intensity[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_intensity[k, m, c3, i, j,14] = (Rate_intensity[k, m, c3, i, j, 9] / min(Rate_intensity[k, m, c3, i, j, 5], Rate_intensity[k, m, c3, i, j, 6])) if min(Rate_intensity[k, m, c3, i, j, 5], Rate_intensity[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
-                                    Rate_intensity[k, m, c3, i, j,15] = (2 * Rate_intensity[k, m, c3, i, j,12] * Rate_intensity[k, m, c3, i, j,13] / (Rate_intensity[k, m, c3, i, j,12] + Rate_intensity[k, m, c3, i, j,13])) if Rate_intensity[k, m, c3, i, j,12] + Rate_intensity[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
-                                    Exec_time_intensity[k, m, c3, i, j, 3] = Exec_time_intensity[k, m, c3, i, j, 0] + Exec_time_intensity[k, m, c3, i, j, 1] + Exec_time_intensity[k, m, c3, i, j, 2] # Total Execution Time
-                                    Exec_time_intensity[k, m, c3, i, j, 4] = ((Exec_time_intensity[k, m, c3, i, j, 0] / Rate_intensity[k, m, c3, i, j, 6]) * 1000) if Rate_intensity[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
-                                    Exec_time_intensity[k, m, c3, i, j, 5] = ((Exec_time_intensity[k, m, c3, i, j, 1] / Rate_intensity[k, m, c3, i, j, 8]) * 1000) if Rate_intensity[k, m, c3, i, j, 8] != 0 else 0 # Descript Time per 1K keypoints
-                                    Exec_time_intensity[k, m, c3, i, j, 6] = ((Exec_time_intensity[k, m, c3, i, j, 3] / Rate_intensity[k, m, c3, i, j,10]) * 1000) if Rate_intensity[k, m, c3, i, j,10] != 0 else 0 # Total Match Time per 1K keypoints
-                                    Exec_time_intensity[k, m, c3, i, j, 7] = ((Exec_time_intensity[k, m, c3, i, j, 3] / Rate_intensity[k, m, c3, i, j, 9]) * 1000) if Rate_intensity[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_intensity(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
-                                    Exec_time_intensity[k, m, c3, i, j, :] = None
-                                    Rate_intensity[k, m, c3, i, j, 5:16] = None
+                                    Exec_time[k, m, c3, i, j, :] = None
+                                    Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 7:
-                                    img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, good_matches, Rate_intensity[k, m, c3, i, j, :], Exec_time_intensity[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/intensity/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
@@ -255,16 +234,16 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_intensity.npy",      Rate_intensity)
-        np.save(f"./arrays/Exec_time_intensity.npy", Exec_time_intensity)
-        saveAverageCSV(Rate_intensity, Exec_time_intensity, "intensity")
-        saveAllCSV(Rate_intensity, Exec_time_intensity, "intensity")
+        np.save(f"./arrays/Rate_intensity.npy",      Rate)
+        np.save(f"./arrays/Exec_time_intensity.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "intensity")
+        saveAllCSV(Rate, Exec_time, "intensity")
 
 def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 2 Scale")
-    Rate_scale        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time_scale   = np.load(f"./arrays/Exec_time_scale.npy")     if os.path.exists(f"./arrays/Exec_time_scale.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time   = np.load(f"./arrays/Exec_time_scale.npy")     if os.path.exists(f"./arrays/Exec_time_scale.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(scale)):
@@ -292,12 +271,6 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                Exec_time_scale[k, m, c3, i, j, 0] = detect_time / (10 ** 9) 
-                                Rate_scale[k, m, c3, i, j, 0] = k
-                                Rate_scale[k, m, c3, i, j, 1] = i
-                                Rate_scale[k, m, c3, i, j, 2] = j
-                                Rate_scale[k, m, c3, i, j, 3] = Normalization[c3]
-                                Rate_scale[k, m, c3, i, j, 4] = m
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -311,31 +284,16 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
-                                    Exec_time_scale[k, m, c3, i, j, 1] = descript_time / (10 ** 9)
                                     start_time = time.perf_counter_ns()
-                                    Rate_scale[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_scale(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], scale[k])
-                                    Exec_time_scale[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate_scale[k, m, c3, i, j, 5] = len(keypoints1)
-                                    Rate_scale[k, m, c3, i, j, 6] = len(keypoints2)
-                                    Rate_scale[k, m, c3, i, j, 7] = len(descriptors1)
-                                    Rate_scale[k, m, c3, i, j, 8] = len(descriptors2)
-                                    Rate_scale[k, m, c3, i, j, 9] = len(good_matches)
-                                    Rate_scale[k, m, c3, i, j,10] = len(matches)
-                                    Rate_scale[k, m, c3, i, j,12] = (Rate_scale[k, m, c3, i, j, 9] / Rate_scale[k, m, c3, i, j, 5]) if Rate_scale[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
-                                    Rate_scale[k, m, c3, i, j,13] = (Rate_scale[k, m, c3, i, j, 9] / Rate_scale[k, m, c3, i, j,10]) if Rate_scale[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_scale[k, m, c3, i, j,14] = (Rate_scale[k, m, c3, i, j, 9] / min(Rate_scale[k, m, c3, i, j, 5], Rate_scale[k, m, c3, i, j, 6])) if min(Rate_scale[k, m, c3, i, j, 5], Rate_scale[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
-                                    Rate_scale[k, m, c3, i, j,15] = (2 * Rate_scale[k, m, c3, i, j,12] * Rate_scale[k, m, c3, i, j,13] / (Rate_scale[k, m, c3, i, j,12] + Rate_scale[k, m, c3, i, j,13])) if Rate_scale[k, m, c3, i, j,12] + Rate_scale[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
-                                    Exec_time_scale[k, m, c3, i, j, 3] = Exec_time_scale[k, m, c3, i, j, 0] + Exec_time_scale[k, m, c3, i, j, 1] + Exec_time_scale[k, m, c3, i, j, 2] # Total Execution Time
-                                    Exec_time_scale[k, m, c3, i, j, 4] = ((Exec_time_scale[k, m, c3, i, j, 0] / Rate_scale[k, m, c3, i, j, 6]) * 1000) if Rate_scale[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
-                                    Exec_time_scale[k, m, c3, i, j, 5] = ((Exec_time_scale[k, m, c3, i, j, 1] / Rate_scale[k, m, c3, i, j, 8]) * 1000) if Rate_scale[k, m, c3, i, j, 8] != 0 else 0 # Descript Time per 1K keypoints
-                                    Exec_time_scale[k, m, c3, i, j, 6] = ((Exec_time_scale[k, m, c3, i, j, 3] / Rate_scale[k, m, c3, i, j,10]) * 1000) if Rate_scale[k, m, c3, i, j,10] != 0 else 0 # Total Match Time per 1K keypoints
-                                    Exec_time_scale[k, m, c3, i, j, 7] = ((Exec_time_scale[k, m, c3, i, j, 3] / Rate_scale[k, m, c3, i, j, 9]) * 1000) if Rate_scale[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_scale(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], scale[k])
+                                    Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
-                                    Exec_time_scale[k, m, c3, i, j, :] = None
-                                    Rate_scale[k, m, c3, i, j, 5:16] = None
+                                    Exec_time[k, m, c3, i, j, :] = None
+                                    Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 4:
-                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate_scale[k, m, c3, i, j, :], Exec_time_scale[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/scale/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
@@ -343,16 +301,16 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_scale.npy",      Rate_scale)
-        np.save(f"./arrays/Exec_time_scale.npy", Exec_time_scale)
-        saveAverageCSV(Rate_scale, Exec_time_scale, "scale")
-        saveAllCSV(Rate_scale, Exec_time_scale, "scale")
+        np.save(f"./arrays/Rate_scale.npy",      Rate)
+        np.save(f"./arrays/Exec_time_scale.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "scale")
+        saveAllCSV(Rate, Exec_time, "scale")
 
 def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
     print(time.ctime())
     print("Scenario 3 Rotation")
-    Rate_rot          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time_rot     = np.load(f"./arrays/Exec_time_rot.npy")  if os.path.exists(f"./arrays/Exec_time_rot.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time     = np.load(f"./arrays/Exec_time_rot.npy")  if os.path.exists(f"./arrays/Exec_time_rot.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(rot)):
@@ -380,12 +338,6 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                Exec_time_rot[k, m, c3, i, j, 0] = detect_time / (10 ** 9)
-                                Rate_rot[k, m, c3, i, j, 0] = k
-                                Rate_rot[k, m, c3, i, j, 1] = i
-                                Rate_rot[k, m, c3, i, j, 2] = j
-                                Rate_rot[k, m, c3, i, j, 3] = Normalization[c3]
-                                Rate_rot[k, m, c3, i, j, 4] = m
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -399,31 +351,16 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
-                                    Exec_time_rot[k, m, c3, i, j, 1] = descript_time / (10 ** 9)
                                     start_time = time.perf_counter_ns()
-                                    Rate_rot[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_rotation(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], rot[k], rot_matrix)
-                                    Exec_time_rot[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate_rot[k, m, c3, i, j, 5] = len(keypoints1)
-                                    Rate_rot[k, m, c3, i, j, 6] = len(keypoints2)
-                                    Rate_rot[k, m, c3, i, j, 7] = len(descriptors1)
-                                    Rate_rot[k, m, c3, i, j, 8] = len(descriptors2)
-                                    Rate_rot[k, m, c3, i, j, 9] = len(good_matches)
-                                    Rate_rot[k, m, c3, i, j,10] = len(matches)
-                                    Rate_rot[k, m, c3, i, j,12] = (Rate_rot[k, m, c3, i, j, 9] / Rate_rot[k, m, c3, i, j, 5]) if Rate_rot[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
-                                    Rate_rot[k, m, c3, i, j,13] = (Rate_rot[k, m, c3, i, j, 9] / Rate_rot[k, m, c3, i, j,10]) if Rate_rot[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    Rate_rot[k, m, c3, i, j,14] = (Rate_rot[k, m, c3, i, j, 9] / min(Rate_rot[k, m, c3, i, j, 5], Rate_rot[k, m, c3, i, j, 6])) if min(Rate_rot[k, m, c3, i, j, 5], Rate_rot[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
-                                    Rate_rot[k, m, c3, i, j,15] = (2 * Rate_rot[k, m, c3, i, j,12] * Rate_rot[k, m, c3, i, j,13] / (Rate_rot[k, m, c3, i, j,12] + Rate_rot[k, m, c3, i, j,13])) if (Rate_rot[k, m, c3, i, j,12] + Rate_rot[k, m, c3, i, j,13]) != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
-                                    Exec_time_rot[k, m, c3, i, j, 3] = Exec_time_rot[k, m, c3, i, j, 0] + Exec_time_rot[k, m, c3, i, j, 1] + Exec_time_rot[k, m, c3, i, j, 2] # Total Execution Time
-                                    Exec_time_rot[k, m, c3, i, j, 4] = ((Exec_time_rot[k, m, c3, i, j, 0] / Rate_rot[k, m, c3, i, j, 6]) * 1000) if Rate_rot[k, m, c3, i, j, 6] != 0 else 0 # Detect Time per 1K keypoints
-                                    Exec_time_rot[k, m, c3, i, j, 5] = ((Exec_time_rot[k, m, c3, i, j, 1] / Rate_rot[k, m, c3, i, j, 8]) * 1000) if Rate_rot[k, m, c3, i, j, 8] != 0 else 0 # Descript Time per 1K keypoints
-                                    Exec_time_rot[k, m, c3, i, j, 6] = ((Exec_time_rot[k, m, c3, i, j, 3] / Rate_rot[k, m, c3, i, j,10]) * 1000) if Rate_rot[k, m, c3, i, j,10] != 0 else 0 # Total Match Time per 1K keypoints
-                                    Exec_time_rot[k, m, c3, i, j, 7] = ((Exec_time_rot[k, m, c3, i, j, 3] / Rate_rot[k, m, c3, i, j, 9]) * 1000) if Rate_rot[k, m, c3, i, j, 9] != 0 else 0 # Inliers Total Time per 1K keypoints
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_rotation(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], rot[k], rot_matrix)
+                                    Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
-                                    Exec_time_rot[k, m, c3, i, j, :] = None
-                                    Rate_rot[k, m, c3, i, j, 5:16] = None
+                                    Exec_time[k, m, c3, i, j, :] = None
+                                    Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 4:
-                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate_rot[k, m, c3, i, j, :], Exec_time_rot[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/rot/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
@@ -431,7 +368,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_rot.npy",      Rate_rot)
-        np.save(f"./arrays/Exec_time_rot.npy", Exec_time_rot)
-        saveAverageCSV(Rate_rot, Exec_time_rot, "rot")
-        saveAllCSV(Rate_rot, Exec_time_rot, "rot")
+        np.save(f"./arrays/Rate_rot.npy",      Rate)
+        np.save(f"./arrays/Exec_time_rot.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "rot")
+        saveAllCSV(Rate, Exec_time, "rot")
