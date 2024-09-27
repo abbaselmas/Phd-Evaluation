@@ -130,7 +130,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
     Rate_rot       = np.load("./arrays/Rate_rot.npy")
     fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('_')[0], y_title=name.split('_')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
     
     color_index = 0
@@ -151,16 +151,16 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     sett = dict(mode="markers+lines", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]), name=legend_groupfig2, legendgroup=legend_groupfig2)
                     if not (np.isnan(Rate2_I1_x).any()) and not (np.isnan(Rate2_I1_y).any()):
                         fig2.add_trace(go.Scatter(  x=Rate2_I1_x, y=Rate2_I1_y, arg=sett, showlegend=True,  customdata=val_b,
-                                                    hovertemplate="%{customdata} | " + f"{name.split('_')[0]}:" + "%{x:.3f} | " + f"{name.split('_')[1]}:" + "%{y:.3f}"), row=1, col=1)
+                                                    hovertemplate="%{customdata} | " + f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}"), row=1, col=1)
                     if not (np.isnan(Rate2_I2_x).any()) and not (np.isnan(Rate2_I2_y).any()):
                         fig2.add_trace(go.Scatter(  x=Rate2_I2_x, y=Rate2_I2_y, arg=sett, showlegend=False, customdata=val_c,
-                                                    hovertemplate="%{customdata} | " + f"{name.split('_')[0]}:" + "%{x:.3f} | " + f"{name.split('_')[1]}:" + "%{y:.3f}"), row=1, col=2)
+                                                    hovertemplate="%{customdata} | " + f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}"), row=1, col=2)
                     if not (np.isnan(Rate2_S_x).any()) and not (np.isnan(Rate2_S_y).any()):
                         fig2.add_trace(go.Scatter(  x=Rate2_S_x,  y=Rate2_S_y,  arg=sett, showlegend=False, customdata=scale,
-                                                    hovertemplate="%{customdata} | " + f"{name.split('_')[0]}:" + "%{x:.3f} | " + f"{name.split('_')[1]}:" + "%{y:.3f}"), row=2, col=1)
+                                                    hovertemplate="%{customdata} | " + f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}"), row=2, col=1)
                     if not (np.isnan(Rate2_R_x).any()) and not (np.isnan(Rate2_R_y).any()):
                         fig2.add_trace(go.Scatter(  x=Rate2_R_x,  y=Rate2_R_y,  arg=sett, showlegend=False, customdata=rot,
-                                                    hovertemplate="%{customdata} | " + f"{name.split('_')[0]}:" + "%{x:.3f} | " + f"{name.split('_')[1]}:" + "%{y:.3f}"), row=2, col=2)
+                                                    hovertemplate="%{customdata} | " + f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}"), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -364,7 +364,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
     Rate_ubc    = np.load("./arrays/Rate_ubc.npy")
     fig5 = go.Figure()
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('_')[0], y_title=name.split('_')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode="x")
     color_index = 0
     symbol_index = 0
@@ -391,7 +391,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker_symbol=symbol_index, marker_size=9,
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig5, legendgroup=legend_groupfig5, hovertemplate=f"{name.split('_')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('_')[1]}:"+ "<b>%{y:.3f}</b>")
+                                name=legend_groupfig5, legendgroup=legend_groupfig5, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate_Graf_x).any()) and not (np.isnan(Rate_Graf_y).any()):
                         fig5.add_trace(go.Scatter(x=Rate_Graf_x,   y=Rate_Graf_y,   arg=sett, showlegend=True),  row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()) and not (np.isnan(Rate_Bikes_y).any()):
@@ -597,7 +597,7 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
     fig11 = go.Figure()
     xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
     fig11.update_layout(title_text=f"{data.upper()} Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
-                        xaxis_title=name.split('_')[0], yaxis_title=name.split('_')[1], hovermode="x")
+                        xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode="x")
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -609,7 +609,7 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
                     if not (np.isnan(Rate_x).any()) and not (np.isnan(Rate_y).any()):
                         fig11trace_UAV  = go.Scatter(   x=Rate_x, y=Rate_y, mode="markers+lines", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]),
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", showlegend=True,
-                                                        customdata=xvals, hovertemplate="%{customdata} | " + f"{name.split('_')[0]}:" + "%{x:.3f} | " + f"{name.split('_')[1]}:"+ "%{y:.3f}")
+                                                        customdata=xvals, hovertemplate="%{customdata} | " + f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:"+ "%{y:.3f}")
                         fig11.add_trace(fig11trace_UAV)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
