@@ -67,7 +67,6 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     Rate[k, m, c3, i, j,10] = len(matches)
                                     Rate[k, m, c3, i, j,12] = (Rate[k, m, c3, i, j, 9] / Rate[k, m, c3, i, j, 5]) if Rate[k, m, c3, i, j, 5] != 0 else 0 # Recall = Inliers / Ground Truth keypoints
                                     Rate[k, m, c3, i, j,13] = (Rate[k, m, c3, i, j, 9] / Rate[k, m, c3, i, j,10]) if Rate[k, m, c3, i, j,10] != 0 else 0 # Precision = Inliers / All Matches
-                                    # Rate[k, m, c3, i, j,14] = (Rate[k, m, c3, i, j, 9] / Rate[k, m, c3, i, j, 5]) if Rate[k, m, c3, i, j, 5] != 0 else 0 # Repeatibility = Inliers / Ground Truth keypoints
                                     Rate[k, m, c3, i, j,14] = (Rate[k, m, c3, i, j, 9] / min(Rate[k, m, c3, i, j, 5], Rate[k, m, c3, i, j, 6])) if min(Rate[k, m, c3, i, j, 5], Rate[k, m, c3, i, j, 6]) != 0 else 0 # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
                                     Rate[k, m, c3, i, j,15] = (2 * Rate[k, m, c3, i, j,12] * Rate[k, m, c3, i, j,13] / (Rate[k, m, c3, i, j,12] + Rate[k, m, c3, i, j,13])) if Rate[k, m, c3, i, j,12] + Rate[k, m, c3, i, j,13] != 0 else 0 # F1 Score = 2 * Recall * Precision / (Recall + Precision)
                                     Exec_time[k, m, c3, i, j, 3] = Exec_time[k, m, c3, i, j, 0] + Exec_time[k, m, c3, i, j, 1] + Exec_time[k, m, c3, i, j, 2] # Total Execution Time
