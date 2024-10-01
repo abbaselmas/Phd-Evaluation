@@ -4,7 +4,7 @@ import time, os
 from define import *
 
 def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
-    print(time.ctime())
+    print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./oxfordAffine/{folder}/img{i}.jpg") for i in range(1, 7)]
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
@@ -69,3 +69,4 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, folder)
         saveAllCSV(Rate, Exec_time, folder)
+    print(time.ctime() + f" {folder} finished")

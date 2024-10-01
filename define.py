@@ -10,14 +10,14 @@ nbre_img = len(val_b) + len(val_c)          # number of intensity change values 
 scale    = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5]   # s ∈]1.1 : 0.2 : 2.3]
 rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15 : 15 : 90
 
-DetectorsLegend   = ['sift', 'akaze', 'orb', 'brisk', 'kaze', 'fast', 'mser', 'agast', 'gftt', 'gftt_harris', 'star', 'hl', 'msd', 'tbmr']
-DescriptorsLegend = ['sift', 'akaze', 'orb', 'brisk', 'kaze', 'daisy', 'freak', 'brief', 'lucid', 'latch', 'vgg', 'beblid', 'teblid', 'boost']
-line_styles = ['solid', 'dash', 'dot'] #, 'dashdot']
-Norm = ['L2', 'HAM']
-Matcher = ['BF', 'Flann']
+DetectorsLegend   = ["sift", "akaze", "orb", "brisk", "kaze", "fast", "mser", "agast", "gftt", "gftt_harris", "star", "hl", "msd", "tbmr"]
+DescriptorsLegend = ["sift", "akaze", "orb", "brisk", "kaze", "daisy", "freak", "brief", "lucid", "latch", "vgg", "beblid", "teblid", "boost"]
+line_styles = ["solid", "dash", "dot"] #, "dashdot"]
+Norm = ["L2", "HAM"]
+Matcher = ["BF", "Flann"]
 
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
-colors = sample_colorscale('Turbo', [i / num_combinations for i in range(num_combinations)])
+colors = sample_colorscale("Turbo", [i / num_combinations for i in range(num_combinations)])
 
 ### detectors/descriptors 5
 sift  = cv2.SIFT_create(nfeatures=30000, nOctaveLayers=3, contrastThreshold=0.04, edgeThreshold=10.0, sigma=1.6)
@@ -54,29 +54,7 @@ Descriptors   = list([sift, akaze, orb, brisk, kaze, daisy, freak, brief, lucid,
 #                     0     1      2    3      4     5      6      7      8      9      10   11      12      13
 Normalization = list([cv2.NORM_L2, cv2.NORM_HAMMING])
 
-def match_with_bf_ratio_test(matcher, Dspt1, Dspt2, norm_type, threshold_ratio=0.8):
-    if matcher == 0: # Brute-force matcher
-        bf = cv2.BFMatcher(norm_type, crossCheck=True) 
-        matches = bf.match(Dspt1, Dspt2)
-    else: # Flann-based matcher
-        if norm_type == cv2.NORM_L2:
-            index_params = dict(algorithm=1, trees=5)
-            search_params = dict(checks=50)
-        elif norm_type == cv2.NORM_HAMMING:
-            index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-            search_params = dict(checks=50)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
-    good_matches = []
-    for m,n in matches:
-        if m.distance < threshold_ratio * n.distance:
-            good_matches.append(m)
-    good_matches = sorted(good_matches, key = lambda x:x.distance)
-    match_rate = (len(good_matches) / len(matches) * 100 if len(matches) > 0 else 0)
-    return match_rate, good_matches, matches
-
 def cross_check_matches(matches1to2, matches2to1):
-    # Create dictionaries for fast lookup
     matches2to1_dict = { (m.trainIdx, m.queryIdx): m for m in matches2to1 }
     cross_checked_matches = [m for m in matches1to2 if (m.queryIdx, m.trainIdx) in matches2to1_dict]
     return cross_checked_matches
@@ -93,10 +71,8 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
             search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        # Find matches in both directions
         matches1to2 = flann.match(Dspt1, Dspt2)
         matches2to1 = flann.match(Dspt2, Dspt1)
-        # Apply cross-check
         matches = cross_check_matches(matches1to2, matches2to1)
     # matchesSorted = sorted(matches, key = lambda x:x.distance)
     # matches = matchesSorted[:1000]               
@@ -121,7 +97,6 @@ def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len
     Rate[k, m, c3, i, j, 8] = desc2_len
     Rate[k, m, c3, i, j, 9] = good_matches_len
     Rate[k, m, c3, i, j, 10] = matches_len
-    
     # Recall = Inliers / Ground Truth keypoints
     Rate[k, m, c3, i, j, 12] = (good_matches_len / kp1_len) if kp1_len != 0 else 0
     # Precision = Inliers / All Matches
@@ -146,13 +121,48 @@ def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len
     Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / good_matches_len) * 1000) if good_matches_len != 0 else 0
     return Rate, Exec_time
 
+def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
+    # Metadata On Image    
+    text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
+                "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
+                "Norm.:", "Matcher:", "Match Rate:", "Inliers:", "All Matches:",
+                "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
+                "Recall", "Precision", "Repeatibility", "F1-Score"]
+    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
+                f"{Rate[5]}",                                           # Keypoint1
+                f"{Rate[6]}",                                           # Keypoint2
+                f"{Exec_time[4]:.4f}",                                  # 1K Detect Time
+                f"{method_dscrpt.getDefaultName().split('.')[-1]}",     # Descriptor
+                f"{Rate[7]}",                                           # Descriptor1
+                f"{Rate[8]}",                                           # Descriptor2
+                f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
+                f"{Norm[c3]}",                                          # Matching
+                f"{Matcher[m]}",                                        # Matcher
+                f"{Rate[11]:.2f}",                                      # Match Rate
+                f"{Rate[9]}",                                           # Inliers
+                f"{Rate[10]}",                                          # All Matches
+                f"{Exec_time[3]:.4f}",                                  # Total Time
+                f"{Exec_time[6]:.4f}",                                  # 1K Match Tot. Time
+                f"{Exec_time[7]:.4f}",                                  # 1K Inliers Time
+                f"{Rate[12]:.4f}",                                      # Recall
+                f"{Rate[13]:.4f}",                                      # Precision
+                f"{Rate[14]:.4f}",                                      # Repeatibility
+                f"{Rate[15]:.4f}"]                                      # F1-Score
+    for idx, txt in enumerate(text1):
+        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    for idx, txt in enumerate(text2):
+        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    return combined_img
+
 def draw_matches_with_homography(img1, kp1, img2, kp2, total_matches, good_matches, H, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
     keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=(255, 0, 0), flags=0)
     keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=(255, 0, 0), flags=0)
     # Combine both images side by side
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
-    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype='uint8')
+    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype="uint8")
     combined_img[:h1, :w1] = keypointImage1
     combined_img[:h2, w1:w1 + w2] = keypointImage2
     # Project the corners of img1 onto img2 using homography
@@ -170,38 +180,7 @@ def draw_matches_with_homography(img1, kp1, img2, kp2, total_matches, good_match
         pt2 = tuple(map(int, kp2[match.trainIdx].pt))
         pt2 = (pt2[0] + w1, pt2[1])  # Shift pt2 to the right for side-by-side view
         cv2.line(combined_img, pt1, pt2, (0, 255, 0), 1)  # Green for inliers
-    # Metadata On Image    
-    text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
-                "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
-                "Norm.:", "Matcher:", "Match Rate:", "Inliers:", "All Matches:",
-                "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
-                "Recall", "Precision", "Repeatibility", "F1-Score"]
-    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
-                f"{Rate[5]}",                                           # Keypoint1
-                f"{Rate[6]}",                                           # Keypoint2
-                f"{Exec_time[4]:.4f}",                                  # 1K Detect Time
-                f"{method_dscrpt.getDefaultName().split('.')[-1]}",     # Descriptor
-                f"{Rate[7]}",                                           # Descriptor1
-                f"{Rate[8]}",                                           # Descriptor2
-                f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
-                f"{Norm[c3]}",                                          # Matching
-                f"{Matcher[m]}",                                        # Matcher
-                f"{Rate[11]:.2f}",                                      # Match Rate
-                f"{Rate[9]}",                                           # Inliers
-                f"{Rate[10]}",                                          # All Matches
-                f"{Exec_time[3]:.4f}",                                  # Total Time
-                f"{Exec_time[6]:.4f}",                                  # 1K Match Tot. Time
-                f"{Exec_time[7]:.4f}",                                  # 1K Inliers Time
-                f"{Rate[12]:.4f}",                                      # Recall
-                f"{Rate[13]:.4f}",                                      # Precision
-                f"{Rate[14]:.4f}",                                      # Repeatibility
-                f"{Rate[15]:.4f}"]                                      # F1-Score
-    for idx, txt in enumerate(text1):
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
-    for idx, txt in enumerate(text2):
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
 
 def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
@@ -210,7 +189,7 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_t
     # Create a blank image with the size of both images combined
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
-    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype='uint8')
+    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype="uint8")
     combined_img[:h1, :w1] = keypointImage1
     combined_img[:h2, w1:w1 + w2] = keypointImage2
     # Create a set of good matches for faster lookup
@@ -226,38 +205,7 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_t
         else:
             color = (0, 0, 255)  # Red for outliers
         cv2.line(combined_img, pt1, pt2, color, 1)
-    # Metadata On Image    
-    text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
-                "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
-                "Norm.:", "Matcher:", "Match Rate:", "Inliers:", "All Matches:",
-                "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
-                "Recall", "Precision", "Repeatibility", "F1-Score"]
-    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
-                f"{Rate[5]}",                                           # Keypoint1
-                f"{Rate[6]}",                                           # Keypoint2
-                f"{Exec_time[4]:.4f}",                                  # 1K Detect Time
-                f"{method_dscrpt.getDefaultName().split('.')[-1]}",     # Descriptor
-                f"{Rate[7]}",                                           # Descriptor1
-                f"{Rate[8]}",                                           # Descriptor2
-                f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
-                f"{Norm[c3]}",                                          # Matching
-                f"{Matcher[m]}",                                        # Matcher
-                f"{Rate[11]:.2f}",                                      # Match Rate
-                f"{Rate[9]}",                                           # Inliers
-                f"{Rate[10]}",                                          # All Matches
-                f"{Exec_time[3]:.4f}",                                  # Total Time
-                f"{Exec_time[6]:.4f}",                                  # 1K Match Tot. Time
-                f"{Exec_time[7]:.4f}",                                  # 1K Inliers Time
-                f"{Rate[12]:.4f}",                                      # Recall
-                f"{Rate[13]:.4f}",                                      # Precision
-                f"{Rate[14]:.4f}",                                      # Repeatibility
-                f"{Rate[15]:.4f}"]                                      # F1-Score
-    for idx, txt in enumerate(text1):
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
-    for idx, txt in enumerate(text2):
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+    combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
 
 def saveAverageCSV(Rate, Exec_time, scenario):
@@ -266,8 +214,8 @@ def saveAverageCSV(Rate, Exec_time, scenario):
                 "Norm.", "Matcher", "Match Rate", "Inliers", "All Matches",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f'./csv/{scenario}_analysis.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=';')
+    with open(f"./csv/{scenario}_analysis.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
         for m in range(Rate.shape[1]):
             for c3 in range(Rate.shape[2]):
@@ -301,8 +249,8 @@ def saveAllCSV(Rate, Exec_time, scenario):
                 "Norm.", "Matcher", "Match Rate", "Inliers", "All Matches", "Match Time",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f'./csv/{scenario}_analysis_all.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=';')
+    with open(f"./csv/{scenario}_analysis_all.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
         for k in range(Rate.shape[0]):
             for m in range(Rate.shape[1]):

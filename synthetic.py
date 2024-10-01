@@ -3,7 +3,9 @@ import numpy as np
 import time, os
 from define import *
 
-Image = np.array(cv2.imread("./hpatches-sequences/v_dogman/1.jpg"))
+hpatches_sequences = ["azzola", "bird", "colors", "dogman", "tempera", "woman", "wormhole", "yard"]
+selected_image = hpatches_sequences[6]
+Image = np.array(cv2.imread(f"./hpatches-sequences/v_{selected_image}/1.jpg"))
 
 ## Scenario 1 (Intensity): Function that returns 8 images with intensity changes from an I image.
 def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with 4 values each
@@ -17,7 +19,7 @@ def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with
         List8Img[i][List8Img[i] > 255] = 255 # set pixels with intensity > 255 to 255
         List8Img[i][List8Img[i] < 0] = 0 # set the pixels with intensity < 0 to the value of 0
         List8Img[i] = np.array(List8Img[i], dtype=np.uint8) # image transformation to uint8
-        filename = f"./synthetic/intensity-image_I+{val_b[i]}.png"
+        filename = f"./synthetic/{selected_image}-intensity-image_I+{val_b[i]}.png"
         cv2.imwrite(filename, List8Img[i])
     for j in range(len(val_c)): # for I ∗ c, with: c ∈ [0.7 : 0.2 : 1.3]
         I =  image * val_c[j]
@@ -25,14 +27,14 @@ def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with
         List8Img[j+4][List8Img[j+4] > 255] = 255 # set pixels with intensity > 255 to 255
         List8Img[j+4][List8Img[j+4] < 0] = 0 # set the pixels with intensity < 0 to the value of 0
         List8Img[j+4] = np.array(List8Img[j+4], dtype=np.uint8) # transform image to uint8 (min value = 0, max value = 255)
-        filename = f"./synthetic/intensity-image_Ix{val_c[j]}.png"
+        filename = f"./synthetic/{selected_image}-intensity-image_Ix{val_c[j]}.png"
         cv2.imwrite(filename, List8Img[j+4])
     return Img, List8Img
 ## Scenario 2 (Scale): Function that takes as input the index of the camera, the index of the image n, and a scale, it returns a couple (I, Iscale). In the following, we will work with 7 images with a scale change Is : s ∈]1.1 : 0.2 : 2.3].
 def get_cam_scale(Img, s):
     ImgScale = cv2.resize(Img, (0, 0), fx=s, fy=s, interpolation = cv2.INTER_NEAREST) # opencv resize function with INTER_NEAREST interpolation
     I_Is = list([Img, ImgScale]) # list of 2 images (original image and scaled image)
-    filename = f"./synthetic/scale-image_{s}.png"
+    filename = f"./synthetic/{selected_image}-scale-image_{s}.png"
     cv2.imwrite(filename, ImgScale)
     return I_Is
 ## Scenario 3 (Rotation): Function that takes as input the index of the camera, the index of the image n, and a rotation angle, it returns a couple (I, Irot), and the rotation matrix. In the following, we will work with 9 images with a change of scale For an image I, we will create 9 images (I10, I20...I90) with change of rotation from 10 to 90 with a step of 10.
@@ -53,126 +55,12 @@ def get_cam_rot(Img, rotationAngle):
     rotated_image = cv2.warpAffine(Img, rotation_mat, (bound_w, bound_h))
     couple_I_Ir = [Img, rotated_image]  # list of 2 images (original image and rotated image)
     # save the rotated image
-    filename = f"./synthetic/rotation-image_{rotationAngle}.png"
+    filename = f"./synthetic/{selected_image}-rotation-image_{rotationAngle}.png"
     cv2.imwrite(filename, rotated_image)
-    return rotation_mat, couple_I_Ir
-
-def evaluate_scenario_intensity(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
-    if matcher == 0: # Brute-force matcher
-        bf = cv2.BFMatcher(norm_type, crossCheck=True) 
-        matches = bf.match(Dspt1, Dspt2)
-    else: # Flann-based matcher
-        if norm_type == cv2.NORM_L2:
-            index_params = dict(algorithm=1, trees=5)
-            search_params = dict(checks=50)
-        elif norm_type == cv2.NORM_HAMMING:
-            index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-            search_params = dict(checks=50)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        # Find matches in both directions
-        matches1to2 = flann.match(Dspt1, Dspt2)
-        matches2to1 = flann.match(Dspt2, Dspt1)
-        # Apply cross-check
-        matches = cross_check_matches(matches1to2, matches2to1)
-    # matchesSorted = sorted(matches, key = lambda x:x.distance)
-    # matches = matchesSorted[:1000]
-    Prob_P = Prob_N = 0
-    good_matches = []
-    for i in range(len(matches)):
-        m1 = matches[i].queryIdx
-        m2 = matches[i].trainIdx
-        X1 = int(KP1[m1].pt[0])
-        Y1 = int(KP1[m1].pt[1])
-        X2 = int(KP2[m2].pt[0])
-        Y2 = int(KP2[m2].pt[1])
-        if (abs(X1 - X2) <=3) and (abs(Y1 - Y2) <=3):   # Tolerance allowance (∼ 3 pixels)
-            Prob_P += 1
-            good_matches.append(matches[i])
-        else:
-            Prob_N += 1   
-    Prob_True = ((Prob_P / (Prob_P + Prob_N))*100 if len(matches) > 0 else 0)
-    # good_matches = sorted(good_matches, key = lambda x:x.distance)
-    return Prob_True, good_matches, matches
-
-def evaluate_scenario_scale    (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, scale):
-    if matcher == 0: # Brute-force matcher
-        bf = cv2.BFMatcher(norm_type, crossCheck=True) 
-        matches = bf.match(Dspt1, Dspt2)
-    else: # Flann-based matcher
-        if norm_type == cv2.NORM_L2:
-            index_params = dict(algorithm=1, trees=5)
-            search_params = dict(checks=50)
-        elif norm_type == cv2.NORM_HAMMING:
-            index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-            search_params = dict(checks=50)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        # Find matches in both directions
-        matches1to2 = flann.match(Dspt1, Dspt2)
-        matches2to1 = flann.match(Dspt2, Dspt1)
-        # Apply cross-check
-        matches = cross_check_matches(matches1to2, matches2to1)
-    # matchesSorted = sorted(matches, key = lambda x:x.distance)
-    # matches = matchesSorted[:1000]
-    Prob_P = Prob_N = 0
-    good_matches = []
-    for i in range(len(matches)):
-        m1 = matches[i].queryIdx
-        m2 = matches[i].trainIdx
-        X1 = int(KP1[m1].pt[0])
-        Y1 = int(KP1[m1].pt[1])
-        X2 = int(KP2[m2].pt[0])
-        Y2 = int(KP2[m2].pt[1])
-        if (abs(X1*scale - X2) <=3) and (abs(Y1*scale - Y2) <=3):   # Tolerance allowance (∼ 3 pixels)
-            Prob_P += 1
-            good_matches.append(matches[i])
-        else:
-            Prob_N += 1   
-    Prob_True = ((Prob_P / (Prob_P + Prob_N))*100 if len(matches) > 0 else 0)
-    # good_matches = sorted(good_matches, key = lambda x:x.distance)
-    return Prob_True, good_matches, matches
-
-def evaluate_scenario_rotation (matcher, KP1, KP2, Dspt1, Dspt2, norm_type, rot, rot_matrix):
-    if matcher == 0: # Brute-force matcher
-        bf = cv2.BFMatcher(norm_type, crossCheck=True) 
-        matches = bf.match(Dspt1, Dspt2)
-    else: # Flann-based matcher
-        if norm_type == cv2.NORM_L2:
-            index_params = dict(algorithm=1, trees=5)
-            search_params = dict(checks=50)
-        elif norm_type == cv2.NORM_HAMMING:
-            index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-            search_params = dict(checks=50)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        # Find matches in both directions
-        matches1to2 = flann.match(Dspt1, Dspt2)
-        matches2to1 = flann.match(Dspt2, Dspt1)
-        # Apply cross-check
-        matches = cross_check_matches(matches1to2, matches2to1)
-    # matchesSorted = sorted(matches, key = lambda x:x.distance)
-    # matches = matchesSorted[:1000]
-    Prob_P = Prob_N = 0
-    good_matches = []
-    theta = rot*(np.pi/180)
-    for i in range(len(matches)):
-        m1 = matches[i].queryIdx
-        m2 = matches[i].trainIdx
-        X1 = int(KP1[m1].pt[0])
-        Y1 = int(KP1[m1].pt[1])
-        X2 = int(KP2[m2].pt[0])
-        Y2 = int(KP2[m2].pt[1])
-        X12 =  X1*np.cos(theta) + Y1*np.sin(theta) + rot_matrix[0,2]
-        Y12 = -X1*np.sin(theta) + Y1*np.cos(theta) + rot_matrix[1,2]
-        if (abs(X12 - X2) <=3) and (abs(Y12 - Y2) <=3):   #  Tolerance allowance (∼ 3 pixels)
-            Prob_P += 1
-            good_matches.append(matches[i])
-        else:
-            Prob_N += 1
-    Prob_True = ((Prob_P / (Prob_P + Prob_N))*100 if len(matches) > 0 else 0)
-    # good_matches = sorted(good_matches, key = lambda x:x.distance)
-    return Prob_True, good_matches, matches
+    return couple_I_Ir
 
 def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
-    print(time.ctime())
+    print(time.ctime() + " Intensity started")
     print("Scenario 1 Intensity")
     Rate      = np.load(f"./arrays/Rate_intensity.npy")      if os.path.exists(f"./arrays/Rate_intensity.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_intensity.npy") if os.path.exists(f"./arrays/Exec_time_intensity.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
@@ -218,7 +106,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_intensity(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
@@ -238,9 +126,10 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
         np.save(f"./arrays/Exec_time_intensity.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "intensity")
         saveAllCSV(Rate, Exec_time, "intensity")
+    print(time.ctime() + " Intensity finished")
 
 def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
-    print(time.ctime())
+    print(time.ctime() + " Scale started")
     print("Scenario 2 Scale")
     Rate        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time   = np.load(f"./arrays/Exec_time_scale.npy")     if os.path.exists(f"./arrays/Exec_time_scale.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
@@ -285,7 +174,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_scale(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], scale[k])
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
@@ -305,9 +194,10 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
         np.save(f"./arrays/Exec_time_scale.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "scale")
         saveAllCSV(Rate, Exec_time, "scale")
+    print(time.ctime() + " Scale finished")
 
 def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
-    print(time.ctime())
+    print(time.ctime() + " Rotation started")
     print("Scenario 3 Rotation")
     Rate          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time     = np.load(f"./arrays/Exec_time_rot.npy")  if os.path.exists(f"./arrays/Exec_time_rot.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
@@ -317,7 +207,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
         if drawing:
                 if k != 4:
                     continue
-        rot_matrix, img = get_cam_rot(Image, rot[k])
+        img = get_cam_rot(Image, rot[k])
         for i in range(len(Detectors)):
             if i == a or a == 100:
                 method_dtect = Detectors[i]
@@ -352,7 +242,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_scenario_rotation(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3], rot[k], rot_matrix)
+                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                 except:
@@ -372,3 +262,4 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
         np.save(f"./arrays/Exec_time_rot.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "rot")
         saveAllCSV(Rate, Exec_time, "rot")
+    print(time.ctime() + " Rotation finished")

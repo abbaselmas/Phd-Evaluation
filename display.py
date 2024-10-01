@@ -62,20 +62,40 @@ custom_html = """
 """
 
 config = {
-        'toImageButtonOptions': {'format': 'svg'},
-        'modeBarButtonsToRemove': ['zoom', 'pan', 'select', 'lasso2d', 'zoomIn2d', 'zoomOut2d'],
-        'modeBarButtonsToAdd': ['v1hovermode', 'toggleSpikeLines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-        'displaylogo': False,
-        'editable': False
+        "toImageButtonOptions": {"format": "svg"},
+        "modeBarButtonsToRemove": ["zoom", "pan", "select", "lasso2d", "zoomIn2d", "zoomOut2d"],
+        "modeBarButtonsToAdd": ["v1hovermode", "toggleSpikeLines", "hoverClosestCartesian", "hoverCompareCartesian"],
+        "displaylogo": False,
+        "editable": False
 }
+
+Rate_intensity      = np.load("./arrays/Rate_intensity.npy")
+Rate_scale          = np.load("./arrays/Rate_scale.npy")
+Rate_rot            = np.load("./arrays/Rate_rot.npy")
+Exec_time_intensity = np.load("./arrays/Exec_time_intensity.npy")
+Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
+Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
+Rate_graf           = np.load("./arrays/Rate_graf.npy")
+Rate_bikes          = np.load("./arrays/Rate_bikes.npy")
+Rate_boat           = np.load("./arrays/Rate_boat.npy")
+Rate_leuven         = np.load("./arrays/Rate_leuven.npy")
+Rate_wall           = np.load("./arrays/Rate_wall.npy")
+Rate_trees          = np.load("./arrays/Rate_trees.npy")
+Rate_bark           = np.load("./arrays/Rate_bark.npy")
+Rate_ubc            = np.load("./arrays/Rate_ubc.npy")
+Exec_time_graf      = np.load("./arrays/Exec_time_graf.npy")
+Exec_time_bikes     = np.load("./arrays/Exec_time_bikes.npy")
+Exec_time_boat      = np.load("./arrays/Exec_time_boat.npy")
+Exec_time_leuven    = np.load("./arrays/Exec_time_leuven.npy")
+Exec_time_wall      = np.load("./arrays/Exec_time_wall.npy")
+Exec_time_trees     = np.load("./arrays/Exec_time_trees.npy")
+Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
+Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
 
 ########################
 # MARK: - Synthetic Data
 ########################
 def synthetic():
-    Rate_intensity = np.load("./arrays/Rate_intensity.npy")
-    Rate_scale     = np.load("./arrays/Rate_scale.npy")
-    Rate_rot       = np.load("./arrays/Rate_rot.npy")
     fig1 = go.Figure()
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.04, vertical_spacing=0.04)
@@ -125,14 +145,10 @@ def synthetic():
 # MARK: - Synthetic Data Precision-Recall
 #########################################
 def syntheticMulti(name="Precision-Recall", x=13, y=12):
-    Rate_intensity = np.load("./arrays/Rate_intensity.npy")
-    Rate_scale     = np.load("./arrays/Rate_scale.npy")
-    Rate_rot       = np.load("./arrays/Rate_rot.npy")
     fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
-    
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -172,9 +188,6 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
 # MARK: - Synthetic Timing
 ###########################
 def synthetic_timing():
-    Exec_time_intensity = np.load("./arrays/Exec_time_intensity.npy")
-    Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
-    Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
     fig3 = go.Figure()
     fig3 = make_subplots(  rows=5, cols=2, subplot_titles=[
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
@@ -230,12 +243,6 @@ def synthetic_timing():
         f.write(custom_html)
 
 def synthetic_timing2():
-    Rate_intensity = np.load("./arrays/Rate_intensity.npy")
-    Rate_scale     = np.load("./arrays/Rate_scale.npy")
-    Rate_rot       = np.load("./arrays/Rate_rot.npy")
-    Exec_time_intensity = np.load("./arrays/Exec_time_intensity.npy")
-    Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
-    Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
     fig15 = go.Figure()
     fig15.update_layout(title_text="Synthetic Data - Overall Timings", title_x=0.45, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
@@ -279,14 +286,6 @@ def synthetic_timing2():
 # MARK: - Oxford all 8 and Overall
 ##################################
 def oxford():
-    Rate_graf   = np.load("./arrays/Rate_graf.npy")
-    Rate_bikes  = np.load("./arrays/Rate_bikes.npy")
-    Rate_boat   = np.load("./arrays/Rate_boat.npy")
-    Rate_leuven = np.load("./arrays/Rate_leuven.npy")
-    Rate_wall   = np.load("./arrays/Rate_wall.npy")
-    Rate_trees  = np.load("./arrays/Rate_trees.npy")
-    Rate_bark   = np.load("./arrays/Rate_bark.npy")
-    Rate_ubc    = np.load("./arrays/Rate_ubc.npy")
     fig4 = go.Figure()
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.04, vertical_spacing=0.05)
@@ -354,14 +353,6 @@ def oxford():
 # MARK: - Oxford Multi
 ######################
 def oxfordMulti(name="Precision-Recall", x=13, y=12):
-    Rate_graf   = np.load("./arrays/Rate_graf.npy")
-    Rate_bikes  = np.load("./arrays/Rate_bikes.npy")
-    Rate_boat   = np.load("./arrays/Rate_boat.npy")
-    Rate_leuven = np.load("./arrays/Rate_leuven.npy")
-    Rate_wall   = np.load("./arrays/Rate_wall.npy")
-    Rate_trees  = np.load("./arrays/Rate_trees.npy")
-    Rate_bark   = np.load("./arrays/Rate_bark.npy")
-    Rate_ubc    = np.load("./arrays/Rate_ubc.npy")
     fig5 = go.Figure()
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
@@ -421,14 +412,6 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
 # MARK: - Oxford Timing
 ###########################
 def oxford_timing():
-    Exec_time_graf      = np.load("./arrays/Exec_time_graf.npy")
-    Exec_time_bikes     = np.load("./arrays/Exec_time_bikes.npy")
-    Exec_time_boat      = np.load("./arrays/Exec_time_boat.npy")
-    Exec_time_leuven    = np.load("./arrays/Exec_time_leuven.npy")
-    Exec_time_wall      = np.load("./arrays/Exec_time_wall.npy")
-    Exec_time_trees     = np.load("./arrays/Exec_time_trees.npy")
-    Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
-    Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
     fig6 = go.Figure()
     fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
@@ -484,22 +467,6 @@ def oxford_timing():
         f.write(custom_html)
 
 def oxford_timing2():
-    Rate_graf   = np.load("./arrays/Rate_graf.npy")
-    Rate_bikes  = np.load("./arrays/Rate_bikes.npy")
-    Rate_boat   = np.load("./arrays/Rate_boat.npy")
-    Rate_leuven = np.load("./arrays/Rate_leuven.npy")
-    Rate_wall   = np.load("./arrays/Rate_wall.npy")
-    Rate_trees  = np.load("./arrays/Rate_trees.npy")
-    Rate_bark   = np.load("./arrays/Rate_bark.npy")
-    Rate_ubc    = np.load("./arrays/Rate_ubc.npy")
-    Exec_time_graf      = np.load("./arrays/Exec_time_graf.npy")
-    Exec_time_bikes     = np.load("./arrays/Exec_time_bikes.npy")
-    Exec_time_boat      = np.load("./arrays/Exec_time_boat.npy")
-    Exec_time_leuven    = np.load("./arrays/Exec_time_leuven.npy")
-    Exec_time_wall      = np.load("./arrays/Exec_time_wall.npy")
-    Exec_time_trees     = np.load("./arrays/Exec_time_trees.npy")
-    Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
-    Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
     fig14 = go.Figure()
     fig14.update_layout(title_text=f"Oxford Data - Timings", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
@@ -545,7 +512,7 @@ def oxford_timing2():
 def single(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig7 = go.Figure()
-    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
+    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"]
     fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", yaxis_title="Precision", hovermode="x unified", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
@@ -595,7 +562,7 @@ def single(data="drone"):
 def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig11 = go.Figure()
-    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ['Bahamas', 'Office', 'Suburban', 'Building', 'Construction', 'Dominica', 'Cadastre', 'Rivaz', 'Urban', 'Belleview']
+    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"]
     fig11.update_layout(title_text=f"{data.upper()} Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
                         xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode="x")
     color_index = 0
