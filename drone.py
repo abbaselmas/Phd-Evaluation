@@ -2,6 +2,57 @@ import cv2
 import numpy as np
 import time, os
 from define import *
+import sqlite3, pycolmap
+
+# Function to estimate camera parameters
+def estimate_camera_parameters(image_shape):
+    # Focal length can be approximated using the image width (in pixels)
+    width = image_shape[1]
+    focal_length = 1.2 * width  # A common assumption
+    cx, cy = width / 2, image_shape[0] / 2  # Principal point at the image center
+
+    # Camera distortion coefficients (k1, k2, p1, p2, k3) - assuming zero distortion for now
+    distortion_coeffs = np.zeros(5)
+
+    return {
+        'model': 'OPENCV',  # Using the OPENCV camera model
+        'width': image_shape[1],
+        'height': image_shape[0],
+        'params': [focal_length, focal_length, cx, cy] + distortion_coeffs.tolist()
+    }
+
+# Function to create and populate COLMAP-compatible database with combination naming
+def create_colmap_db(folder, keypoints_cache, matches_cache, camera_params, detector_name, descriptor_name, norm_type, matcher_name):
+    db_name = f"{folder}_{detector_name}_{descriptor_name}_{Normalization[norm_type]}_{Matcher[matcher_name]}_colmap.db"
+    db_path = f"./colmap_dbs/{db_name}"
+    db = pycolmap.database.COLMAPDatabase.connect(db_path)
+    db.create_tables()
+
+    # Add camera to the database (same camera for all images)
+    camera_id = db.add_camera(
+        model=pycolmap.camera.CameraModel.OPENCV, 
+        width=camera_params['width'], 
+        height=camera_params['height'], 
+        params=camera_params['params']
+    )
+
+    # Add images and keypoints
+    image_ids = []
+    for k in range(len(keypoints_cache)):
+        image_path = f"./Small_Buildings/droneResized/DSC00{153 + k}.JPG"
+        image_id = db.add_image(image_path, camera_id)
+        image_ids.append(image_id)
+        keypoints = keypoints_cache[k]
+        db.add_keypoints(image_id, keypoints)
+
+    # Add matches to the database
+    for k in range(len(matches_cache)):
+        db.add_matches(image_ids[k], image_ids[k + 1], matches_cache[k])
+
+    db.commit()
+    db.close()
+    return db_path
+
 
 def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     print(time.ctime())
@@ -11,6 +62,10 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
+    
+    # Estimate camera parameters based on image shape (all images assumed to have the same shape)
+    camera_params = estimate_camera_parameters(img[0].shape)
+    
     for k in range(len(img)-1):
         if drawing:
             if k != 3:
@@ -60,6 +115,10 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
+                                # Create the COLMAP database with keypoints and matches
+                                db_path = create_colmap_db(folder, keypoints_cache[:, 0, 0], good_matches, camera_params, Detectors[i], Descriptors[j], c3, m)
+                                reconstruction = pycolmap.Reconstruction()
+                                reconstruction.sparse_reconstruct(db_path)
                     else:
                         continue
             else:
