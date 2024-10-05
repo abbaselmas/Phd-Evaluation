@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import time, os
 from define import *
+from database import *
+import pycolmap
 
 def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     print(time.ctime())
@@ -52,18 +54,40 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
-                                except:
+                                    database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
+                                    if not os.path.isfile(database_path):
+                                        db = COLMAPDatabase.connect(database_path)
+                                        db.create_tables()
+                                        camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((1.2*img[k].shape[1], 1.2*img[k].shape[0], 0.5*img[k].shape[1], 0.5*img[k].shape[0])))
+                                    else:
+                                        db = COLMAPDatabase.connect(database_path)
+                                    image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
+                                    keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
+                                    db.add_keypoints(image_id, keypoints1_np)
+                                    db.add_descriptors(image_id, descriptors1)
+                                    good_matches_np = np.array([[m.queryIdx, m.trainIdx] for m in good_matches], dtype=np.uint32)
+                                    db.add_matches(image_id, image_id+1, good_matches_np)
+                                    db.add_two_view_geometry(image_id, image_id+1, good_matches_np)
+                                    db.commit()
+                                except Exception as e:
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and k == 3:
                                     img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
             else:
                 continue
+    for i in range(len(Detectors)):
+        for j in range(len(Descriptors)):
+            for c3 in range(2):
+                for m in range(2):
+                    database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
+                    if os.path.isfile(database_path):
+                        pycolmap.incremental_mapping(database_path, "./Small_Buildings/droneResized", f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}")
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)

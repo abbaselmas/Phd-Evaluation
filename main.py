@@ -4,10 +4,10 @@ from drone import *
 from uav import *
 from display import *
 
-a = 100
-b = 100
+a = 0
+b = 0
 drawing = False
-save = True
+save = False
 
 # execute_scenario_intensity    (          a, b, drawing, save)
 # execute_scenario_scale        (          a, b, drawing, save)
@@ -20,26 +20,26 @@ save = True
 # executeScenarios              ("trees",  a, b, drawing, save)
 # executeScenarios              ("wall",   a, b, drawing, save)
 # executeScenarios              ("ubc",    a, b, drawing, save)
-# executeDroneScenarios         ("drone",  a, b, drawing, save)
+executeDroneScenarios         ("drone",  a, b, drawing, save)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
 
-synthetic           ()
-syntheticMulti      ("Precision-Recall", 13, 12)
-syntheticMulti      ("Inliers-Matches", 9, 10)
-synthetic_timing    ()
-synthetic_timing2   ()
-oxford              ()
-oxfordMulti         ("Precision-Recall", 13, 12)
-oxfordMulti         ("Inliers-Matches", 9, 10)
-oxford_timing       ()
-oxford_timing2      ()
-single              ("drone")
-singleMulti         ("drone", "Precision-Recall", 13, 12)
-singleMulti         ("drone", "Inliers-Matches",   9, 10)
-single_timing       ("drone")
-single_timing2      ("drone")
-single              ("uav")
-singleMulti         ("uav", "Precision-Recall", 13, 12)
-singleMulti         ("uav", "Inliers-Matches",   9, 10)
-single_timing       ("uav")
-single_timing2      ("uav")
+# synthetic           ()
+# syntheticMulti      ("Precision-Recall", 13, 12)
+# syntheticMulti      ("Inliers-Matches", 9, 10)
+# synthetic_timing    ()
+# synthetic_timing2   ()
+# oxford              ()
+# oxfordMulti         ("Precision-Recall", 13, 12)
+# oxfordMulti         ("Inliers-Matches", 9, 10)
+# oxford_timing       ()
+# oxford_timing2      ()
+# single              ("drone")
+# singleMulti         ("drone", "Precision-Recall", 13, 12)
+# singleMulti         ("drone", "Inliers-Matches",   9, 10)
+# single_timing       ("drone")
+# single_timing2      ("drone")
+# single              ("uav")
+# singleMulti         ("uav", "Precision-Recall", 13, 12)
+# singleMulti         ("uav", "Inliers-Matches",   9, 10)
+# single_timing       ("uav")
+# single_timing2      ("uav")
