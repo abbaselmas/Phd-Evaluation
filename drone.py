@@ -15,7 +15,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
         if drawing:
-            if k != 3:
+            if k != 17:
                 continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
@@ -58,7 +58,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     if not os.path.isfile(database_path):
                                         db = COLMAPDatabase.connect(database_path)
                                         db.create_tables()
-                                        camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((1.2*img[k].shape[1], 1.2*img[k].shape[0], 0.5*img[k].shape[1], 0.5*img[k].shape[0])))
+                                        camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
                                     else:
                                         db = COLMAPDatabase.connect(database_path)
                                     image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
@@ -81,13 +81,31 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                         continue
             else:
                 continue
+    pipelineOptions = pycolmap.IncrementalPipelineOptions(
+        {
+            'init_image_id1': 17,
+            'init_image_id2': 18
+        }
+    )
     for i in range(len(Detectors)):
-        for j in range(len(Descriptors)):
-            for c3 in range(2):
-                for m in range(2):
-                    database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
-                    if os.path.isfile(database_path):
-                        pycolmap.incremental_mapping(database_path, "./Small_Buildings/droneResized", f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}")
+        if (i == a or a == 100):
+            for j in range(len(Descriptors)):
+                if j == b or b == 100:
+                    for c3 in range(2):
+                        for m in range(2):
+                            path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
+                            if os.path.isfile(f"{path}.db"):
+                                maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, pipelineOptions)
+                                # pycolmap.bundle_adjustment(maps[0])
+                                # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
+                                # print(maps[0].summary())
+                                Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
+                else:
+                    continue
+        else:
+            continue
+
+
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)

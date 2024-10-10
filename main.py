@@ -4,10 +4,10 @@ from drone import *
 from uav import *
 from display import *
 
-a = 0
-b = 0
+a = 100
+b = 100
 drawing = False
-save = False
+save = True
 
 # execute_scenario_intensity    (          a, b, drawing, save)
 # execute_scenario_scale        (          a, b, drawing, save)
@@ -20,7 +20,7 @@ save = False
 # executeScenarios              ("trees",  a, b, drawing, save)
 # executeScenarios              ("wall",   a, b, drawing, save)
 # executeScenarios              ("ubc",    a, b, drawing, save)
-executeDroneScenarios         ("drone",  a, b, drawing, save)
+executeDroneScenarios           ("drone",  a, b, drawing, save)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
 
 # synthetic           ()
