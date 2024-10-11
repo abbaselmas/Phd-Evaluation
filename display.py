@@ -528,7 +528,7 @@ def single(data="drone"):
                         Rate[:, m, c3, i, j, 12],  # Recall
                         Rate[:, m, c3, i, j, 14],  # Repeatibility
                         Rate[:, m, c3, i, j, 15],  # F1 Score
-                        Rate[:, m, c3, i, j, 9],   # Inliers
+                        Rate[:, m, c3, i, j,  9],  # Inliers
                         Rate[:, m, c3, i, j, 10]   # Matches
                     ]
                     if np.isnan(y_data).all():
@@ -663,8 +663,9 @@ def single_timing2(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j, 12]),  # Recall
                         np.nanmean(Rate[:, m, c3, i, j, 14]),  # Repeatibility
                         np.nanmean(Rate[:, m, c3, i, j, 15]),  # F1 Score
-                        np.nanmean(Rate[:, m, c3, i, j, 9]),   # Inliers
-                        np.nanmean(Rate[:, m, c3, i, j, 10])   # Matches
+                        np.nanmean(Rate[:, m, c3, i, j,  9]),  # Inliers
+                        np.nanmean(Rate[:, m, c3, i, j, 10]),  # Matches
+                        np.nanmean(Rate[:, m, c3, i, j, 11])   # Reprojection Error
                     ]
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
                     if np.isnan(inlierTime):
@@ -677,7 +678,7 @@ def single_timing2(data="drone"):
                     fig13.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
-    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
+    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error"]
     button_list = []
     for idx, xaxis in enumerate(dropdown_xaxis):
         button_list.append(dict( label=xaxis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))

@@ -51,7 +51,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[k+1, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    Rate[k, m, c3, i, j, 11], good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
                                     database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
@@ -81,12 +81,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                         continue
             else:
                 continue
-    pipelineOptions = pycolmap.IncrementalPipelineOptions(
-        {
-            'init_image_id1': 17,
-            'init_image_id2': 18
-        }
-    )
+    
     for i in range(len(Detectors)):
         if (i == a or a == 100):
             for j in range(len(Descriptors)):
@@ -95,17 +90,20 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                         for m in range(2):
                             path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
                             if os.path.isfile(f"{path}.db"):
-                                maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, pipelineOptions)
+                                maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, 
+                                                                    pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
                                 # pycolmap.bundle_adjustment(maps[0])
                                 # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
                                 # print(maps[0].summary())
-                                Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
+                                try:
+                                    Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
+                                except:
+                                    Rate[:, m, c3, i, j, 11] = None
                 else:
                     continue
         else:
             continue
-
-
+    
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
