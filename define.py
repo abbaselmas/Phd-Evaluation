@@ -82,8 +82,7 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
     _, mask = cv2.findFundamentalMat(points1, points2, cv2.USAC_MAGSAC) # MAGSAC++
     inliers = [matches[i] for i in range(len(matches)) if mask[i] == 1]
     # inliers.sort(key=lambda x: x.distance)
-    inliers_percentage = ((len(inliers) / len(matches)) * 100 if len(matches) > 0 else 0)
-    return inliers_percentage, inliers, matches
+    return inliers, matches
 
 def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len, desc2_len, good_matches_len, matches_len, detect_time, descript_time):
     Rate[k, m, c3, i, j, 0] = k
@@ -125,7 +124,7 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
     # Metadata On Image    
     text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
                 "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
-                "Norm.:", "Matcher:", "Match Rate:", "Inliers:", "All Matches:",
+                "Norm.:", "Matcher:", "Reprojection Error:", "Inliers:", "All Matches:",
                 "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
     text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
@@ -138,7 +137,7 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
                 f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
                 f"{Norm[c3]}",                                          # Matching
                 f"{Matcher[m]}",                                        # Matcher
-                f"{Rate[11]:.2f}",                                      # Match Rate
+                f"{Rate[11]:.2f}",                                      # Reprojection Error
                 f"{Rate[9]}",                                           # Inliers
                 f"{Rate[10]}",                                          # All Matches
                 f"{Exec_time[3]:.4f}",                                  # Total Time
@@ -211,7 +210,7 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_t
 def saveAverageCSV(Rate, Exec_time, scenario):
     headers = [ "Detector", "Keypoint1", "Keypoint2", "1K Detect Time",
                 "Descriptor", "Descriptor1", "Descriptor2", "1K Descript Time",
-                "Norm.", "Matcher", "Match Rate", "Inliers", "All Matches",
+                "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
     with open(f"./csv/{scenario}_analysis.csv", "w", newline="") as csvfile:
@@ -231,7 +230,7 @@ def saveAverageCSV(Rate, Exec_time, scenario):
                                 np.nanmean(Exec_time[:, m, c3, i, j, 5]),     # 1K Descript Time
                                 Norm[c3],                                     # Norm
                                 Matcher[m],                                   # Matcher
-                                np.nanmean(Rate[:, m, c3, i, j, 11]),         # MATCH RATE
+                                np.nanmean(Rate[:, m, c3, i, j, 11]),         # Reprojection Error
                                 np.nanmean(Rate[:, m, c3, i, j,  9]),         # Inliers
                                 np.nanmean(Rate[:, m, c3, i, j, 10]),         # All Matches
                                 np.nanmean(Exec_time[:, m, c3, i, j, 3]),     # Total Time
@@ -246,7 +245,7 @@ def saveAverageCSV(Rate, Exec_time, scenario):
 def saveAllCSV(Rate, Exec_time, scenario):
     headers = [ "k", "Detector", "Keypoint1-GT", "Keypoint2", "Detect Time", "1K Detect Time",
                 "Descriptor", "Descriptor1-GT", "Descriptor2", "Descript Time", "1K Descript Time",
-                "Norm.", "Matcher", "Match Rate", "Inliers", "All Matches", "Match Time",
+                "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches", "Match Time",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
     with open(f"./csv/{scenario}_analysis_all.csv", "w", newline="") as csvfile:
@@ -270,7 +269,7 @@ def saveAllCSV(Rate, Exec_time, scenario):
                                     Exec_time[k, m, c3, i, j, 5],           # 1K Descipt Time
                                     Norm[c3],                               # Norm
                                     Matcher[m],                             # Matcher
-                                    Rate[k, m, c3, i, j, 11],               # MATCH RATE
+                                    Rate[k, m, c3, i, j, 11],               # Reprojection Error
                                     Rate[k, m, c3, i, j,  9],               # Inliers
                                     Rate[k, m, c3, i, j, 10],               # All Matches
                                     Exec_time[k, m, c3, i, j, 2],           # Match Time
