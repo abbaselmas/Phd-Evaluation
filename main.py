@@ -20,7 +20,7 @@ save = True
 # executeScenarios              ("trees",  a, b, drawing, save)
 # executeScenarios              ("wall",   a, b, drawing, save)
 # executeScenarios              ("ubc",    a, b, drawing, save)
-# executeDroneScenarios         ("drone",  a, b, drawing, save)
+executeDroneScenarios         ("drone",  a, b, drawing, save)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
 
 # synthetic           ()
@@ -43,3 +43,8 @@ save = True
 # singleMulti         ("uav", "Inliers-Matches",   9, 10)
 # single_timing       ("uav")
 # single_timing2      ("uav")
+
+drone_rep_err()
+
+# synthetic_timing_mobile()
+# oxford_timing_mobile()

@@ -72,9 +72,12 @@ config = {
 Rate_intensity      = np.load("./arrays/Rate_intensity.npy")
 Rate_scale          = np.load("./arrays/Rate_scale.npy")
 Rate_rot            = np.load("./arrays/Rate_rot.npy")
-Exec_time_intensity = np.load("./arrays/Exec_time_intensity.npy")
-Exec_time_scale     = np.load("./arrays/Exec_time_scale.npy")
-Exec_time_rot       = np.load("./arrays/Exec_time_rot.npy")
+Exec_time_intensity         = np.load("./arrays/Exec_time_intensity.npy")
+Exec_time_intensity_mobile  = np.load("./arrays/Exec_time_intensity_mobile.npy")
+Exec_time_scale             = np.load("./arrays/Exec_time_scale.npy")
+Exec_time_scale_mobile      = np.load("./arrays/Exec_time_scale_mobile.npy")
+Exec_time_rot               = np.load("./arrays/Exec_time_rot.npy")
+Exec_time_rot_mobile        = np.load("./arrays/Exec_time_rot_mobile.npy")
 Rate_graf           = np.load("./arrays/Rate_graf.npy")
 Rate_bikes          = np.load("./arrays/Rate_bikes.npy")
 Rate_boat           = np.load("./arrays/Rate_boat.npy")
@@ -83,14 +86,22 @@ Rate_wall           = np.load("./arrays/Rate_wall.npy")
 Rate_trees          = np.load("./arrays/Rate_trees.npy")
 Rate_bark           = np.load("./arrays/Rate_bark.npy")
 Rate_ubc            = np.load("./arrays/Rate_ubc.npy")
-Exec_time_graf      = np.load("./arrays/Exec_time_graf.npy")
-Exec_time_bikes     = np.load("./arrays/Exec_time_bikes.npy")
-Exec_time_boat      = np.load("./arrays/Exec_time_boat.npy")
-Exec_time_leuven    = np.load("./arrays/Exec_time_leuven.npy")
-Exec_time_wall      = np.load("./arrays/Exec_time_wall.npy")
-Exec_time_trees     = np.load("./arrays/Exec_time_trees.npy")
-Exec_time_bark      = np.load("./arrays/Exec_time_bark.npy")
-Exec_time_ubc       = np.load("./arrays/Exec_time_ubc.npy")
+Exec_time_graf          = np.load("./arrays/Exec_time_graf.npy")
+Exec_time_graf_mobile   = np.load("./arrays/Exec_time_graf_mobile.npy")
+Exec_time_bikes         = np.load("./arrays/Exec_time_bikes.npy")
+Exec_time_bikes_mobile  = np.load("./arrays/Exec_time_bikes_mobile.npy")
+Exec_time_boat          = np.load("./arrays/Exec_time_boat.npy")
+Exec_time_boat_mobile   = np.load("./arrays/Exec_time_boat_mobile.npy")
+Exec_time_leuven        = np.load("./arrays/Exec_time_leuven.npy")
+Exec_time_leuven_mobile = np.load("./arrays/Exec_time_leuven_mobile.npy")
+Exec_time_wall          = np.load("./arrays/Exec_time_wall.npy")
+Exec_time_wall_mobile   = np.load("./arrays/Exec_time_wall_mobile.npy")
+Exec_time_trees         = np.load("./arrays/Exec_time_trees.npy")
+Exec_time_trees_mobile  = np.load("./arrays/Exec_time_trees_mobile.npy")
+Exec_time_bark          = np.load("./arrays/Exec_time_bark.npy")
+Exec_time_bark_mobile   = np.load("./arrays/Exec_time_bark_mobile.npy")
+Exec_time_ubc           = np.load("./arrays/Exec_time_ubc.npy")
+Exec_time_ubc_mobile    = np.load("./arrays/Exec_time_ubc_mobile.npy")
 
 ########################
 # MARK: - Synthetic Data
@@ -687,4 +698,197 @@ def single_timing2(data="drone"):
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.03)])
     fig13.write_html(f"./html/{data}_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}_timing2.html", "a") as f:
+        f.write(custom_html)
+
+def drone_rep_err():
+    Exec_time = np.load(f"./arrays/Exec_time_drone.npy")
+    Rate = np.load(f"./arrays/Rate_drone.npy")
+    fig14 = go.Figure()
+    fig14.update_layout(title_text=f"Drone Reprojection Error with All Matches and BA", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    color_index = 0
+    symbol_index = 0
+    traces = []
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for c3 in range(2):
+                for m in range(2):
+                    x_data = [
+                        np.nanmean(Rate[:, m, c3, i, j, 11])   # Reprojection Error
+                    ]
+                    inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
+                    if np.isnan(inlierTime):
+                        continue
+                    trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
+                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
+                    traces.append(trace)
+                    fig14.add_trace(trace)
+                    symbol_index = (symbol_index + 1) % 27
+            color_index = (color_index + 26) % num_combinations
+    
+    fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
+    fig14.write_html(f"./html/drone_reprojection_error_matches.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/drone_reprojection_error_matches.html", "a") as f:
+        f.write(custom_html)
+        
+#################################
+# MARK: Mobile Timing Comparison
+#################################
+def synthetic_timing_mobile():
+    fig15 = go.Figure()
+    fig15 = make_subplots(  rows=5, cols=2, subplot_titles=[
+                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
+                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
+                                                            "Average 1k Total time (Detect + Descript + Match(BF+FL))",
+                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
+                                                            "Average 1k Detect time",
+                                                            "Average 1k Describe time"
+                                                            ],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+    fig15.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
+    color_index = 0
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for m in range(2):
+                result3 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 6], Exec_time_scale[:, m, :, i, j, 6], Exec_time_rot[:, m, :, i, j, 6]), axis=0))
+                result3m= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 6], Exec_time_scale_mobile[:, m, :, i, j, 6], Exec_time_rot_mobile[:, m, :, i, j, 6]), axis=0))
+                result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7], Exec_time_scale[:, m, :, i, j, 7], Exec_time_rot[:, m, :, i, j, 7]), axis=0))
+                result4m= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 7], Exec_time_scale_mobile[:, m, :, i, j, 7], Exec_time_rot_mobile[:, m, :, i, j, 7]), axis=0))
+                if np.isnan(result3) or np.isnan(result4):
+                    continue
+                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                    text=[f"{result3:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                trace_match_synt_result3m= go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3m],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                    text=[f"{result3m:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                fig15.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result3,  row=2, col=1)
+                fig15.add_trace(trace_match_synt_result3m, row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result3m, row=2, col=1)
+                trace_match_synt_result3.showlegend = False
+                trace_match_synt_result3m.showlegend = False
+                fig15.add_trace(trace_match_synt_result3, row=3, col=1)
+                fig15.add_trace(trace_match_synt_result3m, row=3, col=1)
+                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                    text=[f"{result4:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                trace_match_synt_result4m= go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4m],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                    text=[f"{result4m:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                fig15.add_trace(trace_match_synt_result4,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result4,  row=2, col=1)
+                fig15.add_trace(trace_match_synt_result4m, row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result4m, row=2, col=1)
+                trace_match_synt_result4.showlegend = False
+                trace_match_synt_result4m.showlegend = False
+                fig15.add_trace(trace_match_synt_result4,  row=4, col=1)
+                fig15.add_trace(trace_match_synt_result4m, row=4, col=1)
+            color_index = (color_index + 28) % num_combinations
+        result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
+        resultm= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, :, :, i, :, 4], Exec_time_scale_mobile[:, :, :, i, :, 4], Exec_time_rot_mobile[:, :, :, i, :, 4]), axis=0))
+        trace_detect_synt = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True,  text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
+        trace_detect_syntm = go.Bar(x=[DetectorsLegend[i]],  y=[resultm],  name=f".{DetectorsLegend[i]}",  showlegend=True,  text=[f"{resultm:.3f}"],  marker=dict(color = colors[14*i]))
+        fig15.add_trace(trace_detect_synt,  row=5, col=1)
+        fig15.add_trace(trace_detect_syntm, row=5, col=1)
+        result2 = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, :, i, 5], Exec_time_scale[:, :, :, :, i, 5], Exec_time_rot[:, :, :, :, i, 5]), axis=0))
+        result2m = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, :, i, 5], Exec_time_scale[:, :, :, :, i, 5], Exec_time_rot[:, :, :, :, i, 5]), axis=0))
+        trace_descr_synt = go.Bar(x=[DescriptorsLegend[i]], y=[result2], name=f"-{DescriptorsLegend[i]}", showlegend=True, text=[f"{result2:.3f}"], marker=dict(color = colors[14*i]))
+        trace_descr_syntm = go.Bar(x=[DescriptorsLegend[i]], y=[result2m], name=f"-{DescriptorsLegend[i]}", showlegend=True, text=[f"{result2m:.3f}"], marker=dict(color = colors[14*i]))
+        fig15.add_trace(trace_descr_synt,  row=5, col=2)
+        fig15.add_trace(trace_descr_syntm, row=5, col=2)
+    fig15.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis.type" : "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis.type" : "log"}])], x=0, xanchor="left", y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
+                                    ])
+    fig15.write_html("./html/synthetic_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open("./html/synthetic_timing_mobile.html", "a") as f:
+        f.write(custom_html)
+        
+############################
+# MARK: Oxford Timing Mobile
+############################
+def oxford_timing_mobile():
+    fig6 = go.Figure()
+    fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[
+                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
+                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
+                                                            "Average 1k Total time (Detect + Descript + Match(BF+FL))",
+                                                            "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
+                                                            "Average 1k Detect time",
+                                                            "Average 1k Describe time"
+                                                            ],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+    fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
+    color_index = 0
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for m in range(2):
+                result3 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 6], Exec_time_wall[:, m, :, i, j, 6], Exec_time_trees[:, m, :, i, j, 6], Exec_time_bikes[:, m, :, i, j, 6], Exec_time_bark[:, m, :, i, j, 6], Exec_time_boat[:, m, :, i, j, 6], Exec_time_leuven[:, m, :, i, j, 6], Exec_time_ubc[:, m, :, i, j, 6]), axis=0))
+                result3m= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 6], Exec_time_wall_mobile[:, m, :, i, j, 6], Exec_time_trees_mobile[:, m, :, i, j, 6], Exec_time_bikes_mobile[:, m, :, i, j, 6], Exec_time_bark_mobile[:, m, :, i, j, 6], Exec_time_boat_mobile[:, m, :, i, j, 6], Exec_time_leuven_mobile[:, m, :, i, j, 6], Exec_time_ubc_mobile[:, m, :, i, j, 6]), axis=0))
+                result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7], Exec_time_wall[:, m, :, i, j, 7], Exec_time_trees[:, m, :, i, j, 7], Exec_time_bikes[:, m, :, i, j, 7], Exec_time_bark[:, m, :, i, j, 7], Exec_time_boat[:, m, :, i, j, 7], Exec_time_leuven[:, m, :, i, j, 7], Exec_time_ubc[:, m, :, i, j, 7]), axis=0))
+                result4m= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 7], Exec_time_wall_mobile[:, m, :, i, j, 7], Exec_time_trees_mobile[:, m, :, i, j, 7], Exec_time_bikes_mobile[:, m, :, i, j, 7], Exec_time_bark_mobile[:, m, :, i, j, 7], Exec_time_boat_mobile[:, m, :, i, j, 7], Exec_time_leuven_mobile[:, m, :, i, j, 7], Exec_time_ubc_mobile[:, m, :, i, j, 7]), axis=0))
+                if np.isnan(result3) or np.isnan(result4):
+                    continue
+                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                    text=[f"{result3:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                trace_match_synt_result3m= go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3m],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                    text=[f"{result3m:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                fig6.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3, row=2, col=1)
+                fig6.add_trace(trace_match_synt_result3m, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3m, row=2, col=1)
+                trace_match_synt_result3.showlegend  = False
+                trace_match_synt_result3m.showlegend = False
+                fig6.add_trace(trace_match_synt_result3,  row=3, col=1)
+                fig6.add_trace(trace_match_synt_result3m, row=3, col=1)
+                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                    text=[f"{result4:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                trace_match_synt_result4m = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4m],
+                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                    text=[f"{result4m:.3f}"], marker_color=colors[color_index],
+                                                    showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
+                fig6.add_trace(trace_match_synt_result4,  row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4, row=2, col=1)
+                fig6.add_trace(trace_match_synt_result4m, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4m, row=2, col=1)
+                trace_match_synt_result4.showlegend  = False
+                trace_match_synt_result4m.showlegend = False
+                fig6.add_trace(trace_match_synt_result4,  row=4, col=1)
+                fig6.add_trace(trace_match_synt_result4m, row=4, col=1)
+            color_index = (color_index + 28) % num_combinations            
+        result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
+        resultm= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, :, :, i, :, 4], Exec_time_wall_mobile[:, :, :, i, :, 4], Exec_time_trees_mobile[:, :, :, i, :, 4], Exec_time_bikes_mobile[:, :, :, i, :, 4], Exec_time_bark_mobile[:, :, :, i, :, 4], Exec_time_boat_mobile[:, :, :, i, :, 4], Exec_time_leuven_mobile[:, :, :, i, :, 4], Exec_time_ubc_mobile[:, :, :, i, :, 4]), axis=0))
+        trace_detect_oxford = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
+        trace_detect_oxfordm= go.Bar(x=[DetectorsLegend[i]],  y=[resultm], name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{resultm:.3f}"], marker=dict(color = colors[14*i]))
+        fig6.add_trace(trace_detect_oxford,  row=5, col=1)
+        fig6.add_trace(trace_detect_oxfordm, row=5, col=1)
+        result2 = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, :, i, 5], Exec_time_wall[:, :, :, :, i, 5], Exec_time_trees[:, :, :, :, i, 5], Exec_time_bikes[:, :, :, :, i, 5], Exec_time_bark[:, :, :, :, i, 5], Exec_time_boat[:, :, :, :, i, 5], Exec_time_leuven[:, :, :, :, i, 5], Exec_time_ubc[:, :, :, :, i, 5]), axis=0))
+        result2m= np.nanmean(np.concatenate((Exec_time_graf[:, :, :, :, i, 5], Exec_time_wall[:, :, :, :, i, 5], Exec_time_trees[:, :, :, :, i, 5], Exec_time_bikes[:, :, :, :, i, 5], Exec_time_bark[:, :, :, :, i, 5], Exec_time_boat[:, :, :, :, i, 5], Exec_time_leuven[:, :, :, :, i, 5], Exec_time_ubc[:, :, :, :, i, 5]), axis=0))
+        trace_descr_oxford = go.Bar(x=[DescriptorsLegend[i]], y=[result2],  name=f"-{DescriptorsLegend[i]}",showlegend=True, text=[f"{result2:.3f}"],  marker=dict(color = colors[14*i]))
+        trace_descr_oxfordm= go.Bar(x=[DescriptorsLegend[i]], y=[result2m], name=f"-{DescriptorsLegend[i]}",showlegend=True, text=[f"{result2m:.3f}"], marker=dict(color = colors[14*i]))
+        fig6.add_trace(trace_descr_oxford,  row=5, col=2)
+        fig6.add_trace(trace_descr_oxfordm, row=5, col=2)
+        
+    fig6.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis.type" : "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis.type" : "log"}])], x=0, xanchor="left", y=1.015),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
+                                    ])
+    fig6.write_html("./html/oxford_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford_timing_mobile.html", "a") as f:
         f.write(custom_html)
