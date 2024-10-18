@@ -69,39 +69,39 @@ config = {
         "editable": False
 }
 
-Rate_intensity      = np.load("./arrays/Rate_intensity.npy")
-Rate_scale          = np.load("./arrays/Rate_scale.npy")
-Rate_rot            = np.load("./arrays/Rate_rot.npy")
+Rate_intensity              = np.load("./arrays/Rate_intensity.npy")
+Rate_scale                  = np.load("./arrays/Rate_scale.npy")
+Rate_rot                    = np.load("./arrays/Rate_rot.npy")
+Rate_graf                   = np.load("./arrays/Rate_graf.npy")
+Rate_bikes                  = np.load("./arrays/Rate_bikes.npy")
+Rate_boat                   = np.load("./arrays/Rate_boat.npy")
+Rate_leuven                 = np.load("./arrays/Rate_leuven.npy")
+Rate_wall                   = np.load("./arrays/Rate_wall.npy")
+Rate_trees                  = np.load("./arrays/Rate_trees.npy")
+Rate_bark                   = np.load("./arrays/Rate_bark.npy")
+Rate_ubc                    = np.load("./arrays/Rate_ubc.npy")
 Exec_time_intensity         = np.load("./arrays/Exec_time_intensity.npy")
 Exec_time_intensity_mobile  = np.load("./arrays/Exec_time_intensity_mobile.npy")
 Exec_time_scale             = np.load("./arrays/Exec_time_scale.npy")
 Exec_time_scale_mobile      = np.load("./arrays/Exec_time_scale_mobile.npy")
 Exec_time_rot               = np.load("./arrays/Exec_time_rot.npy")
 Exec_time_rot_mobile        = np.load("./arrays/Exec_time_rot_mobile.npy")
-Rate_graf           = np.load("./arrays/Rate_graf.npy")
-Rate_bikes          = np.load("./arrays/Rate_bikes.npy")
-Rate_boat           = np.load("./arrays/Rate_boat.npy")
-Rate_leuven         = np.load("./arrays/Rate_leuven.npy")
-Rate_wall           = np.load("./arrays/Rate_wall.npy")
-Rate_trees          = np.load("./arrays/Rate_trees.npy")
-Rate_bark           = np.load("./arrays/Rate_bark.npy")
-Rate_ubc            = np.load("./arrays/Rate_ubc.npy")
-Exec_time_graf          = np.load("./arrays/Exec_time_graf.npy")
-Exec_time_graf_mobile   = np.load("./arrays/Exec_time_graf_mobile.npy")
-Exec_time_bikes         = np.load("./arrays/Exec_time_bikes.npy")
-Exec_time_bikes_mobile  = np.load("./arrays/Exec_time_bikes_mobile.npy")
-Exec_time_boat          = np.load("./arrays/Exec_time_boat.npy")
-Exec_time_boat_mobile   = np.load("./arrays/Exec_time_boat_mobile.npy")
-Exec_time_leuven        = np.load("./arrays/Exec_time_leuven.npy")
-Exec_time_leuven_mobile = np.load("./arrays/Exec_time_leuven_mobile.npy")
-Exec_time_wall          = np.load("./arrays/Exec_time_wall.npy")
-Exec_time_wall_mobile   = np.load("./arrays/Exec_time_wall_mobile.npy")
-Exec_time_trees         = np.load("./arrays/Exec_time_trees.npy")
-Exec_time_trees_mobile  = np.load("./arrays/Exec_time_trees_mobile.npy")
-Exec_time_bark          = np.load("./arrays/Exec_time_bark.npy")
-Exec_time_bark_mobile   = np.load("./arrays/Exec_time_bark_mobile.npy")
-Exec_time_ubc           = np.load("./arrays/Exec_time_ubc.npy")
-Exec_time_ubc_mobile    = np.load("./arrays/Exec_time_ubc_mobile.npy")
+Exec_time_graf              = np.load("./arrays/Exec_time_graf.npy")
+Exec_time_graf_mobile       = np.load("./arrays/Exec_time_graf_mobile.npy")
+Exec_time_bikes             = np.load("./arrays/Exec_time_bikes.npy")
+Exec_time_bikes_mobile      = np.load("./arrays/Exec_time_bikes_mobile.npy")
+Exec_time_boat              = np.load("./arrays/Exec_time_boat.npy")
+Exec_time_boat_mobile       = np.load("./arrays/Exec_time_boat_mobile.npy")
+Exec_time_leuven            = np.load("./arrays/Exec_time_leuven.npy")
+Exec_time_leuven_mobile     = np.load("./arrays/Exec_time_leuven_mobile.npy")
+Exec_time_wall              = np.load("./arrays/Exec_time_wall.npy")
+Exec_time_wall_mobile       = np.load("./arrays/Exec_time_wall_mobile.npy")
+Exec_time_trees             = np.load("./arrays/Exec_time_trees.npy")
+Exec_time_trees_mobile      = np.load("./arrays/Exec_time_trees_mobile.npy")
+Exec_time_bark              = np.load("./arrays/Exec_time_bark.npy")
+Exec_time_bark_mobile       = np.load("./arrays/Exec_time_bark_mobile.npy")
+Exec_time_ubc               = np.load("./arrays/Exec_time_ubc.npy")
+Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
 
 ########################
 # MARK: - Synthetic Data
@@ -158,7 +158,7 @@ def synthetic():
 def syntheticMulti(name="Precision-Recall", x=13, y=12):
     fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
     color_index = 0
     symbol_index = 0
@@ -200,15 +200,13 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
 ###########################
 def synthetic_timing():
     fig3 = go.Figure()
-    fig3 = make_subplots(  rows=5, cols=2, subplot_titles=[
-                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
+    fig3 = make_subplots(  rows=5, cols=2, subplot_titles=[ "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
                                                             "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
                                                             "Average 1k Detect time",
-                                                            "Average 1k Describe time"
-                                                            ],
-                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                                                            "Average 1k Describe time"],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.06)
     fig3.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -218,14 +216,14 @@ def synthetic_timing():
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7], Exec_time_scale[:, m, :, i, j, 7], Exec_time_rot[:, m, :, i, j, 7]), axis=0))
                 if np.isnan(result3) or np.isnan(result4):
                     continue
-                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
+                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                 fig3.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig3.add_trace(trace_match_synt_result3, row=3, col=1)
-                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
+                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
@@ -245,10 +243,13 @@ def synthetic_timing():
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.59),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
-                                    ])
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.39),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
     fig3.write_html("./html/synthetic_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open("./html/synthetic_timing.html", "a") as f:
         f.write(custom_html)
@@ -366,7 +367,7 @@ def oxford():
 def oxfordMulti(name="Precision-Recall", x=13, y=12):
     fig5 = go.Figure()
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
-                            horizontal_spacing=0.05, vertical_spacing=0.07, x_title=name.split('-')[0], y_title=name.split('-')[1])
+                            horizontal_spacing=0.05, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
     fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode="x")
     color_index = 0
     symbol_index = 0
@@ -424,15 +425,13 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
 ###########################
 def oxford_timing():
     fig6 = go.Figure()
-    fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[
-                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
+    fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[ "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
                                                             "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
                                                             "Average 1k Detect time",
-                                                            "Average 1k Describe time"
-                                                            ],
-                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                                                            "Average 1k Describe time"],
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.06)
     fig6.update_layout(title_text="Oxford Affine Dataset - Timing", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -442,14 +441,14 @@ def oxford_timing():
                 result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7], Exec_time_wall[:, m, :, i, j, 7], Exec_time_trees[:, m, :, i, j, 7], Exec_time_bikes[:, m, :, i, j, 7], Exec_time_bark[:, m, :, i, j, 7], Exec_time_boat[:, m, :, i, j, 7], Exec_time_leuven[:, m, :, i, j, 7], Exec_time_ubc[:, m, :, i, j, 7]), axis=0))
                 if np.isnan(result3) or np.isnan(result4):
                     continue
-                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
+                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                 fig6.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig6.add_trace(trace_match_synt_result3, row=3, col=1)
-                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
+                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
@@ -469,10 +468,13 @@ def oxford_timing():
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.59),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
-                                    ])
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.38),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
     fig6.write_html("./html/oxford_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford_timing.html", "a") as f:
         f.write(custom_html)
@@ -611,7 +613,7 @@ def single_timing(data="drone"):
                                                             "Average 1k Describe time"
                                                             ],
                             specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]],
-                            horizontal_spacing=0.05, vertical_spacing=0.07)
+                            horizontal_spacing=0.05, vertical_spacing=0.06)
     fig12.update_layout(title_text=f"{data.upper()} Data - Timing", title_x=0.5, title_xanchor="right", barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -621,14 +623,14 @@ def single_timing(data="drone"):
                 result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
                 if np.isnan(result3) or np.isnan(result4):
                     continue
-                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result3],
+                trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                     text=[f"{result3:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                 fig12.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result3, row=2, col=1)
                 trace_match_synt_result3.showlegend = False
                 fig12.add_trace(trace_match_synt_result3, row=3, col=1)
-                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]], [Matcher[m]]], y=[result4],
+                trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                     text=[f"{result4:.3f}"], marker=dict(color = colors[color_index]),
                                                     showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
@@ -649,10 +651,11 @@ def single_timing(data="drone"):
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
                                                         dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
-                                                        dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.59),
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
-                                                        dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
-                                        ])
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.38),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17)])
     fig12.write_html(f"./html/{data}_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}_timing.html", "a") as f:
         f.write(custom_html)
@@ -675,8 +678,7 @@ def single_timing2(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j, 14]),  # Repeatibility
                         np.nanmean(Rate[:, m, c3, i, j, 15]),  # F1 Score
                         np.nanmean(Rate[:, m, c3, i, j,  9]),  # Inliers
-                        np.nanmean(Rate[:, m, c3, i, j, 10]),  # Matches
-                        np.nanmean(Rate[:, m, c3, i, j, 11])   # Reprojection Error
+                        np.nanmean(Rate[:, m, c3, i, j, 10])  # Matches
                     ]
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
                     if np.isnan(inlierTime):
@@ -689,7 +691,7 @@ def single_timing2(data="drone"):
                     fig13.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
-    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error"]
+    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, xaxis in enumerate(dropdown_xaxis):
         button_list.append(dict( label=xaxis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))
@@ -699,42 +701,10 @@ def single_timing2(data="drone"):
     fig13.write_html(f"./html/{data}_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}_timing2.html", "a") as f:
         f.write(custom_html)
-
-def drone_rep_err():
-    Exec_time = np.load(f"./arrays/Exec_time_drone.npy")
-    Rate = np.load(f"./arrays/Rate_drone.npy")
-    fig14 = go.Figure()
-    fig14.update_layout(title_text=f"Drone Reprojection Error with All Matches and BA", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
-    color_index = 0
-    symbol_index = 0
-    traces = []
-    for i in range(len(DetectorsLegend)):
-        for j in range(len(DescriptorsLegend)):
-            for c3 in range(2):
-                for m in range(2):
-                    x_data = [
-                        np.nanmean(Rate[:, m, c3, i, j, 11])   # Reprojection Error
-                    ]
-                    inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
-                    if np.isnan(inlierTime):
-                        continue
-                    trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
-                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    traces.append(trace)
-                    fig14.add_trace(trace)
-                    symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
-    
-    fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
-    fig14.write_html(f"./html/drone_reprojection_error_matches.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/drone_reprojection_error_matches.html", "a") as f:
-        f.write(custom_html)
         
-#################################
-# MARK: Mobile Timing Comparison
-#################################
+###############################
+# MARK: Synthetic Timing Mobile
+###############################
 def synthetic_timing_mobile():
     fig15 = go.Figure()
     fig15 = make_subplots(  rows=5, cols=2, subplot_titles=[   "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
@@ -743,7 +713,7 @@ def synthetic_timing_mobile():
                                                                 "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
                                                                 "Average 1k Detect time",
                                                                 "Average 1k Describe time"],
-                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None],[{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None],[{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.06)
     fig15.update_layout(title_text=f"Synthetic Data Timings", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -807,10 +777,13 @@ def synthetic_timing_mobile():
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.59),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
-                                    ])
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.38),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
     fig15.write_html("./html/synthetic_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open("./html/synthetic_timing_mobile.html", "a") as f:
         f.write(custom_html)
@@ -826,7 +799,7 @@ def oxford_timing_mobile():
                                                             "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
                                                             "Average 1k Detect time",
                                                             "Average 1k Describe time"],
-                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.07)
+                            specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.06)
     fig6.update_layout(title_text="Oxford Affine Dataset Timings", title_x=0.5, barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -891,10 +864,49 @@ def oxford_timing_mobile():
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis2.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis2.type": "log"}])], x=0, xanchor="left", y=0.80),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis3.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.58),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis3.type": "log"}])], x=0, xanchor="left", y=0.59),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
-                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.36)
-                                    ])
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.38),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.175),
+                                    dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
+                                                    dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
     fig6.write_html("./html/oxford_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford_timing_mobile.html", "a") as f:
+        f.write(custom_html)
+
+################################
+# MARK: Drone Reprojection Error
+################################        
+def drone_rep_err(data="inliers"):
+    Exec_time = np.load(f"./arrays/Exec_time_drone.npy")
+    Rate = np.load(f"./arrays/Rate_drone.npy") if data == "inliers" else np.load(f"./arrays/Rate_drone_11matches.npy")
+    fig14 = go.Figure()
+    fig14.update_layout(title_text=f"Drone Reprojection Error with All Matches and BA", title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    color_index = 0
+    symbol_index = 0
+    traces = []
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for c3 in range(2):
+                for m in range(2):
+                    x_data = [
+                        np.nanmean(Rate[:, m, c3, i, j, 11])   # Reprojection Error
+                    ]
+                    inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
+                    if np.isnan(inlierTime):
+                        continue
+                    trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
+                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
+                    traces.append(trace)
+                    fig14.add_trace(trace)
+                    symbol_index = (symbol_index + 1) % 27
+            color_index = (color_index + 26) % num_combinations
+    
+    fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
+    file = f"./html/drone_reprojection_error_inliers.html" if data == "inliers" else f"./html/drone_reprojection_error_matches.html"
+    fig14.write_html(file, include_plotlyjs="cdn", full_html=True, config=config)
+    with open(file, "a") as f:
         f.write(custom_html)
