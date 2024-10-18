@@ -65,12 +65,12 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
                                     db.add_keypoints(image_id, keypoints1_np)
                                     db.add_descriptors(image_id, descriptors1)
-                                    matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
-                                    db.add_matches(image_id, image_id+1, matches_np)
-                                    db.add_two_view_geometry(image_id, image_id+1, matches_np)
-                                    # good_matches_np = np.array([[m.queryIdx, m.trainIdx] for m in good_matches], dtype=np.uint32)
-                                    # db.add_matches(image_id, image_id+1, good_matches_np)
-                                    # db.add_two_view_geometry(image_id, image_id+1, good_matches_np)
+                                    # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
+                                    # db.add_matches(image_id, image_id+1, matches_np)
+                                    # db.add_two_view_geometry(image_id, image_id+1, matches_np)
+                                    good_matches_np = np.array([[m.queryIdx, m.trainIdx] for m in good_matches], dtype=np.uint32)
+                                    db.add_matches(image_id, image_id+1, good_matches_np)
+                                    db.add_two_view_geometry(image_id, image_id+1, good_matches_np)
                                     db.commit()
                                 except Exception as e:
                                     Exec_time[k, m, c3, i, j, :] = None
