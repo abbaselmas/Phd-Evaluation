@@ -2,10 +2,10 @@ from synthetic import *
 from oxfordAffine import *
 from drone import *
 from uav import *
-# from display import *
+from display import *
 
-a = 100
-b = 100
+a = 3
+b = 5
 drawing = False
 save = True
 
@@ -47,5 +47,5 @@ execute_scenario_rotation     (          a, b, drawing, save)
 # drone_rep_err("inliers")
 # drone_rep_err("matches")
 
-# synthetic_timing_mobile()
+synthetic_timing_mobile()
 # oxford_timing_mobile()
