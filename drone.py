@@ -3,7 +3,7 @@ import numpy as np
 import time, os
 from define import *
 from database import *
-import pycolmap
+# import pycolmap
 
 def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     print(time.ctime())

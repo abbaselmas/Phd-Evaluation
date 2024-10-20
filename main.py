@@ -2,24 +2,24 @@ from synthetic import *
 from oxfordAffine import *
 from drone import *
 from uav import *
-from display import *
+# from display import *
 
-a = 3
-b = 5
+a = 100
+b = 100
 drawing = False
 save = True
 
-# execute_scenario_scale        (          a, b, drawing, save)
-# execute_scenario_intensity    (          a, b, drawing, save)
-# execute_scenario_rotation     (          a, b, drawing, save)
-# executeScenarios              ("graf",   a, b, drawing, save)
-# executeScenarios              ("leuven", a, b, drawing, save)
-# executeScenarios              ("bark",   a, b, drawing, save)
-# executeScenarios              ("boat",   a, b, drawing, save)
-# executeScenarios              ("bikes",  a, b, drawing, save)
-# executeScenarios              ("trees",  a, b, drawing, save)
-# executeScenarios              ("wall",   a, b, drawing, save)
-# executeScenarios              ("ubc",    a, b, drawing, save)
+execute_scenario_scale        (          a, b, drawing, save)
+execute_scenario_intensity    (          a, b, drawing, save)
+execute_scenario_rotation     (          a, b, drawing, save)
+executeScenarios              ("graf",   a, b, drawing, save)
+executeScenarios              ("leuven", a, b, drawing, save)
+executeScenarios              ("bark",   a, b, drawing, save)
+executeScenarios              ("boat",   a, b, drawing, save)
+executeScenarios              ("bikes",  a, b, drawing, save)
+executeScenarios              ("trees",  a, b, drawing, save)
+executeScenarios              ("wall",   a, b, drawing, save)
+executeScenarios              ("ubc",    a, b, drawing, save)
 # executeDroneScenarios         ("drone",  a, b, drawing, save)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
 
@@ -47,5 +47,5 @@ save = True
 # drone_rep_err("inliers")
 # drone_rep_err("matches")
 
-synthetic_timing_mobile()
+# synthetic_timing_mobile()
 # oxford_timing_mobile()
