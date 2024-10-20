@@ -9,9 +9,9 @@ b = 5
 drawing = False
 save = True
 
-execute_scenario_scale        (          a, b, drawing, save)
-execute_scenario_intensity    (          a, b, drawing, save)
-execute_scenario_rotation     (          a, b, drawing, save)
+# execute_scenario_scale        (          a, b, drawing, save)
+# execute_scenario_intensity    (          a, b, drawing, save)
+# execute_scenario_rotation     (          a, b, drawing, save)
 # executeScenarios              ("graf",   a, b, drawing, save)
 # executeScenarios              ("leuven", a, b, drawing, save)
 # executeScenarios              ("bark",   a, b, drawing, save)
