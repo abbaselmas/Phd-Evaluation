@@ -94,14 +94,14 @@ Exec_time_ubc               = np.load("./arrays/Exec_time_ubc.npy")
 Exec_time_intensity_mobile  = np.load("./arrays/Exec_time_intensity_mobile.npy")
 Exec_time_scale_mobile      = np.load("./arrays/Exec_time_scale_mobile.npy")
 Exec_time_rot_mobile        = np.load("./arrays/Exec_time_rot_mobile.npy")
-# Exec_time_graf_mobile       = np.load("./arrays/Exec_time_graf_mobile.npy")
-# Exec_time_bikes_mobile      = np.load("./arrays/Exec_time_bikes_mobile.npy")
-# Exec_time_boat_mobile       = np.load("./arrays/Exec_time_boat_mobile.npy")
-# Exec_time_leuven_mobile     = np.load("./arrays/Exec_time_leuven_mobile.npy")
-# Exec_time_wall_mobile       = np.load("./arrays/Exec_time_wall_mobile.npy")
-# Exec_time_trees_mobile      = np.load("./arrays/Exec_time_trees_mobile.npy")
-# Exec_time_bark_mobile       = np.load("./arrays/Exec_time_bark_mobile.npy")
-# Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
+Exec_time_graf_mobile       = np.load("./arrays/Exec_time_graf_mobile.npy")
+Exec_time_bikes_mobile      = np.load("./arrays/Exec_time_bikes_mobile.npy")
+Exec_time_boat_mobile       = np.load("./arrays/Exec_time_boat_mobile.npy")
+Exec_time_leuven_mobile     = np.load("./arrays/Exec_time_leuven_mobile.npy")
+Exec_time_wall_mobile       = np.load("./arrays/Exec_time_wall_mobile.npy")
+Exec_time_trees_mobile      = np.load("./arrays/Exec_time_trees_mobile.npy")
+Exec_time_bark_mobile       = np.load("./arrays/Exec_time_bark_mobile.npy")
+Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
 
 ########################
 # MARK: - Synthetic Data
@@ -604,14 +604,12 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
 def single_timing(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig12 = go.Figure()
-    fig12 = make_subplots(  rows=5, cols=2, subplot_titles=[
-                                                            "Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
+    fig12 = make_subplots(  rows=5, cols=2, subplot_titles=["Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)",
                                                             "Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)",
                                                             "Average 1k Total time (Detect + Descript + Match(BF+FL))",
                                                             "Average 1k Inlier time (Detect + Descript + Match(BF+FL) + RANSAC)",
                                                             "Average 1k Detect time",
-                                                            "Average 1k Describe time"
-                                                            ],
+                                                            "Average 1k Describe time"],
                             specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]],
                             horizontal_spacing=0.05, vertical_spacing=0.06)
     fig12.update_layout(title_text=f"{data.upper()} Data - Timing", title_x=0.5, title_xanchor="right", barmode="stack", height=2000, margin=dict(l=20, r=20, t=60, b=20), hovermode="x unified")
@@ -655,7 +653,9 @@ def single_timing(data="drone"):
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis4.type": "linear"}]),
                                                         dict(label="Log",   method="relayout", args=[{"yaxis4.type": "log"}])], x=0, xanchor="left", y=0.38),
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis5.type": "linear"}]),
-                                                        dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17)])
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
+                                        dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
+                                                        dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
     fig12.write_html(f"./html/{data}_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}_timing.html", "a") as f:
         f.write(custom_html)
@@ -678,7 +678,7 @@ def single_timing2(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j, 14]),  # Repeatibility
                         np.nanmean(Rate[:, m, c3, i, j, 15]),  # F1 Score
                         np.nanmean(Rate[:, m, c3, i, j,  9]),  # Inliers
-                        np.nanmean(Rate[:, m, c3, i, j, 10])  # Matches
+                        np.nanmean(Rate[:, m, c3, i, j, 10])   # Matches
                     ]
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
                     if np.isnan(inlierTime):
