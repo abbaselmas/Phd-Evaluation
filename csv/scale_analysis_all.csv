@@ -409,7 +409,7 @@ k;Detector;Keypoint1-GT;Keypoint2;Detect Time;1K Detect Time;Descriptor;Descript
 0;akaze;nan;nan;nan;nan;akaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 0;akaze;nan;nan;nan;nan;orb;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 0;akaze;nan;nan;nan;nan;brisk;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
-0;akaze;2598.0;749.0;0.023597195;0.03150493324432577;kaze;2598.0;749.0;0.056464193;0.07538610547396529;L2;Flann;nan;7.0;9.0;0.017336409;0.09739779700000001;10.821977444444444;13.913971;0.0026943802925327174;0.7777777777777778;0.009345794392523364;0.005370157268891446
+0;akaze;nan;nan;nan;nan;kaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 0;akaze;2598.0;749.0;0.023597195;0.03150493324432577;daisy;2598.0;749.0;0.029869932;0.039879748998664886;L2;Flann;nan;162.0;292.0;0.084412895;0.137880022;0.4721918561643835;0.8511112469135802;0.06235565819861432;0.5547945205479452;0.2162883845126836;0.11211072664359863
 0;akaze;nan;nan;nan;nan;freak;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 0;akaze;nan;nan;nan;nan;brief;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
@@ -1193,7 +1193,7 @@ k;Detector;Keypoint1-GT;Keypoint2;Detect Time;1K Detect Time;Descriptor;Descript
 1;akaze;nan;nan;nan;nan;akaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 1;akaze;nan;nan;nan;nan;orb;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 1;akaze;nan;nan;nan;nan;brisk;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
-1;akaze;nan;nan;nan;nan;kaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
+1;akaze;2598.0;1424.0;0.054799584;0.038482853932584264;kaze;2598.0;1424.0;0.161450171;0.1133779290730337;L2;Flann;nan;0.0;7.0;0.024617066;0.24086682099999998;34.40954585714286;0.0;0.0;0.0;0.0;0.0
 1;akaze;2598.0;1424.0;0.037930658;0.026636698033707867;daisy;2598.0;1424.0;0.062497688;0.043888825842696634;L2;Flann;nan;968.0;1011.0;0.11686323;0.217291576;0.21492737487636002;0.22447476859504129;0.37259430331023863;0.9574678536102869;0.6797752808988764;0.5364366860626212
 1;akaze;nan;nan;nan;nan;freak;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 1;akaze;nan;nan;nan;nan;brief;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
@@ -1977,7 +1977,7 @@ k;Detector;Keypoint1-GT;Keypoint2;Detect Time;1K Detect Time;Descriptor;Descript
 2;akaze;nan;nan;nan;nan;akaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 2;akaze;nan;nan;nan;nan;orb;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 2;akaze;nan;nan;nan;nan;brisk;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
-2;akaze;2598.0;2253.0;0.059510402;0.026413849090102085;kaze;2598.0;2253.0;0.237986224;0.10563081402574345;L2;Flann;nan;8.0;13.0;0.035682585;0.333179211;25.629170076923074;41.647401374999994;0.003079291762894534;0.6153846153846154;0.003550821127385708;0.006127920337035618
+2;akaze;2598.0;2253.0;0.081418011;0.03613759920106525;kaze;2598.0;2253.0;0.263320279;0.11687540124278739;L2;Flann;nan;7.0;10.0;0.035523334;0.380261624;38.026162400000004;54.32308914285715;0.0026943802925327174;0.7;0.0031069684864624943;0.005368098159509202
 2;akaze;2598.0;2253.0;0.059510402;0.026413849090102085;daisy;2598.0;2253.0;0.097049704;0.04307576742121616;L2;Flann;nan;1895.0;1906.0;0.150619799;0.30717990500000003;0.1611646930745016;0.16210021372031663;0.7294072363356428;0.9942287513116475;0.8411007545494895;0.8414742451154529
 2;akaze;nan;nan;nan;nan;freak;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 2;akaze;nan;nan;nan;nan;brief;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
@@ -3545,7 +3545,7 @@ k;Detector;Keypoint1-GT;Keypoint2;Detect Time;1K Detect Time;Descriptor;Descript
 4;akaze;nan;nan;nan;nan;akaze;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 4;akaze;nan;nan;nan;nan;orb;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 4;akaze;nan;nan;nan;nan;brisk;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
-4;akaze;2598.0;4021.0;0.1133322;0.02818507833872171;kaze;2598.0;4021.0;0.516453288;0.1284390171599105;L2;Flann;nan;8.0;12.0;0.049543432;0.67932892;56.61074333333333;84.916115;0.003079291762894534;0.6666666666666666;0.003079291762894534;0.006130268199233715
+4;akaze;2598.0;4021.0;0.162803199;0.04048823650833127;kaze;2598.0;4021.0;0.538150892;0.13383508878388461;L2;Flann;nan;8.0;10.0;0.035351192;0.7363052830000001;73.63052830000001;92.03816037500002;0.003079291762894534;0.8;0.003079291762894534;0.0061349693251533735
 4;akaze;2598.0;4021.0;0.1133322;0.02818507833872171;daisy;2598.0;4021.0;0.16538136;0.04112941059437951;L2;Flann;nan;1917.0;1974.0;0.177103299;0.455816859;0.23091026291793312;0.2377761392801252;0.7378752886836027;0.9711246200607903;0.7378752886836027;0.8385826771653543
 4;akaze;nan;nan;nan;nan;freak;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
 4;akaze;nan;nan;nan;nan;brief;nan;nan;nan;nan;L2;Flann;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan;nan
