@@ -74,17 +74,14 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
         matches1to2 = flann.match(Dspt1, Dspt2)
         matches2to1 = flann.match(Dspt2, Dspt1)
         matches = cross_check_matches(matches1to2, matches2to1)
-    # matchesSorted = sorted(matches, key = lambda x:x.distance)
-    # matches = matchesSorted[:1000]               
     points1 = np.array([KP1[match.queryIdx].pt for match in matches], dtype=np.float32)
     points2 = np.array([KP2[match.trainIdx].pt for match in matches], dtype=np.float32)
     
     _, mask = cv2.findFundamentalMat(points1, points2, cv2.USAC_MAGSAC) # MAGSAC++
     inliers = [matches[i] for i in range(len(matches)) if mask[i] == 1]
-    # inliers.sort(key=lambda x: x.distance)
     return inliers, matches
 
-def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len, desc2_len, good_matches_len, matches_len, detect_time, descript_time):
+def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len, desc2_len, inliers_len, matches_len, detect_time, descript_time):
     Rate[k, m, c3, i, j, 0] = k
     Rate[k, m, c3, i, j, 1] = i
     Rate[k, m, c3, i, j, 2] = j
@@ -94,14 +91,14 @@ def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len
     Rate[k, m, c3, i, j, 6] = kp2_len
     Rate[k, m, c3, i, j, 7] = desc1_len
     Rate[k, m, c3, i, j, 8] = desc2_len
-    Rate[k, m, c3, i, j, 9] = good_matches_len
+    Rate[k, m, c3, i, j, 9] = inliers_len
     Rate[k, m, c3, i, j, 10] = matches_len
     # Recall = Inliers / Ground Truth keypoints
-    Rate[k, m, c3, i, j, 12] = (good_matches_len / kp1_len) if kp1_len != 0 else 0
+    Rate[k, m, c3, i, j, 12] = (inliers_len / kp1_len) if kp1_len != 0 else 0
     # Precision = Inliers / All Matches
-    Rate[k, m, c3, i, j, 13] = (good_matches_len / matches_len) if matches_len != 0 else 0
+    Rate[k, m, c3, i, j, 13] = (inliers_len / matches_len) if matches_len != 0 else 0
     # Repeatibility = Inliers / min(Ground Truth keypoints, Detected keypoints)
-    Rate[k, m, c3, i, j, 14] = (good_matches_len / min(kp1_len, kp2_len)) if min(kp1_len, kp2_len) != 0 else 0
+    Rate[k, m, c3, i, j, 14] = (inliers_len / min(kp1_len, kp2_len)) if min(kp1_len, kp2_len) != 0 else 0
     # F1 Score = 2 * Recall * Precision / (Recall + Precision)
     Rate[k, m, c3, i, j, 15] = (2 * Rate[k, m, c3, i, j, 12] * Rate[k, m, c3, i, j, 13] / (Rate[k, m, c3, i, j, 12] + Rate[k, m, c3, i, j, 13])) if Rate[k, m, c3, i, j, 12] + Rate[k, m, c3, i, j, 13] != 0 else 0
     # Detect time
@@ -117,14 +114,14 @@ def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len
     # Total Match Time per 1K keypoints
     Exec_time[k, m, c3, i, j, 6] = ((Exec_time[k, m, c3, i, j, 3] / matches_len) * 1000) if matches_len != 0 else 0
     # Inliers Total Time per 1K keypoints
-    Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / good_matches_len) * 1000) if good_matches_len != 0 else 0
+    Exec_time[k, m, c3, i, j, 7] = ((Exec_time[k, m, c3, i, j, 3] / inliers_len) * 1000) if inliers_len != 0 else 0
     return Rate, Exec_time
 
 def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
     # Metadata On Image    
     text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
                 "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
-                "Norm.:", "Matcher:", "Reprojection Error:", "Inliers:", "All Matches:",
+                "Norm.:", "Matcher:", "Inliers:", "All Matches:",
                 "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
     text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
@@ -137,7 +134,6 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
                 f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
                 f"{Norm[c3]}",                                          # Matching
                 f"{Matcher[m]}",                                        # Matcher
-                f"{Rate[11]:.2f}",                                      # Reprojection Error
                 f"{Rate[9]}",                                           # Inliers
                 f"{Rate[10]}",                                          # All Matches
                 f"{Exec_time[3]:.4f}",                                  # Total Time
@@ -155,55 +151,20 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
         cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
     return combined_img
 
-def draw_matches_with_homography(img1, kp1, img2, kp2, total_matches, good_matches, H, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
-    keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=(255, 0, 0), flags=0)
-    keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=(255, 0, 0), flags=0)
-    # Combine both images side by side
-    h1, w1 = img1.shape[:2]
-    h2, w2 = img2.shape[:2]
-    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype="uint8")
-    combined_img[:h1, :w1] = keypointImage1
-    combined_img[:h2, w1:w1 + w2] = keypointImage2
-    # Project the corners of img1 onto img2 using homography
-    corners_img1 = np.array([[0, 0], [w1, 0], [w1, h1], [0, h1]], dtype=np.float32).reshape(-1, 1, 2)
-    projected_corners_img2 = cv2.perspectiveTransform(corners_img1, H)
-    # Draw the rectangle in the second image showing where img1 fits
-    projected_corners_img2 = projected_corners_img2.astype(int)
-    cv2.polylines(combined_img, [projected_corners_img2 + np.array([w1, 0])], isClosed=True, color=(0, 255, 0), thickness=2)
-    # Filter matches that are inside the projected rectangle
-    rect = projected_corners_img2.astype(int)
-    filtered_matches = [match for match in good_matches if cv2.pointPolygonTest(rect, kp2[match.trainIdx].pt, False) >= 0]
-    # Draw lines for filtered matches
-    for match in filtered_matches:
-        pt1 = tuple(map(int, kp1[match.queryIdx].pt))
-        pt2 = tuple(map(int, kp2[match.trainIdx].pt))
-        pt2 = (pt2[0] + w1, pt2[1])  # Shift pt2 to the right for side-by-side view
-        cv2.line(combined_img, pt1, pt2, (0, 255, 0), 1)  # Green for inliers
-    combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
-    return combined_img
-
-def draw_matches(img1, kp1, img2, kp2, total_matches, good_matches, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
-    keypointImage1 = cv2.drawKeypoints(img1, kp1, None, color=( 255,  0, 0), flags=0)
-    keypointImage2 = cv2.drawKeypoints(img2, kp2, None, color=( 255,  0, 0), flags=0)
-    # Create a blank image with the size of both images combined
-    h1, w1 = img1.shape[:2]
-    h2, w2 = img2.shape[:2]
-    combined_img = np.zeros((max(h1, h2), w1 + w2, 3), dtype="uint8")
-    combined_img[:h1, :w1] = keypointImage1
-    combined_img[:h2, w1:w1 + w2] = keypointImage2
-    # Create a set of good matches for faster lookup
-    good_matches_set = set(good_matches)
-    # Draw all lines in a single loop
-    for match in total_matches:
-        pt1 = tuple(map(int, kp1[match.queryIdx].pt))
-        pt2 = tuple(map(int, kp2[match.trainIdx].pt))
-        pt2 = (pt2[0] + w1, pt2[1])
-        # Check if the match is a good match
-        if match in good_matches_set:
-            color = (0, 255, 0)  # Green for inliers
-        else:
-            color = (0, 0, 255)  # Red for outliers
-        cv2.line(combined_img, pt1, pt2, color, 1)
+def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
+    # Create a set of inliers for faster lookup
+    inliers_set = set(inliers)
+    outliers = [match for match in total_matches if match not in inliers_set]
+    #Sort inliers and outliers by distance
+    inliers = sorted(inliers, key = lambda x:x.distance)
+    outliers = sorted(outliers, key = lambda x:x.distance)
+    #first draw inliers
+    draw_params1 = dict( matchColor = (0, 255, 0), flags = 2|4)
+    combined_img = cv2.drawMatches(img1, kp1, img2, kp2, inliers[:200], None, **draw_params1)
+    # #second draw outliers
+    draw_params2 = dict( matchColor = (0, 0, 255), flags = 1|2)
+    cv2.drawMatches(img1, kp1, img2, kp2, outliers[:100], combined_img, **draw_params2)
+    
     combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
 

@@ -4,10 +4,10 @@ from drone import *
 from uav import *
 from display import *
 
-a = 100
-b = 100
-drawing = False
-save = True
+a = 1
+b = 0
+drawing = True
+save = False
 
 # execute_scenario_scale        (          a, b, drawing, save)
 # execute_scenario_intensity    (          a, b, drawing, save)

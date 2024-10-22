@@ -4,7 +4,7 @@ import time, os
 from define import *
 
 def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
-    print(time.ctime())
+    print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./UAV-AerialResized/{i}.JPG") for i in range(20)]
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
@@ -13,9 +13,9 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         k = int(n/2) # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        if drawing:
-            if k != 3:
-                continue
+        # if drawing:
+        #     if k != 3:
+        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -50,16 +50,16 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[n+1, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                 except:
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and k == 3:
-                                    img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Normalization[c3]}_{Matcher[m]}.png"
+                                if drawing:
+                                    img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
@@ -70,3 +70,4 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, folder)
         saveAllCSV(Rate, Exec_time, folder)
+    print(time.ctime() + f" {folder} finished")

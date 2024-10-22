@@ -3,7 +3,7 @@ import numpy as np
 import time, os
 from define import *
 from database import *
-# import pycolmap
+import pycolmap
 
 def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
     print(time.ctime())
@@ -51,9 +51,9 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     else:
                                         descriptors2 = descriptors_cache[k+1, i, j, 1]
                                     start_time = time.perf_counter_ns()
-                                    good_matches, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(good_matches), len(matches), detect_time, descript_time)
+                                    Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                     database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
                                     if not os.path.isfile(database_path):
                                         db = COLMAPDatabase.connect(database_path)
@@ -68,16 +68,16 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
                                     # db.add_matches(image_id, image_id+1, matches_np)
                                     # db.add_two_view_geometry(image_id, image_id+1, matches_np)
-                                    good_matches_np = np.array([[m.queryIdx, m.trainIdx] for m in good_matches], dtype=np.uint32)
-                                    db.add_matches(image_id, image_id+1, good_matches_np)
-                                    db.add_two_view_geometry(image_id, image_id+1, good_matches_np)
+                                    inliers_np = np.array([[m.queryIdx, m.trainIdx] for m in inliers], dtype=np.uint32)
+                                    db.add_matches(image_id, image_id+1, inliers_np)
+                                    db.add_two_view_geometry(image_id, image_id+1, inliers_np)
                                     db.commit()
-                                except Exception as e:
+                                except:
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and k == 3:
-                                    img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, good_matches, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                if drawing:
+                                    img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
