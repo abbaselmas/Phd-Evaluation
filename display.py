@@ -12,6 +12,7 @@ custom_html = """
             <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
             <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max x">
         </span>
+        <span id="trace-count">Total Traces: 0</span>
     </div>
     <script>
     function applyFilters() {
@@ -23,6 +24,7 @@ custom_html = """
         var maxXThreshold = parseFloat(document.getElementById("maxXValueInput").value) || Infinity;
         var plot = document.querySelectorAll(".js-plotly-plot")[0];
         var data = plot.data;
+        var visibleTraceCount = 0;
         
         var filterParts = filter.split(" ");
         var logicKeyword = filterParts.shift() || "";
@@ -45,10 +47,12 @@ custom_html = """
                     if (yValues[j] >= minYThreshold && yValues[j] <= maxYThreshold) {
                         if (xValues[j] >= minXThreshold && xValues[j] <= maxXThreshold) {
                             showTrace = true;
+                            visibleTraceCount++;
                             break;
                         }
                         if (isNaN(xValues[j])) {
                             showTrace = true;
+                            visibleTraceCount++;
                             break;
                         }
                     }
@@ -56,8 +60,12 @@ custom_html = """
             }
             data[i].visible = showTrace;
         }
+        document.getElementById('trace-count').innerText = "Total Traces: " + visibleTraceCount;
         Plotly.redraw(plot);
     }
+    window.onload = function() {
+        applyFilters();
+    };
     </script>
 """
 
@@ -890,8 +898,8 @@ def drone_rep_err(data="inliers"):
     Exec_time = np.load(f"./arrays/Exec_time_drone.npy")
     Rate = np.load(f"./arrays/Rate_drone.npy") if data == "inliers" else np.load(f"./arrays/Rate_drone_11matches.npy")
     fig14 = go.Figure()
-    title = "Drone Reprojection Error with Inliers" if data == "inliers" else "Drone Reprojection Error with All Matches and BA"
-    fig14.update_layout(title_text=title, title_x=0.5, title_xanchor="right", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    title = "Drone Reprojection Error calculated with Inliers" if data == "inliers" else "Drone Reprojection Error calculated with Total Matches and BA"
+    fig14.update_layout(title_text=title, title_x=0.5, title_xanchor="right", xaxis_title="pixel", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -901,12 +909,13 @@ def drone_rep_err(data="inliers"):
                 for m in range(2):
                     x_data = [np.nanmean(Rate[:, m, c3, i, j, 11])]
                     inlierTime = np.nanmean(Exec_time[:, m, c3, i, j, 7]) # 1K feature Inlier Time
-                    trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                        marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
-                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    traces.append(trace)
-                    fig14.add_trace(trace)
+                    if not (inlierTime == 0 or np.isnan(inlierTime) or np.isnan(x_data).any()):
+                        trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
+                                            marker=dict(color=colors[color_index], size=10, symbol=symbol_index),
+                                            name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                            showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
+                        traces.append(trace)
+                        fig14.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     
