@@ -8,20 +8,21 @@ a = 1
 b = 0
 drawing = True
 save = False
+reconstruct = False
 
-# execute_scenario_scale        (          a, b, drawing, save)
-# execute_scenario_intensity    (          a, b, drawing, save)
-# execute_scenario_rotation     (          a, b, drawing, save)
-# executeScenarios              ("graf",   a, b, drawing, save)
-# executeScenarios              ("leuven", a, b, drawing, save)
-# executeScenarios              ("bark",   a, b, drawing, save)
-# executeScenarios              ("boat",   a, b, drawing, save)
-# executeScenarios              ("bikes",  a, b, drawing, save)
-# executeScenarios              ("trees",  a, b, drawing, save)
-# executeScenarios              ("wall",   a, b, drawing, save)
-# executeScenarios              ("ubc",    a, b, drawing, save)
-# executeDroneScenarios         ("drone",  a, b, drawing, save)
-# executeUAVScenarios           ("uav",    a, b, drawing, save)
+execute_scenario_scale        (          a, b, drawing, save)
+execute_scenario_intensity    (          a, b, drawing, save)
+execute_scenario_rotation     (          a, b, drawing, save)
+executeScenarios              ("graf",   a, b, drawing, save)
+executeScenarios              ("leuven", a, b, drawing, save)
+executeScenarios              ("bark",   a, b, drawing, save)
+executeScenarios              ("boat",   a, b, drawing, save)
+executeScenarios              ("bikes",  a, b, drawing, save)
+executeScenarios              ("trees",  a, b, drawing, save)
+executeScenarios              ("wall",   a, b, drawing, save)
+executeScenarios              ("ubc",    a, b, drawing, save)
+executeDroneScenarios         ("drone",  a, b, drawing, save, reconstruct)
+executeUAVScenarios           ("uav",    a, b, drawing, save)
 
 # synthetic           ()
 # syntheticMulti      ("Precision-Recall", 13, 12)

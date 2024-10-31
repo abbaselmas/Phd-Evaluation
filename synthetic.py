@@ -3,8 +3,8 @@ import numpy as np
 import time, os
 from define import *
 
-hpatches_sequences = ["azzola", "bird", "colors", "dogman", "tempera", "woman", "wormhole", "yard"]
-selected_image = hpatches_sequences[6]
+hpatches_sequences = ["bird", "colors", "dogman", "tempera", "woman", "wormhole", "yard"]
+selected_image = hpatches_sequences[4]
 Image = np.array(cv2.imread(f"./hpatches-sequences/v_{selected_image}/1.jpg"))
 
 ## Scenario 1 (Intensity): Function that returns 8 images with intensity changes from an I image.
@@ -115,7 +115,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
                                     continue
                                 if drawing:
                                     img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/intensity/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/intensity/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
@@ -183,7 +183,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
                                     continue
                                 if drawing and k == 4:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/scale/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/scale/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
@@ -251,7 +251,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
                                     continue
                                 if drawing and k == 4:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/rot/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/rot/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue

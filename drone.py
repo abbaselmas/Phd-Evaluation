@@ -5,7 +5,7 @@ from define import *
 from database import *
 import pycolmap
 
-def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
+def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
@@ -58,9 +58,9 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     if not os.path.isfile(database_path):
                                         db = COLMAPDatabase.connect(database_path)
                                         db.create_tables()
-                                        camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
                                     else:
                                         db = COLMAPDatabase.connect(database_path)
+                                    camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
                                     image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
                                     keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
                                     db.add_keypoints(image_id, keypoints1_np)
@@ -84,28 +84,28 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True):
                         continue
             else:
                 continue
-    
-    for i in range(len(Detectors)):
-        if (i == a or a == 100):
-            for j in range(len(Descriptors)):
-                if j == b or b == 100:
-                    for c3 in range(2):
-                        for m in range(2):
-                            path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
-                            if os.path.isfile(f"{path}.db"):
-                                maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, 
-                                                                    pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
-                                # pycolmap.bundle_adjustment(maps[0])
-                                # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
-                                # print(maps[0].summary())
-                                try:
-                                    Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
-                                except:
-                                    Rate[:, m, c3, i, j, 11] = None
-                else:
-                    continue
-        else:
-            continue
+    if reconstruct:
+        for i in range(len(Detectors)):
+            if (i == a or a == 100):
+                for j in range(len(Descriptors)):
+                    if j == b or b == 100:
+                        for c3 in range(2):
+                            for m in range(2):
+                                path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
+                                if os.path.isfile(f"{path}.db"):
+                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, 
+                                                                        pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
+                                    # pycolmap.bundle_adjustment(maps[0])
+                                    # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
+                                    # print(maps[0].summary())
+                                    try:
+                                        Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
+                                    except:
+                                        Rate[:, m, c3, i, j, 11] = None
+                    else:
+                        continue
+            else:
+                continue
     
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)

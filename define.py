@@ -1,6 +1,5 @@
 import cv2
 from plotly.colors import sample_colorscale
-from plotly.validators.scatter.marker import SymbolValidator
 import numpy as np
 import csv
 
@@ -118,53 +117,54 @@ def process_matches(Rate, Exec_time, k, m, c3, i, j, kp1_len, kp2_len, desc1_len
     return Rate, Exec_time
 
 def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
-    # Metadata On Image    
-    text1 = [   "Detector:", "Keypoint1:", "Keypoint2:", "1K Detect Time:",
-                "Descriptor:", "Descriptor1:", "Descriptor2:", "1K Descript Time:",
-                "Norm.:", "Matcher:", "Inliers:", "All Matches:",
-                "Total Time:", "1K Match Tot. Time:", "1K Inliers Time:",
-                "Recall", "Precision", "Repeatibility", "F1-Score"]
-    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]}",      # Detector
-                f"{Rate[5]}",                                           # Keypoint1
-                f"{Rate[6]}",                                           # Keypoint2
-                f"{Exec_time[4]:.4f}",                                  # 1K Detect Time
-                f"{method_dscrpt.getDefaultName().split('.')[-1]}",     # Descriptor
-                f"{Rate[7]}",                                           # Descriptor1
-                f"{Rate[8]}",                                           # Descriptor2
-                f"{Exec_time[5]:.4f}",                                  # 1K Descript Time
-                f"{Norm[c3]}",                                          # Matching
-                f"{Matcher[m]}",                                        # Matcher
-                f"{Rate[9]}",                                           # Inliers
-                f"{Rate[10]}",                                          # All Matches
-                f"{Exec_time[3]:.4f}",                                  # Total Time
-                f"{Exec_time[6]:.4f}",                                  # 1K Match Tot. Time
-                f"{Exec_time[7]:.4f}",                                  # 1K Inliers Time
-                f"{Rate[12]:.4f}",                                      # Recall
-                f"{Rate[13]:.4f}",                                      # Precision
-                f"{Rate[14]:.4f}",                                      # Repeatibility
-                f"{Rate[15]:.4f}"]                                      # F1-Score
+    text1 = [   "Combination: ",
+                "Keypoints: ",
+                "Descriptors: ",
+                "Inliers: ",
+                "All Matches: ",
+                "",
+                "1K Match time: ",
+                "1K Inliers time: ",
+                "",
+                "Recall: ",
+                "Precision: ",
+                "Repeatibility: ",
+                "F1-Score: "] 
+    text2 = [   f"{method_dtect.getDefaultName().split('.')[-1]} {method_dscrpt.getDefaultName().split('.')[-1]} {Norm[c3]} {Matcher[m]}",                                        # Matcher
+                f"{Rate[5]} {Rate[6]}", # Keypoint1-2
+                f"{Rate[7]} {Rate[8]}", # Descriptor1-2
+                f"{Rate[9]}",           # Inliers
+                f"{Rate[10]}",          # All Matches
+                f"",
+                f"{Exec_time[6]:.4f}",  # 1K Match Tot. Time
+                f"{Exec_time[7]:.4f}",  # 1K Inliers Time
+                f"",
+                f"{Rate[12]:.4f}",      # Recall
+                f"{Rate[13]:.4f}",      # Precision
+                f"{Rate[14]:.4f}",      # Repeatibility
+                f"{Rate[15]:.4f}"]      # F1-Score
     for idx, txt in enumerate(text1):
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (30, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (  30, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 5, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (  30, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (  0,   0,   0), 2, cv2.LINE_AA)
     for idx, txt in enumerate(text2):
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (198, 198, 198), 2, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (240, 30+idx*22), cv2.FONT_HERSHEY_COMPLEX , 0.6, (  0,   0,   0), 1, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, ( 300, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 5, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, ( 300, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (  0,   0,   0), 2, cv2.LINE_AA)
     return combined_img
 
 def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
-    # Create a set of inliers for faster lookup
     inliers_set = set(inliers)
     outliers = [match for match in total_matches if match not in inliers_set]
-    #Sort inliers and outliers by distance
-    inliers = sorted(inliers, key = lambda x:x.distance)
-    outliers = sorted(outliers, key = lambda x:x.distance)
+    # inliers = sorted(inliers, key = lambda x:x.distance)
+    # outliers = sorted(outliers, key = lambda x:x.distance)
+    step = 10 if len(total_matches) > 500 else 5
+
     #first draw inliers
-    draw_params1 = dict( matchColor = (0, 255, 0), flags = 2|4)
-    combined_img = cv2.drawMatches(img1, kp1, img2, kp2, inliers[:200], None, **draw_params1)
-    # #second draw outliers
-    draw_params2 = dict( matchColor = (0, 0, 255), flags = 1|2)
-    cv2.drawMatches(img1, kp1, img2, kp2, outliers[:100], combined_img, **draw_params2)
-    
+    draw_params1 = dict( matchColor = (66, 252, 28), flags = 2|4)
+    combined_img = cv2.drawMatches(img1, kp1, img2, kp2, inliers[::step], None, **draw_params1)
+    # # #second draw outliers
+    draw_params2 = dict( matchColor = (39, 0, 255), flags = 1|2)
+    cv2.drawMatches(img1, kp1, img2, kp2, outliers[::step], combined_img, **draw_params2)
+
     combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
 

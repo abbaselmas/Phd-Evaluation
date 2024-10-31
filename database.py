@@ -161,28 +161,28 @@ class COLMAPDatabase(sqlite3.Connection):
 
     def add_camera( self, model, width, height, params, prior_focal_length=False, camera_id=None,):
         params = np.asarray(params, np.float64)
-        cursor = self.execute("INSERT INTO cameras VALUES (?, ?, ?, ?, ?, ?)", (camera_id, model, width, height, array_to_blob(params), prior_focal_length,),)
+        cursor = self.execute("INSERT OR IGNORE INTO cameras VALUES (?, ?, ?, ?, ?, ?)", (camera_id, model, width, height, array_to_blob(params), prior_focal_length,),)
         return cursor.lastrowid
 
     def add_image(self, name, camera_id, image_id=None,):
-        cursor = self.execute("INSERT INTO images VALUES (?, ?, ?)", (image_id, name, camera_id))
+        cursor = self.execute("INSERT OR IGNORE INTO images VALUES (?, ?, ?)", (image_id, name, camera_id))
         return cursor.lastrowid
 
     def add_pose_prior(self, image_id, position, coordinate_system=-1, position_covariance=None):
         position = np.asarray(position, dtype=np.float64)
         if position_covariance is None:
             position_covariance = np.full((3, 3), np.nan, dtype=np.float64)
-        self.execute("INSERT INTO pose_priors VALUES (?, ?, ?, ?)", (image_id, array_to_blob(position), coordinate_system, array_to_blob(position_covariance),),)
+        self.execute("INSERT OR IGNORE INTO pose_priors VALUES (?, ?, ?, ?)", (image_id, array_to_blob(position), coordinate_system, array_to_blob(position_covariance),),)
 
     def add_keypoints(self, image_id, keypoints):
         assert len(keypoints.shape) == 2
         assert keypoints.shape[1] in [2, 4, 6]
         keypoints = np.asarray(keypoints, np.float32)
-        self.execute("INSERT INTO keypoints VALUES (?, ?, ?, ?)", (image_id,) + keypoints.shape + (array_to_blob(keypoints),),)
+        self.execute("INSERT OR IGNORE INTO keypoints VALUES (?, ?, ?, ?)", (image_id,) + keypoints.shape + (array_to_blob(keypoints),),)
 
     def add_descriptors(self, image_id, descriptors):
         descriptors = np.ascontiguousarray(descriptors, np.uint8)
-        self.execute("INSERT INTO descriptors VALUES (?, ?, ?, ?)", (image_id,) + descriptors.shape + (array_to_blob(descriptors),),)
+        self.execute("INSERT OR IGNORE INTO descriptors VALUES (?, ?, ?, ?)", (image_id,) + descriptors.shape + (array_to_blob(descriptors),),)
 
     def add_matches(self, image_id1, image_id2, matches):
         assert len(matches.shape) == 2
@@ -191,7 +191,7 @@ class COLMAPDatabase(sqlite3.Connection):
             matches = matches[:, ::-1]
         pair_id = image_ids_to_pair_id(image_id1, image_id2)
         matches = np.asarray(matches, np.uint32)
-        self.execute("INSERT INTO matches VALUES (?, ?, ?, ?)", (pair_id,) + matches.shape + (array_to_blob(matches),),)
+        self.execute("INSERT OR IGNORE INTO matches VALUES (?, ?, ?, ?)", (pair_id,) + matches.shape + (array_to_blob(matches),),)
 
     def add_two_view_geometry(self, image_id1, image_id2, matches, F=np.eye(3), E=np.eye(3), H=np.eye(3), qvec=np.array([1.0, 0.0, 0.0, 0.0]), tvec=np.zeros(3), config=2,):
         assert len(matches.shape) == 2
@@ -205,4 +205,4 @@ class COLMAPDatabase(sqlite3.Connection):
         H = np.asarray(H, dtype=np.float64)
         qvec = np.asarray(qvec, dtype=np.float64)
         tvec = np.asarray(tvec, dtype=np.float64)
-        self.execute("INSERT INTO two_view_geometries VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(pair_id,) + matches.shape + (array_to_blob(matches), config, array_to_blob(F), array_to_blob(E), array_to_blob(H), array_to_blob(qvec), array_to_blob(tvec),),)
+        self.execute("INSERT OR IGNORE INTO two_view_geometries VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(pair_id,) + matches.shape + (array_to_blob(matches), config, array_to_blob(F), array_to_blob(E), array_to_blob(H), array_to_blob(qvec), array_to_blob(tvec),),)
