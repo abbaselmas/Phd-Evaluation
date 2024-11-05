@@ -54,24 +54,25 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
                                     inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
-                                    database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
-                                    if not os.path.isfile(database_path):
-                                        db = COLMAPDatabase.connect(database_path)
-                                        db.create_tables()
-                                    else:
-                                        db = COLMAPDatabase.connect(database_path)
-                                    camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
-                                    image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
-                                    keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
-                                    db.add_keypoints(image_id, keypoints1_np)
-                                    db.add_descriptors(image_id, descriptors1)
-                                    # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
-                                    # db.add_matches(image_id, image_id+1, matches_np)
-                                    # db.add_two_view_geometry(image_id, image_id+1, matches_np)
-                                    inliers_np = np.array([[m.queryIdx, m.trainIdx] for m in inliers], dtype=np.uint32)
-                                    db.add_matches(image_id, image_id+1, inliers_np)
-                                    db.add_two_view_geometry(image_id, image_id+1, inliers_np)
-                                    db.commit()
+                                    if reconstruct:
+                                        database_path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}.db"
+                                        if not os.path.isfile(database_path):
+                                            db = COLMAPDatabase.connect(database_path)
+                                            db.create_tables()
+                                        else:
+                                            db = COLMAPDatabase.connect(database_path)
+                                        camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
+                                        image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
+                                        keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
+                                        db.add_keypoints(image_id, keypoints1_np)
+                                        db.add_descriptors(image_id, descriptors1)
+                                        # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
+                                        # db.add_matches(image_id, image_id+1, matches_np)
+                                        # db.add_two_view_geometry(image_id, image_id+1, matches_np)
+                                        inliers_np = np.array([[m.queryIdx, m.trainIdx] for m in inliers], dtype=np.uint32)
+                                        db.add_matches(image_id, image_id+1, inliers_np)
+                                        db.add_two_view_geometry(image_id, image_id+1, inliers_np)
+                                        db.commit()
                                 except:
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
