@@ -10,8 +10,8 @@
 [Drone Reprojection Error with Inliers](https://abbaselmas.github.io/Phd-Evaluation/html/drone_reprojection_error_inliers.html)  
 [Drone Reprojection Error with All Matches](https://abbaselmas.github.io/Phd-Evaluation/html/drone_reprojection_error_matches.html)
 
-[Synthetic Timing Comparison](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic_timing_mobile.html)  
-[Oxford Timing Comparison](https://abbaselmas.github.io/Phd-Evaluation/html/oxford_timing_mobile.html)
+[Synthetic Timing Comparison with Mobile](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic_timing_mobile.html)  
+[Oxford Timing Comparison with Mobile](https://abbaselmas.github.io/Phd-Evaluation/html/oxford_timing_mobile.html)
 
 
 ## UAV Data Visualisations
