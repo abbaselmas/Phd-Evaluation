@@ -168,13 +168,13 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
     combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
 
-def saveAverageCSV(Rate, Exec_time, scenario):
+def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
     headers = [ "Detector", "Keypoint1", "Keypoint2", "1K Detect Time",
                 "Descriptor", "Descriptor1", "Descriptor2", "1K Descript Time",
                 "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f"./csv/{scenario}_analysis.csv", "w", newline="") as csvfile:
+    with open(f"./csv/{scenario}_analysis{mobile}.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
         for m in range(Rate.shape[1]):
@@ -203,13 +203,13 @@ def saveAverageCSV(Rate, Exec_time, scenario):
                                 np.nanmean(Rate[:, m, c3, i, j, 15])]         # F1-Score
                         writer.writerow(row)
                     
-def saveAllCSV(Rate, Exec_time, scenario):
+def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
     headers = [ "k", "Detector", "Keypoint1-GT", "Keypoint2", "Detect Time", "1K Detect Time",
                 "Descriptor", "Descriptor1-GT", "Descriptor2", "Descript Time", "1K Descript Time",
                 "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches", "Match Time",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
                 "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f"./csv/{scenario}_analysis_all.csv", "w", newline="") as csvfile:
+    with open(f"./csv/{scenario}_analysis_all{mobile}.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
         for k in range(Rate.shape[0]):

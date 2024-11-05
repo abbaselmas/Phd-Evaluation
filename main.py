@@ -9,10 +9,11 @@ b = 100
 drawing = False
 save = True
 reconstruct = False
+mobile = "" # "_mobile"
 
-execute_scenario_scale        (          a, b, drawing, save)
-execute_scenario_intensity    (          a, b, drawing, save)
-execute_scenario_rotation     (          a, b, drawing, save)
+# execute_scenario_scale        (          a, b, drawing, save)
+# execute_scenario_intensity    (          a, b, drawing, save)
+# execute_scenario_rotation     (          a, b, drawing, save)
 # executeScenarios              ("graf",   a, b, drawing, save)
 # executeScenarios              ("leuven", a, b, drawing, save)
 # executeScenarios              ("bark",   a, b, drawing, save)
@@ -48,5 +49,5 @@ execute_scenario_rotation     (          a, b, drawing, save)
 # drone_rep_err("inliers")
 # drone_rep_err("matches")
 
-synthetic_timing_mobile()
+# synthetic_timing_mobile()
 # oxford_timing_mobile()

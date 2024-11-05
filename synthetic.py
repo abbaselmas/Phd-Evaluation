@@ -59,11 +59,11 @@ def get_cam_rot(Img, rotationAngle):
     cv2.imwrite(filename, rotated_image)
     return couple_I_Ir
 
-def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
+def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Intensity started")
     print("Scenario 1 Intensity")
-    Rate      = np.load(f"./arrays/Rate_intensity.npy")      if os.path.exists(f"./arrays/Rate_intensity.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_intensity.npy") if os.path.exists(f"./arrays/Exec_time_intensity.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate      = np.load(f"./arrays/Rate_intensity{mobile}.npy")      if os.path.exists(f"./arrays/Rate_intensity{mobile}.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_intensity{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_intensity{mobile}.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache     = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache   = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     img, List8Img = get_intensity_8Img(Image, val_b, val_c)
@@ -122,17 +122,17 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_intensity.npy",      Rate)
-        np.save(f"./arrays/Exec_time_intensity.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "intensity")
-        saveAllCSV(Rate, Exec_time, "intensity")
+        np.save(f"./arrays/Rate_intensity{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_intensity{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "intensity", mobile)
+        saveAllCSV(Rate, Exec_time, "intensity", mobile)
     print(time.ctime() + " Intensity finished")
 
-def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
+def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Scale started")
     print("Scenario 2 Scale")
-    Rate        = np.load(f"./arrays/Rate_scale.npy")          if os.path.exists(f"./arrays/Rate_scale.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time   = np.load(f"./arrays/Exec_time_scale.npy")     if os.path.exists(f"./arrays/Exec_time_scale.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate        = np.load(f"./arrays/Rate_scale{mobile}.npy")          if os.path.exists(f"./arrays/Rate_scale{mobile}.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time   = np.load(f"./arrays/Exec_time_scale{mobile}.npy")     if os.path.exists(f"./arrays/Exec_time_scale{mobile}.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(scale)):
@@ -190,17 +190,17 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_scale.npy",      Rate)
-        np.save(f"./arrays/Exec_time_scale.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "scale")
-        saveAllCSV(Rate, Exec_time, "scale")
+        np.save(f"./arrays/Rate_scale{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_scale{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "scale", mobile)
+        saveAllCSV(Rate, Exec_time, "scale", mobile)
     print(time.ctime() + " Scale finished")
 
-def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
+def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Rotation started")
     print("Scenario 3 Rotation")
-    Rate          = np.load(f"./arrays/Rate_rot.npy")       if os.path.exists(f"./arrays/Rate_rot.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time     = np.load(f"./arrays/Exec_time_rot.npy")  if os.path.exists(f"./arrays/Exec_time_rot.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate          = np.load(f"./arrays/Rate_rot{mobile}.npy")       if os.path.exists(f"./arrays/Rate_rot{mobile}.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time     = np.load(f"./arrays/Exec_time_rot{mobile}.npy")  if os.path.exists(f"./arrays/Exec_time_rot{mobile}.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(rot)):
@@ -258,8 +258,8 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_rot.npy",      Rate)
-        np.save(f"./arrays/Exec_time_rot.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "rot")
-        saveAllCSV(Rate, Exec_time, "rot")
+        np.save(f"./arrays/Rate_rot{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_rot{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, "rot", mobile)
+        saveAllCSV(Rate, Exec_time, "rot", mobile)
     print(time.ctime() + " Rotation finished")

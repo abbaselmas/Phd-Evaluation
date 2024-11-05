@@ -3,12 +3,12 @@ import numpy as np
 import time, os
 from define import *
 
-def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
+def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./oxfordAffine/{folder}/img{i}.jpg") for i in range(1, 7)]
-    Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate      = np.load(f"./arrays/Rate_{folder}{mobile}.npy")      if os.path.exists(f"./arrays/Rate_{folder}{mobile}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
@@ -65,8 +65,8 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_{folder}.npy",      Rate)
-        np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, folder)
-        saveAllCSV(Rate, Exec_time, folder)
+        np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, folder, mobile)
+        saveAllCSV(Rate, Exec_time, folder, mobile)
     print(time.ctime() + f" {folder} finished")
