@@ -12,9 +12,9 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
-        if drawing:
-            if k != 3:
-                continue
+        # if drawing:
+        #     if k != 3:
+        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
