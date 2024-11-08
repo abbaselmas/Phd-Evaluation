@@ -4,69 +4,73 @@ import numpy as np
 from define import *
 
 custom_html = """
-    <div style="position: fixed; top: 12px; left: 10px;">
-        <span style="margin: 20px;">
-            <input type="text" id="filterInput" size="15" onchange="applyFilters()" placeholder="and|or method">
-            <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
-            <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
-            <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
-            <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max x">
-        </span>
-        <span id="trace-count">Total Traces: 0</span>
-    </div>
-    <script>
-    function applyFilters() {
-        var i, j;
-        var filter = document.getElementById("filterInput").value.toUpperCase();
-        var minYThreshold = parseFloat(document.getElementById("minYValueInput").value) || -Infinity;
-        var maxYThreshold = parseFloat(document.getElementById("maxYValueInput").value) || Infinity;
-        var minXThreshold = parseFloat(document.getElementById("minXValueInput").value) || -Infinity;
-        var maxXThreshold = parseFloat(document.getElementById("maxXValueInput").value) || Infinity;
-        var plot = document.querySelectorAll(".js-plotly-plot")[0];
-        var data = plot.data;
-        var visibleTraceCount = 0;
-        
-        var filterParts = filter.split(" ");
-        var logicKeyword = filterParts.shift() || "";
-        var filterWords = filterParts;
-        var filterFunction = word => {
-            if (logicKeyword === "AND") {
-                return filterWords.every(filterWord => word.includes(filterWord));
-            } else if (logicKeyword === "OR") {
-                return filterWords.some(filterWord => word.includes(filterWord));
-            }
-            return true; // Default case when no filter input is provided
-        };
-        for (i = 0; i < data.length; i++) {
-            var traceName = data[i].name || "";
-            var yValues = data[i].y;
-            var xValues = data[i].x;
-            var showTrace = false;
-            if (filterFunction(traceName.toUpperCase())) {
-                for (j = 0; j < yValues.length; j++) {
-                    if (yValues[j] >= minYThreshold && yValues[j] <= maxYThreshold) {
-                        if (xValues[j] >= minXThreshold && xValues[j] <= maxXThreshold) {
-                            showTrace = true;
-                            visibleTraceCount++;
-                            break;
-                        }
-                        if (isNaN(xValues[j])) {
-                            showTrace = true;
-                            visibleTraceCount++;
-                            break;
-                        }
-                    }
-                }
-            }
-            data[i].visible = showTrace;
-        }
-        document.getElementById('trace-count').innerText = "Total Traces: " + visibleTraceCount;
-        Plotly.redraw(plot);
-    }
-    window.onload = function() {
-        applyFilters();
+<div style="position: fixed; top: 45px; right: 130px;">
+    <span id="trace-count">Total Traces: 0</span>
+</div>
+<div style="position: fixed; top: 2px; left: 2px;">
+    <span>
+        <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
+        <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
+        <input type="text" id="filterInput" size="15" onchange="applyFilters()" placeholder="and|or method">
+    </span>
+</div>
+<div style="position: fixed; top: 25px; left: 2px;">
+    <span>
+        <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
+        <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max x">
+        <input type="radio" name="filterMode" value="all" onchange="applyFilters()" checked>All
+        <input type="radio" name="filterMode" value="any" onchange="applyFilters()" >Any
+    </span>
+</div>
+<script>
+function applyFilters() {
+    var i, j;
+    var filter = document.getElementById("filterInput").value.toUpperCase();
+    var minYThreshold = parseFloat(document.getElementById("minYValueInput").value) || -Infinity;
+    var maxYThreshold = parseFloat(document.getElementById("maxYValueInput").value) ||  Infinity;
+    var minXThreshold = parseFloat(document.getElementById("minXValueInput").value) || -Infinity;
+    var maxXThreshold = parseFloat(document.getElementById("maxXValueInput").value) ||  Infinity;
+    var plot = document.querySelectorAll(".js-plotly-plot")[0];
+    var data = plot.data;
+    var visibleTraceCount = 0;
+    var filterParts = filter.split(" ");
+    var logicKeyword = filterParts.shift() || "";
+    var filterWords = filterParts;
+    var filterFunction = word => {
+        if (logicKeyword === "AND")
+            return filterWords.every(filterWord => word.includes(filterWord));
+        else if (logicKeyword === "OR")
+            return filterWords.some(filterWord => word.includes(filterWord));
+        else
+            return true;
     };
-    </script>
+    var filterMode = document.querySelector('input[name="filterMode"]:checked').value;
+    for (i = 0; i < data.length; i++) {
+        var traceName = data[i].name || "";
+        var yValues = data[i].y;
+        var xValues = data[i].x;
+        var showTrace = false;
+        if (filterFunction(traceName.toUpperCase())) {
+            const matchFunc = filterMode === "all" ? yValues.every : yValues.some;
+            const isValueInRange = (y, i) => {
+                const x = xValues[i];
+                return y >= minYThreshold && y <= maxYThreshold &&
+                    (isNaN(x) || (x >= minXThreshold && x <= maxXThreshold));
+            };
+            if (matchFunc.call(yValues, isValueInRange)) {
+                showTrace = true;
+                visibleTraceCount++;
+            }
+        }
+        data[i].visible = showTrace;
+    }
+    document.getElementById('trace-count').innerText = "Total Traces: " + visibleTraceCount;
+    Plotly.redraw(plot);
+}
+window.onload = function() {
+    applyFilters();
+};
+</script>
 """
 
 config = {
