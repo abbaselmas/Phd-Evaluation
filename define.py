@@ -151,6 +151,16 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
         cv2.putText(combined_img, txt, ( 300, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (  0,   0,   0), 2, cv2.LINE_AA)
     return combined_img
 
+def draw_keypoints(img1, kp1, img2, kp2, method_dtect):
+    combined_image = cv2.drawMatches(img1, kp1, img2, kp2, [], None, flags = 4)
+    cv2.putText(combined_image, f"{method_dtect.getDefaultName().split('.')[-1]}", (30, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 5, cv2.LINE_AA)
+    cv2.putText(combined_image, f"{method_dtect.getDefaultName().split('.')[-1]}", (30, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
+    cv2.putText(combined_image, f"Keypoints1: {len(kp1)}", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 5, cv2.LINE_AA)
+    cv2.putText(combined_image, f"Keypoints1: {len(kp1)}", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
+    cv2.putText(combined_image, f"Keypoints2: {len(kp2)}", (30, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 5, cv2.LINE_AA)
+    cv2.putText(combined_image, f"Keypoints2: {len(kp2)}", (30, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
+    return combined_image
+
 def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
     inliers_set = set(inliers)
     outliers = [match for match in total_matches if match not in inliers_set]
