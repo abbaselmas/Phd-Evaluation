@@ -4,10 +4,10 @@ from drone import *
 from uav import *
 from display import *
 
-a = 100
-b = 100
-drawing = False
-save = True
+a = 1
+b = 0
+drawing = True
+save = False
 reconstruct = False
 mobile = "" # "_mobile"
 
@@ -25,29 +25,29 @@ mobile = "" # "_mobile"
 # executeDroneScenarios         ("drone",  a, b, drawing, save, reconstruct)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
 
-synthetic           ()
-syntheticMulti      ("Precision-Recall", 13, 12)
-syntheticMulti      ("Inliers-Matches",   9, 10)
-synthetic_timing    ()
-synthetic_timing2   ()
-oxford              ()
-oxfordMulti         ("Precision-Recall", 13, 12)
-oxfordMulti         ("Inliers-Matches",   9, 10)
-oxford_timing       ()
-oxford_timing2      ()
-single              ("drone")
-singleMulti         ("drone", "Precision-Recall", 13, 12)
-singleMulti         ("drone", "Inliers-Matches",   9, 10)
-single_timing       ("drone")
-single_timing2      ("drone")
-single              ("uav")
-singleMulti         ("uav", "Precision-Recall", 13, 12)
-singleMulti         ("uav", "Inliers-Matches",   9, 10)
-single_timing       ("uav")
-single_timing2      ("uav")
+# synthetic           ()
+# syntheticMulti      ("Precision-Recall", 13, 12)
+# syntheticMulti      ("Inliers-Matches",   9, 10)
+# synthetic_timing    ()
+# synthetic_timing2   ()
+# oxford              ()
+# oxfordMulti         ("Precision-Recall", 13, 12)
+# oxfordMulti         ("Inliers-Matches",   9, 10)
+# oxford_timing       ()
+# oxford_timing2      ()
+# single              ("drone")
+# singleMulti         ("drone", "Precision-Recall", 13, 12)
+# singleMulti         ("drone", "Inliers-Matches",   9, 10)
+# single_timing       ("drone")
+# single_timing2      ("drone")
+# single              ("uav")
+# singleMulti         ("uav", "Precision-Recall", 13, 12)
+# singleMulti         ("uav", "Inliers-Matches",   9, 10)
+# single_timing       ("uav")
+# single_timing2      ("uav")
 
-drone_rep_err("inliers")
-drone_rep_err("matches")
+# drone_rep_err("inliers")
+# drone_rep_err("matches")
 
-synthetic_timing_mobile()
-oxford_timing_mobile()
+# synthetic_timing_mobile()
+# oxford_timing_mobile()

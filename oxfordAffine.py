@@ -30,6 +30,11 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
                     keypoints_cache[k+1, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k+1, i, 1]
+                # draw keypoints
+                if drawing:
+                    img_keypoints = draw_keypoints(img[0], keypoints1, img[k+1], keypoints2, method_dtect)
+                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName()}.png"
+                    cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -56,7 +61,7 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing and m == 0:
                                     img_matches = draw_matches(img[0], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)

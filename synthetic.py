@@ -87,6 +87,11 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
+                # draw keypoints
+                if drawing:
+                    img_keypoints = draw_keypoints(img, keypoints1, img2, keypoints2, method_dtect)
+                    filename = f"./draws/intensity/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                    cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -155,6 +160,11 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
+                # draw keypoints
+                if drawing:
+                    img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
+                    filename = f"./draws/scale/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                    cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -223,6 +233,11 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
+                # draw keypoints
+                if drawing:
+                    img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
+                    filename = f"./draws/rot/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                    cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
