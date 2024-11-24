@@ -4,7 +4,7 @@ import time, os
 from define import *
 
 hpatches_sequences = ["bird", "colors", "dogman", "tempera", "woman", "wormhole", "yard"]
-selected_image = hpatches_sequences[6]
+selected_image = hpatches_sequences[4]
 Image = np.array(cv2.imread(f"./hpatches-sequences/v_{selected_image}/1.jpg"))
 
 ## Scenario 1 (Intensity): Function that returns 8 images with intensity changes from an I image.
