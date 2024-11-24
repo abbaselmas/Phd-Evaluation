@@ -14,7 +14,7 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         k = int(n/2) # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         # if drawing:
-        #     if k != 3:
+        #     if k != 8:
         #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
@@ -31,11 +31,11 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                     keypoints_cache[n+1, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[n+1, i, 1]
-                # draw keypoints
-                if drawing:
-                    img_keypoints = draw_keypoints(img[n], keypoints1, img[n+1], keypoints2, method_dtect)
-                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName()}.png"
-                    cv2.imwrite(filename, img_keypoints)
+                # # draw keypoints
+                # if drawing:
+                #     img_keypoints = draw_keypoints(img[n], keypoints1, img[n+1], keypoints2, method_dtect)
+                #     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName()}.png"
+                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -62,9 +62,9 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0:
+                                if drawing and m == 0: # and Rate[k, m, c3, i, j, 13] > 0.5 and Rate[k, m, c3, i, j, 15] > 0.35 and Exec_time[k, m, c3, i, j, 7] < 1 and Rate[k, m, c3, i, j, 12] > 0.15:
                                     img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue

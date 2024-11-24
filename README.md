@@ -15,30 +15,30 @@
 
 
 ## UAV Data Visualisations
-|AKAZE-SIFT-L2-BF|
-|---|
-|![0_AKAZE_SIFT_L2_BF](/draws/uav/0_AKAZE_SIFT_L2_BF.png)|  
-|![1_AKAZE_SIFT_L2_BF](/draws/uav/1_AKAZE_SIFT_L2_BF.png)|  
-|![2_AKAZE_SIFT_L2_BF](/draws/uav/2_AKAZE_SIFT_L2_BF.png)|  
-|![3_AKAZE_SIFT_L2_BF](/draws/uav/3_AKAZE_SIFT_L2_BF.png)|  
-|![4_AKAZE_SIFT_L2_BF](/draws/uav/4_AKAZE_SIFT_L2_BF.png)|  
-|![5_AKAZE_SIFT_L2_BF](/draws/uav/5_AKAZE_SIFT_L2_BF.png)|  
-|![6_AKAZE_SIFT_L2_BF](/draws/uav/6_AKAZE_SIFT_L2_BF.png)|  
-|![7_AKAZE_SIFT_L2_BF](/draws/uav/7_AKAZE_SIFT_L2_BF.png)|  
-|![8_AKAZE_SIFT_L2_BF](/draws/uav/8_AKAZE_SIFT_L2_BF.png)|  
-|![9_AKAZE_SIFT_L2_BF](/draws/uav/9_AKAZE_SIFT_L2_BF.png)|  
+|AKAZE-SIFT-L2-BF|  
+|---|  
+|![0_1AKAZE_0SIFT_L2_BF](/draws/uav/0_1AKAZE_0SIFT_L2_BF.png)|  
+|![1_1AKAZE_0SIFT_L2_BF](/draws/uav/1_1AKAZE_0SIFT_L2_BF.png)|  
+|![2_1AKAZE_0SIFT_L2_BF](/draws/uav/2_1AKAZE_0SIFT_L2_BF.png)|  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/uav/3_1AKAZE_0SIFT_L2_BF.png)|  
+|![4_1AKAZE_0SIFT_L2_BF](/draws/uav/4_1AKAZE_0SIFT_L2_BF.png)|  
+|![5_1AKAZE_0SIFT_L2_BF](/draws/uav/5_1AKAZE_0SIFT_L2_BF.png)|  
+|![6_1AKAZE_0SIFT_L2_BF](/draws/uav/6_1AKAZE_0SIFT_L2_BF.png)|  
+|![7_1AKAZE_0SIFT_L2_BF](/draws/uav/7_1AKAZE_0SIFT_L2_BF.png)|  
+|![8_1AKAZE_0SIFT_L2_BF](/draws/uav/8_1AKAZE_0SIFT_L2_BF.png)|  
+|![9_1AKAZE_0SIFT_L2_BF](/draws/uav/9_1AKAZE_0SIFT_L2_BF.png)|  
 
 ## Oxford Data Visualisations
-|AKAZE-SIFT-L2-BF|
-|---|
-|![3_AKAZE_SIFT_L2_BF](/draws/bark/3_AKAZE_SIFT_L2_BF.png)   |  
-|![3_AKAZE_SIFT_L2_BF](/draws/bikes/3_AKAZE_SIFT_L2_BF.png)  |  
-|![3_AKAZE_SIFT_L2_BF](/draws/boat/3_AKAZE_SIFT_L2_BF.png)   |  
-|![3_AKAZE_SIFT_L2_BF](/draws/graf/3_AKAZE_SIFT_L2_BF.png)   |  
-|![3_AKAZE_SIFT_L2_BF](/draws/leuven/3_AKAZE_SIFT_L2_BF.png) |  
-|![3_AKAZE_SIFT_L2_BF](/draws/trees/3_AKAZE_SIFT_L2_BF.png)  |  
-|![3_AKAZE_SIFT_L2_BF](/draws/ubc/3_AKAZE_SIFT_L2_BF.png)    |  
-|![3_AKAZE_SIFT_L2_BF](/draws/wall/3_AKAZE_SIFT_L2_BF.png)   |  
+|AKAZE-SIFT-L2-BF|  
+|---|  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/bark/3_1AKAZE_0SIFT_L2_BF.png)   |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/bikes/3_1AKAZE_0SIFT_L2_BF.png)  |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/boat/3_1AKAZE_0SIFT_L2_BF.png)   |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/graf/3_1AKAZE_0SIFT_L2_BF.png)   |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/leuven/3_1AKAZE_0SIFT_L2_BF.png) |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/trees/3_1AKAZE_0SIFT_L2_BF.png)  |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/ubc/3_1AKAZE_0SIFT_L2_BF.png)    |  
+|![3_1AKAZE_0SIFT_L2_BF](/draws/wall/3_1AKAZE_0SIFT_L2_BF.png)   |  
 
 ## Synthetic Data Visualisations
 ### AKAZE-SIFT-L2-BF
@@ -49,6 +49,6 @@
 |![Intensity](/draws/intensity/colors_7_AKAZE_SIFT_L2_BF.png)       |![Scale](/draws/scale/colors_4_AKAZE_SIFT_L2_BF.png)       |![Rotation](/draws/rot/colors_4_AKAZE_SIFT_L2_BF.png)      |  
 |![Intensity](/draws/intensity/dogman_7_AKAZE_SIFT_L2_BF.png)       |![Scale](/draws/scale/dogman_4_AKAZE_SIFT_L2_BF.png)       |![Rotation](/draws/rot/dogman_4_AKAZE_SIFT_L2_BF.png)      |  
 |![Intensity](/draws/intensity/tempera_7_AKAZE_SIFT_L2_BF.png)      |![Scale](/draws/scale/tempera_4_AKAZE_SIFT_L2_BF.png)      |![Rotation](/draws/rot/tempera_4_AKAZE_SIFT_L2_BF.png)     |  
-|![Intensity](/draws/intensity/woman_7_AKAZE_SIFT_L2_BF.png)        |![Scale](/draws/scale/woman_4_AKAZE_SIFT_L2_BF.png)        |![Rotation](/draws/rot/woman_4_AKAZE_SIFT_L2_BF.png)       |  
+|![Intensity](/draws/intensity/woman_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/woman_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/woman_4_1AKAZE_0SIFT_L2_BF.png)      |  
 |![Intensity](/draws/intensity/wormhole_7_AKAZE_SIFT_L2_BF.png)     |![Scale](/draws/scale/wormhole_4_AKAZE_SIFT_L2_BF.png)     |![Rotation](/draws/rot/wormhole_4_AKAZE_SIFT_L2_BF.png)    |  
 |![Intensity](/draws/intensity/yard_7_AKAZE_SIFT_L2_BF.png)         |![Scale](/draws/scale/yard_4_AKAZE_SIFT_L2_BF.png)         |![Rotation](/draws/rot/yard_4_AKAZE_SIFT_L2_BF.png)        |  

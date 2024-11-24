@@ -167,7 +167,8 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
     # inliers = sorted(inliers, key = lambda x:x.distance)
     # outliers = sorted(outliers, key = lambda x:x.distance)
     step = 10 if len(total_matches) > 500 else 5
-
+    img1 = cv2.drawKeypoints(img1, kp1[::step], None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    img2 = cv2.drawKeypoints(img2, kp2[::step], None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     #first draw inliers
     draw_params1 = dict( matchColor = (66, 252, 28), flags = 2|4)
     combined_img = cv2.drawMatches(img1, kp1, img2, kp2, inliers[::step], None, **draw_params1)

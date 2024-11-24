@@ -68,9 +68,9 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
     descriptors_cache   = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     img, List8Img = get_intensity_8Img(Image, val_b, val_c)
     for k in range(nbre_img):
-        # if drawing:
-        #         if k != 7:
-        #             continue
+        if drawing:
+                if k != 7:
+                    continue
         img2 = List8Img[k]
         for i in range(len(Detectors)):
             if i == a or a == 100:
@@ -87,11 +87,11 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
-                # draw keypoints
-                if drawing:
-                    img_keypoints = draw_keypoints(img, keypoints1, img2, keypoints2, method_dtect)
-                    filename = f"./draws/intensity/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
-                    cv2.imwrite(filename, img_keypoints)
+                # # draw keypoints
+                # if drawing:
+                #     img_keypoints = draw_keypoints(img, keypoints1, img2, keypoints2, method_dtect)
+                #     filename = f"./draws/intensity/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -118,9 +118,9 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0:
+                                if drawing and m == 0 and Rate[k, m, c3, i, j, 13] > 0.5:
                                     img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/intensity/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/intensity/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
@@ -141,9 +141,9 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(scale)):
-        # if drawing:
-        #         if k != 4:
-        #             continue
+        if drawing:
+                if k != 4:
+                    continue
         img = get_cam_scale(Image, scale[k])
         for i in range(len(Detectors)):
             if i == a or a == 100:
@@ -160,11 +160,11 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
-                # draw keypoints
-                if drawing:
-                    img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
-                    filename = f"./draws/scale/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
-                    cv2.imwrite(filename, img_keypoints)
+                # # draw keypoints
+                # if drawing:
+                #     img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
+                #     filename = f"./draws/scale/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -191,9 +191,9 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0:
+                                if drawing and m == 0 and Rate[k, m, c3, i, j, 13] > 0.5:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/scale/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/scale/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
@@ -214,9 +214,9 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(rot)):
-        # if drawing:
-        #         if k != 4:
-        #             continue
+        if drawing:
+                if k != 4:
+                    continue
         img = get_cam_rot(Image, rot[k])
         for i in range(len(Detectors)):
             if i == a or a == 100:
@@ -233,11 +233,11 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                     keypoints_cache[k, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k, i, 1]
-                # draw keypoints
-                if drawing:
-                    img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
-                    filename = f"./draws/rot/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
-                    cv2.imwrite(filename, img_keypoints)
+                # # draw keypoints
+                # if drawing:
+                #     img_keypoints = draw_keypoints(img[0], keypoints1, img[1], keypoints2, method_dtect)
+                #     filename = f"./draws/rot/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_keypoints.png"
+                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
@@ -264,9 +264,9 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0:
+                                if drawing and m == 0 and Rate[k, m, c3, i, j, 13] > 0.5:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
-                                    filename = f"./draws/rot/{selected_image}_{k}_{method_dtect.getDefaultName().split('.')[-1]}_{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
+                                    filename = f"./draws/rot/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
                         continue
