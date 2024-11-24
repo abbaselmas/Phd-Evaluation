@@ -45,10 +45,10 @@
 
 |Intensity|Scale|Rotation|  
 |---|---|---|  
-|![Intensity](/draws/intensity/bird_7_AKAZE_SIFT_L2_BF.png)         |![Scale](/draws/scale/bird_4_AKAZE_SIFT_L2_BF.png)         |![Rotation](/draws/rot/bird_4_AKAZE_SIFT_L2_BF.png)        |  
-|![Intensity](/draws/intensity/colors_7_AKAZE_SIFT_L2_BF.png)       |![Scale](/draws/scale/colors_4_AKAZE_SIFT_L2_BF.png)       |![Rotation](/draws/rot/colors_4_AKAZE_SIFT_L2_BF.png)      |  
-|![Intensity](/draws/intensity/dogman_7_AKAZE_SIFT_L2_BF.png)       |![Scale](/draws/scale/dogman_4_AKAZE_SIFT_L2_BF.png)       |![Rotation](/draws/rot/dogman_4_AKAZE_SIFT_L2_BF.png)      |  
-|![Intensity](/draws/intensity/tempera_7_AKAZE_SIFT_L2_BF.png)      |![Scale](/draws/scale/tempera_4_AKAZE_SIFT_L2_BF.png)      |![Rotation](/draws/rot/tempera_4_AKAZE_SIFT_L2_BF.png)     |  
+|![Intensity](/draws/intensity/bird_7_1AKAZE_0SIFT_L2_BF.png)         |![Scale](/draws/scale/bird_4_1AKAZE_0SIFT_L2_BF.png)         |![Rotation](/draws/rot/bird_4_1AKAZE_0SIFT_L2_BF.png)        |  
+|![Intensity](/draws/intensity/colors_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/colors_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/colors_4_1AKAZE_0SIFT_L2_BF.png)      |  
+|![Intensity](/draws/intensity/dogman_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/dogman_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/dogman_4_1AKAZE_0SIFT_L2_BF.png)      |  
+|![Intensity](/draws/intensity/tempera_7_1AKAZE_0SIFT_L2_BF.png)      |![Scale](/draws/scale/tempera_4_1AKAZE_0SIFT_L2_BF.png)      |![Rotation](/draws/rot/tempera_4_1AKAZE_0SIFT_L2_BF.png)     |  
 |![Intensity](/draws/intensity/woman_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/woman_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/woman_4_1AKAZE_0SIFT_L2_BF.png)      |  
-|![Intensity](/draws/intensity/wormhole_7_AKAZE_SIFT_L2_BF.png)     |![Scale](/draws/scale/wormhole_4_AKAZE_SIFT_L2_BF.png)     |![Rotation](/draws/rot/wormhole_4_AKAZE_SIFT_L2_BF.png)    |  
-|![Intensity](/draws/intensity/yard_7_AKAZE_SIFT_L2_BF.png)         |![Scale](/draws/scale/yard_4_AKAZE_SIFT_L2_BF.png)         |![Rotation](/draws/rot/yard_4_AKAZE_SIFT_L2_BF.png)        |  
+|![Intensity](/draws/intensity/wormhole_7_1AKAZE_0SIFT_L2_BF.png)     |![Scale](/draws/scale/wormhole_4_1AKAZE_0SIFT_L2_BF.png)     |![Rotation](/draws/rot/wormhole_4_1AKAZE_0SIFT_L2_BF.png)    |  
+|![Intensity](/draws/intensity/yard_7_1AKAZE_0SIFT_L2_BF.png)         |![Scale](/draws/scale/yard_4_1AKAZE_0SIFT_L2_BF.png)         |![Rotation](/draws/rot/yard_4_1AKAZE_0SIFT_L2_BF.png)        |  
