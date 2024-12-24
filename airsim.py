@@ -5,18 +5,24 @@ from define import *
 from database import *
 import pycolmap
 
-def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, reconstruct=False):
+def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=True, reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
-    img = [cv2.imread(f"./Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
+    image_folder = "./AirSimNH/Layer3/pitch-90_yaw0"
+    # Read all the images within image folder into img
+    img = []
+    for root, _, files in os.walk(image_folder):
+        for filename in files:
+            img.append(cv2.imread(os.path.join(root, filename)))
+    
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
-        if drawing:
-            if k != 17:
-                continue
+        # if drawing:
+        #     if k != 17:
+        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -82,7 +88,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0 and Rate[k, m, c3, i, j, 13] > 0.5:
+                                if drawing and m == 0:# and Rate[k, m, c3, i, j, 13] > 0.5:
                                     img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -118,3 +124,4 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, folder)
         saveAllCSV(Rate, Exec_time, folder)
+

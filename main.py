@@ -3,6 +3,7 @@ from oxfordAffine import *
 from drone import *
 from uav import *
 from display import *
+from airsim import *
 
 a = 1
 b = 0
@@ -51,3 +52,5 @@ mobile = "" # "_mobile"
 
 # synthetic_timing_mobile()
 # oxford_timing_mobile()
+
+executeAirSimScenarios("airsim", a, b, drawing, save, reconstruct)
