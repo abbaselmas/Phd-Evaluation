@@ -9,11 +9,11 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
     print(time.ctime())
     print(f"Folder: {folder}")
     image_folder = "./AirSimNH/Layer3/pitch-90_yaw0"
-    # Read all the images within image folder into img
+    # Read all the images within image folder into img in order
     img = []
-    for root, _, files in os.walk(image_folder):
-        for filename in files:
-            img.append(cv2.imread(os.path.join(root, filename)))
+    files = sorted(os.listdir(image_folder))
+    for filename in files:
+        img.append(cv2.imread(os.path.join(image_folder, filename)))
     
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)

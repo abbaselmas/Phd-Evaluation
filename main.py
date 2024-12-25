@@ -5,10 +5,10 @@ from uav import *
 from display import *
 from airsim import *
 
-a = 1
-b = 0
-drawing = True
-save = False
+a = 100
+b = 100
+drawing = False
+save = True
 reconstruct = False
 mobile = "" # "_mobile"
 
@@ -25,6 +25,7 @@ mobile = "" # "_mobile"
 # executeScenarios              ("ubc",    a, b, drawing, save)
 # executeDroneScenarios         ("drone",  a, b, drawing, save, reconstruct)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
+# executeAirSimScenarios        ("airsim", a, b, drawing, save, reconstruct)
 
 # synthetic           ()
 # syntheticMulti      ("Precision-Recall", 13, 12)
@@ -46,6 +47,11 @@ mobile = "" # "_mobile"
 # singleMulti         ("uav", "Inliers-Matches",   9, 10)
 # single_timing       ("uav")
 # single_timing2      ("uav")
+# single              ("airsim")
+# singleMulti         ("airsim", "Precision-Recall", 13, 12)
+# singleMulti         ("airsim", "Inliers-Matches",   9, 10)
+# single_timing       ("airsim")
+# single_timing2      ("airsim")
 
 # drone_rep_err("inliers")
 # drone_rep_err("matches")
@@ -53,4 +59,3 @@ mobile = "" # "_mobile"
 # synthetic_timing_mobile()
 # oxford_timing_mobile()
 
-executeAirSimScenarios("airsim", a, b, drawing, save, reconstruct)

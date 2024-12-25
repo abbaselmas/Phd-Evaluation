@@ -92,6 +92,7 @@ Rate_wall                   = np.load("./arrays/Rate_wall.npy")
 Rate_trees                  = np.load("./arrays/Rate_trees.npy")
 Rate_bark                   = np.load("./arrays/Rate_bark.npy")
 Rate_ubc                    = np.load("./arrays/Rate_ubc.npy")
+Rate_airsim                 = np.load("./arrays/Rate_airsim.npy")
 Exec_time_intensity         = np.load("./arrays/Exec_time_intensity.npy")
 Exec_time_scale             = np.load("./arrays/Exec_time_scale.npy")
 Exec_time_rot               = np.load("./arrays/Exec_time_rot.npy")
@@ -114,6 +115,7 @@ Exec_time_wall_mobile       = np.load("./arrays/Exec_time_wall_mobile.npy")
 Exec_time_trees_mobile      = np.load("./arrays/Exec_time_trees_mobile.npy")
 Exec_time_bark_mobile       = np.load("./arrays/Exec_time_bark_mobile.npy")
 Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
+Exec_time_airsim            = np.load("./arrays/Exec_time_airsim.npy")
 
 ########################
 # MARK: - Synthetic Data
@@ -543,7 +545,9 @@ def oxford_timing2():
 def single(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig7 = go.Figure()
-    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"]
+    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else (
+        ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
+        [f"Img{i}" for i in range(653, 774, 5)])
     fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", yaxis_title="Precision", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
@@ -593,7 +597,9 @@ def single(data="drone"):
 def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig11 = go.Figure()
-    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"]
+    xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else (
+        ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
+        [f"Img{i}" for i in range(653, 774, 5)])
     fig11.update_layout(title_text=f"{data.upper()} Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
                         xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode="x")
     color_index = 0
