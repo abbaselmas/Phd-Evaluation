@@ -904,13 +904,13 @@ def oxford_timing_mobile():
         f.write(custom_html)
 
 ################################
-# MARK: Drone Reprojection Error
+# MARK: Reprojection Error from Rate 11
 ################################        
-def drone_rep_err(data="inliers"):
-    Exec_time = np.load(f"./arrays/Exec_time_drone.npy")
-    Rate = np.load(f"./arrays/Rate_drone.npy") if data == "inliers" else np.load(f"./arrays/Rate_drone_11matches.npy")
+def rep_err(data="drone"):
+    Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+    Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig14 = go.Figure()
-    title = "Drone Reprojection Error calculated with Inliers" if data == "inliers" else "Drone Reprojection Error calculated with Total Matches and BA"
+    title = f"{data} Reprojection Error"
     fig14.update_layout(title_text=title, title_x=0.5, title_xanchor="right", xaxis_title="pixel", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     color_index = 0
     symbol_index = 0
@@ -932,7 +932,7 @@ def drone_rep_err(data="inliers"):
             color_index = (color_index + 26) % num_combinations
     
     fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
-    file = f"./html/drone_reprojection_error_inliers.html" if data == "inliers" else f"./html/drone_reprojection_error_matches.html"
+    file = f"./html/{data}_reprojection_error.html"
     fig14.write_html(file, include_plotlyjs="cdn", full_html=True, config=config)
     with open(file, "a") as f:
         f.write(custom_html)

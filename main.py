@@ -53,8 +53,8 @@ mobile = "" # "_mobile"
 # single_timing       ("airsim")
 # single_timing2      ("airsim")
 
-# drone_rep_err("inliers")
-# drone_rep_err("matches")
+rep_err("drone")
+# rep_err("airsim") #TODO: airsim should run with reconstruct true to fill Rate 11 with reprojetion error
 
 # synthetic_timing_mobile()
 # oxford_timing_mobile()
