@@ -6,16 +6,13 @@ from define import *
 def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
     print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
-    img = [cv2.imread(f"./UAV-AerialResized/{i}.JPG") for i in range(20)]
+    img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         k = int(n/2) # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        # if drawing:
-        #     if k != 8:
-        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -31,11 +28,6 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
                     keypoints_cache[n+1, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[n+1, i, 1]
-                # # draw keypoints
-                # if drawing:
-                #     img_keypoints = draw_keypoints(img[n], keypoints1, img[n+1], keypoints2, method_dtect)
-                #     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName()}.png"
-                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]

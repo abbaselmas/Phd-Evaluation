@@ -5,11 +5,11 @@ from uav import *
 from display import *
 from airsim import *
 
-a = 7
+a = 1
 b = 0
 drawing = False
 save = False
-reconstruct = True
+reconstruct = False
 mobile = "" # "_mobile"
 
 # execute_scenario_scale        (          a, b, drawing, save)

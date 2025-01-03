@@ -20,9 +20,6 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
-        # if drawing:
-        #     if k != 17:
-        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -38,11 +35,6 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
                     keypoints_cache[k+1, i, 1] = keypoints2
                 else:
                     keypoints2 = keypoints_cache[k+1, i, 1]
-                # # draw keypoints
-                # if drawing:
-                #     img_keypoints = draw_keypoints(img[k], keypoints1, img[k+1], keypoints2, method_dtect)
-                #     filename = f"./draws/{folder}/{k}_{method_dtect.getDefaultName()}.png"
-                #     cv2.imwrite(filename, img_keypoints)
                 for j in range(len(Descriptors)):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
