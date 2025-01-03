@@ -73,6 +73,4 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, folder)
-        saveAllCSV(Rate, Exec_time, folder)
     print(time.ctime() + f" {folder} finished")

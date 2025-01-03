@@ -5,7 +5,7 @@ from define import *
 
 hpatches_sequences = ["bird", "colors", "dogman", "tempera", "woman", "wormhole", "yard"]
 selected_image = hpatches_sequences[4]
-Image = np.array(cv2.imread(f"./hpatches-sequences/v_{selected_image}/1.jpg"))
+Image = np.array(cv2.imread(f"./Datasets/hpatches-sequences/v_{selected_image}/1.jpg"))
 
 ## Scenario 1 (Intensity): Function that returns 8 images with intensity changes from an I image.
 def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with 4 values each
@@ -19,7 +19,7 @@ def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with
         List8Img[i][List8Img[i] > 255] = 255 # set pixels with intensity > 255 to 255
         List8Img[i][List8Img[i] < 0] = 0 # set the pixels with intensity < 0 to the value of 0
         List8Img[i] = np.array(List8Img[i], dtype=np.uint8) # image transformation to uint8
-        filename = f"./synthetic/{selected_image}-intensity-image_I+{val_b[i]}.png"
+        filename = f"./Datasets/synthetic/{selected_image}-intensity-image_I+{val_b[i]}.png"
         cv2.imwrite(filename, List8Img[i])
     for j in range(len(val_c)): # for I ∗ c, with: c ∈ [0.7 : 0.2 : 1.3]
         I =  image * val_c[j]
@@ -27,14 +27,14 @@ def get_intensity_8Img(Img, val_b, val_c): # val_b, val_c must be 2 vectors with
         List8Img[j+4][List8Img[j+4] > 255] = 255 # set pixels with intensity > 255 to 255
         List8Img[j+4][List8Img[j+4] < 0] = 0 # set the pixels with intensity < 0 to the value of 0
         List8Img[j+4] = np.array(List8Img[j+4], dtype=np.uint8) # transform image to uint8 (min value = 0, max value = 255)
-        filename = f"./synthetic/{selected_image}-intensity-image_Ix{val_c[j]}.png"
+        filename = f"./Datasets/synthetic/{selected_image}-intensity-image_Ix{val_c[j]}.png"
         cv2.imwrite(filename, List8Img[j+4])
     return Img, List8Img
 ## Scenario 2 (Scale): Function that takes as input the index of the camera, the index of the image n, and a scale, it returns a couple (I, Iscale). In the following, we will work with 7 images with a scale change Is : s ∈]1.1 : 0.2 : 2.3].
 def get_cam_scale(Img, s):
     ImgScale = cv2.resize(Img, (0, 0), fx=s, fy=s, interpolation = cv2.INTER_NEAREST) # opencv resize function with INTER_NEAREST interpolation
     I_Is = list([Img, ImgScale]) # list of 2 images (original image and scaled image)
-    filename = f"./synthetic/{selected_image}-scale-image_{s}.png"
+    filename = f"./Datasets/synthetic/{selected_image}-scale-image_{s}.png"
     cv2.imwrite(filename, ImgScale)
     return I_Is
 ## Scenario 3 (Rotation): Function that takes as input the index of the camera, the index of the image n, and a rotation angle, it returns a couple (I, Irot), and the rotation matrix. In the following, we will work with 9 images with a change of scale For an image I, we will create 9 images (I10, I20...I90) with change of rotation from 10 to 90 with a step of 10.
@@ -55,7 +55,7 @@ def get_cam_rot(Img, rotationAngle):
     rotated_image = cv2.warpAffine(Img, rotation_mat, (bound_w, bound_h))
     couple_I_Ir = [Img, rotated_image]  # list of 2 images (original image and rotated image)
     # save the rotated image
-    filename = f"./synthetic/{selected_image}-rotation-image_{rotationAngle}.png"
+    filename = f"./Datasets/synthetic/{selected_image}-rotation-image_{rotationAngle}.png"
     cv2.imwrite(filename, rotated_image)
     return couple_I_Ir
 
@@ -129,8 +129,6 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
     if save:
         np.save(f"./arrays/Rate_intensity{mobile}.npy",      Rate)
         np.save(f"./arrays/Exec_time_intensity{mobile}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "intensity", mobile)
-        saveAllCSV(Rate, Exec_time, "intensity", mobile)
     print(time.ctime() + " Intensity finished")
 
 def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile=""):
@@ -202,8 +200,6 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
     if save:
         np.save(f"./arrays/Rate_scale{mobile}.npy",      Rate)
         np.save(f"./arrays/Exec_time_scale{mobile}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "scale", mobile)
-        saveAllCSV(Rate, Exec_time, "scale", mobile)
     print(time.ctime() + " Scale finished")
 
 def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile=""):
@@ -275,6 +271,4 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
     if save:
         np.save(f"./arrays/Rate_rot{mobile}.npy",      Rate)
         np.save(f"./arrays/Exec_time_rot{mobile}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, "rot", mobile)
-        saveAllCSV(Rate, Exec_time, "rot", mobile)
     print(time.ctime() + " Rotation finished")

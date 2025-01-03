@@ -5,11 +5,11 @@ from uav import *
 from display import *
 from airsim import *
 
-a = 100
-b = 100
+a = 7
+b = 0
 drawing = False
-save = True
-reconstruct = False
+save = False
+reconstruct = True
 mobile = "" # "_mobile"
 
 # execute_scenario_scale        (          a, b, drawing, save)
@@ -56,6 +56,6 @@ mobile = "" # "_mobile"
 # rep_err("drone")
 # rep_err("airsim") #TODO: airsim should run with reconstruct true to fill Rate 11 with reprojetion error
 
-synthetic_timing_mobile()
-oxford_timing_mobile()
+# synthetic_timing_mobile()
+# oxford_timing_mobile()
 

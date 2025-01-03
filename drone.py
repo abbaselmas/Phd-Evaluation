@@ -8,7 +8,7 @@ import pycolmap
 def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
-    img = [cv2.imread(f"./Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
+    img = [cv2.imread(f"./Datasets/Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
     Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
@@ -99,7 +99,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
                             for m in range(2):
                                 path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
                                 if os.path.isfile(f"{path}.db"):
-                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, 
+                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Datasets/Small_Buildings/droneResized", path, 
                                                                         pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
                                     # pycolmap.bundle_adjustment(maps[0])
                                     # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
@@ -116,5 +116,3 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, folder)
-        saveAllCSV(Rate, Exec_time, folder)

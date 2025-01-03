@@ -8,7 +8,7 @@ import pycolmap
 def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=True, reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
-    image_folder = "./AirSimNH/Layer3/pitch-90_yaw0"
+    image_folder = "./Datasets/AirSimNH/Layer3/pitch-90_yaw0"
     # Read all the images within image folder into img in order
     img = []
     files = sorted(os.listdir(image_folder))
@@ -122,6 +122,3 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
     if save:
         np.save(f"./arrays/Rate_{folder}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
-        saveAverageCSV(Rate, Exec_time, folder)
-        saveAllCSV(Rate, Exec_time, folder)
-

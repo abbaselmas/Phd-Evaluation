@@ -162,8 +162,8 @@ def synthetic():
     
     fig1.update_layout(updatemenus=[    dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045),
                                         dict(type="dropdown", buttons=button_list, x=0.55, xanchor="left", y=1.045)]) 
-    fig1.write_html(f"./html/synthetic.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic.html", "a") as f:
+    fig1.write_html(f"./html/synthetic/synthetic.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/synthetic.html", "a") as f:
         f.write(custom_html)
 
 #########################################
@@ -202,8 +202,8 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
-    fig2.write_html(f"./html/synthetic_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic_{name}.html", "a") as f:
+    fig2.write_html(f"./html/synthetic/synthetic_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/synthetic_{name}.html", "a") as f:
         f.write(custom_html)
 
 ###########################
@@ -264,8 +264,8 @@ def synthetic_timing():
                                                     dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
-    fig3.write_html("./html/synthetic_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open("./html/synthetic_timing.html", "a") as f:
+    fig3.write_html("./html/synthetic/synthetic_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open("./html/synthetic/synthetic_timing.html", "a") as f:
         f.write(custom_html)
 
 def synthetic_timing2():
@@ -303,8 +303,8 @@ def synthetic_timing2():
                                                                     {"xaxis.title": axis}]))    
     fig15.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig15.write_html(f"./html/synthetic_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic_timing2.html", "a") as f:
+    fig15.write_html(f"./html/synthetic/synthetic_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/synthetic_timing2.html", "a") as f:
         f.write(custom_html)
 
 ##################################
@@ -373,8 +373,8 @@ def oxford():
                                 args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": y, "yaxis2.title": y, "yaxis3.title": y, "yaxis4.title": y, "yaxis5.title": y, "yaxis6.title": y, "yaxis7.title": y, "yaxis8.title": y, "yaxis9.title": y}]))
     fig4.update_layout(updatemenus=[    dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, x=0.55, xanchor="left", y=1.06)])          
-    fig4.write_html(f"./html/oxford.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford.html", "a") as f:
+    fig4.write_html(f"./html/oxford/oxford.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford.html", "a") as f:
         f.write(custom_html)
 
 ######################
@@ -434,8 +434,8 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
-    fig5.write_html(f"./html/oxford_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford_{name}.html", "a") as f:
+    fig5.write_html(f"./html/oxford/oxford_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford_{name}.html", "a") as f:
         f.write(custom_html)
 
 ###########################
@@ -496,8 +496,8 @@ def oxford_timing():
                                                     dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
-    fig6.write_html("./html/oxford_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford_timing.html", "a") as f:
+    fig6.write_html("./html/oxford/oxford_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford_timing.html", "a") as f:
         f.write(custom_html)
 
 def oxford_timing2():
@@ -535,8 +535,8 @@ def oxford_timing2():
     
     fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig14.write_html(f"./html/oxford_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford_timing2.html", "a") as f:
+    fig14.write_html(f"./html/oxford/oxford_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford_timing2.html", "a") as f:
         f.write(custom_html)
 
 #################################
@@ -587,8 +587,8 @@ def single(data="drone"):
     
     fig7.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, active=0, x=0.55, xanchor="left", y=1.06)])
-    fig7.write_html(f"./html/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}.html", "a") as f:
+    fig7.write_html(f"./html/{data}/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}.html", "a") as f:
         f.write(custom_html)
 
 ##################################
@@ -618,8 +618,8 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig11.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
-    fig11.write_html(f"./html/{data}_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}_{name}.html", "a") as f:
+    fig11.write_html(f"./html/{data}/{data}_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}_{name}.html", "a") as f:
         f.write(custom_html)
         
 ###################################
@@ -682,8 +682,8 @@ def single_timing(data="drone"):
                                                         dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
                                         dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
                                                         dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
-    fig12.write_html(f"./html/{data}_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}_timing.html", "a") as f:
+    fig12.write_html(f"./html/{data}/{data}_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}_timing.html", "a") as f:
         f.write(custom_html)
 
 def single_timing2(data="drone"):
@@ -723,8 +723,8 @@ def single_timing2(data="drone"):
     
     fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045),
                                         dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.03)])
-    fig13.write_html(f"./html/{data}_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}_timing2.html", "a") as f:
+    fig13.write_html(f"./html/{data}/{data}_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}_timing2.html", "a") as f:
         f.write(custom_html)
         
 ###############################
@@ -811,8 +811,8 @@ def synthetic_timing_mobile():
                                                     dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.17),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
-    fig15.write_html("./html/synthetic_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open("./html/synthetic_timing_mobile.html", "a") as f:
+    fig15.write_html("./html/synthetic/synthetic_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open("./html/synthetic/synthetic_timing_mobile.html", "a") as f:
         f.write(custom_html)
         
 ############################
@@ -899,8 +899,8 @@ def oxford_timing_mobile():
                                                     dict(label="Log",   method="relayout", args=[{"yaxis5.type": "log"}])], x=0, xanchor="left", y=0.175),
                                     dict(buttons=[  dict(label="Linear",method="relayout", args=[{"yaxis6.type": "linear"}]),
                                                     dict(label="Log",   method="relayout", args=[{"yaxis6.type": "log"}])], x=0.5, xanchor="left", y=0.175)])
-    fig6.write_html("./html/oxford_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford_timing_mobile.html", "a") as f:
+    fig6.write_html("./html/oxford/oxford_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford_timing_mobile.html", "a") as f:
         f.write(custom_html)
 
 ################################
@@ -932,7 +932,7 @@ def rep_err(data="drone"):
             color_index = (color_index + 26) % num_combinations
     
     fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
-    file = f"./html/{data}_reprojection_error.html"
+    file = f"./html/{data}/{data}_reprojection_error.html"
     fig14.write_html(file, include_plotlyjs="cdn", full_html=True, config=config)
     with open(file, "a") as f:
         f.write(custom_html)

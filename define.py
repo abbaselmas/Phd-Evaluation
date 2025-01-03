@@ -1,7 +1,6 @@
 import cv2
 from plotly.colors import sample_colorscale
 import numpy as np
-import csv
 
 val_b    = np.array([-30, -10, 10, 30])     # b ∈ [−30 : 20 : +30]
 val_c    = np.array([0.7, 0.9, 1.1, 1.3])   # c ∈ [0.7 : 0.2 : 1.3]
@@ -11,9 +10,9 @@ rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15 : 15 : 90
 
 DetectorsLegend   = ["sift", "akaze", "orb", "brisk", "kaze", "fast", "mser", "agast", "gftt", "gftt_harris", "star", "hl", "msd", "tbmr"]
 DescriptorsLegend = ["sift", "akaze", "orb", "brisk", "kaze", "daisy", "freak", "brief", "lucid", "latch", "vgg", "beblid", "teblid", "boost"]
-line_styles = ["solid", "dash", "dot"] #, "dashdot"]
-Norm = ["L2", "HAM"]
-Matcher = ["BF", "Flann"]
+line_styles       = ["solid", "dash", "dot"] #, "dashdot"]
+Norm              = ["L2", "HAM"]
+Matcher           = ["BF", "Flann"]
 
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
 colors = sample_colorscale("Turbo", [i / num_combinations for i in range(num_combinations)])
@@ -178,78 +177,3 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
 
     combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
     return combined_img
-
-def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
-    headers = [ "Detector", "Keypoint1", "Keypoint2", "1K Detect Time",
-                "Descriptor", "Descriptor1", "Descriptor2", "1K Descript Time",
-                "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches",
-                "Total Time", "1K Match Tot. Time", "1K Inliers Time",
-                "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f"./csv/{scenario}_analysis{mobile}.csv", "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, delimiter=";")
-        writer.writerow(headers)
-        for m in range(Rate.shape[1]):
-            for c3 in range(Rate.shape[2]):
-                for i in range(Rate.shape[3]):
-                    for j in range(Rate.shape[4]):
-                        row = [ DetectorsLegend[i],                           # DETECTOR
-                                np.nanmean(Rate[:, m, c3, i, j, 5]),          # Keypoint1
-                                np.nanmean(Rate[:, m, c3, i, j, 6]),          # Keypoint2
-                                np.nanmean(Exec_time[:, m, c3, i, j, 4]),     # 1K Detect Time
-                                DescriptorsLegend[j],                         # DESCRIPTOR
-                                np.nanmean(Rate[:, m, c3, i, j, 7]),          # Descriptor1
-                                np.nanmean(Rate[:, m, c3, i, j, 8]),          # Descriptor2
-                                np.nanmean(Exec_time[:, m, c3, i, j, 5]),     # 1K Descript Time
-                                Norm[c3],                                     # Norm
-                                Matcher[m],                                   # Matcher
-                                np.nanmean(Rate[:, m, c3, i, j, 11]),         # Reprojection Error
-                                np.nanmean(Rate[:, m, c3, i, j,  9]),         # Inliers
-                                np.nanmean(Rate[:, m, c3, i, j, 10]),         # All Matches
-                                np.nanmean(Exec_time[:, m, c3, i, j, 3]),     # Total Time
-                                np.nanmean(Exec_time[:, m, c3, i, j, 6]),     # 1K Match Tot. Time
-                                np.nanmean(Exec_time[:, m, c3, i, j, 7]),     # 1K Inliers Time
-                                np.nanmean(Rate[:, m, c3, i, j, 12]),         # Recall
-                                np.nanmean(Rate[:, m, c3, i, j, 13]),         # Precision
-                                np.nanmean(Rate[:, m, c3, i, j, 14]),         # Repeatibility
-                                np.nanmean(Rate[:, m, c3, i, j, 15])]         # F1-Score
-                        writer.writerow(row)
-                    
-def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
-    headers = [ "k", "Detector", "Keypoint1-GT", "Keypoint2", "Detect Time", "1K Detect Time",
-                "Descriptor", "Descriptor1-GT", "Descriptor2", "Descript Time", "1K Descript Time",
-                "Norm.", "Matcher", "Reprojection Error", "Inliers", "All Matches", "Match Time",
-                "Total Time", "1K Match Tot. Time", "1K Inliers Time",
-                "Recall", "Precision", "Repeatibility", "F1-Score"]
-    with open(f"./csv/{scenario}_analysis_all{mobile}.csv", "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, delimiter=";")
-        writer.writerow(headers)
-        for k in range(Rate.shape[0]):
-            for m in range(Rate.shape[1]):
-                for c3 in range(Rate.shape[2]):
-                    for i in range(Rate.shape[3]):
-                        for j in range(Rate.shape[4]):
-                            row = [ k,                                      # k
-                                    DetectorsLegend[i],                     # DETECTOR
-                                    Rate[k, m, c3, i, j, 5],                # Keypoint1-GT
-                                    Rate[k, m, c3, i, j, 6],                # Keypoint2
-                                    Exec_time[k, m, c3, i, j, 0],           # Detect Time
-                                    Exec_time[k, m, c3, i, j, 4],           # 1K Detect Time
-                                    DescriptorsLegend[j],                   # DESCRIPTOR
-                                    Rate[k, m, c3, i, j, 7],                # Descriptor1-GT
-                                    Rate[k, m, c3, i, j, 8],                # Descriptor2
-                                    Exec_time[k, m, c3, i, j, 1],           # Descript Time
-                                    Exec_time[k, m, c3, i, j, 5],           # 1K Descipt Time
-                                    Norm[c3],                               # Norm
-                                    Matcher[m],                             # Matcher
-                                    Rate[k, m, c3, i, j, 11],               # Reprojection Error
-                                    Rate[k, m, c3, i, j,  9],               # Inliers
-                                    Rate[k, m, c3, i, j, 10],               # All Matches
-                                    Exec_time[k, m, c3, i, j, 2],           # Match Time
-                                    Exec_time[k, m, c3, i, j, 3],           # Total Time
-                                    Exec_time[k, m, c3, i, j, 6],           # 1K Match Tot. Time
-                                    Exec_time[k, m, c3, i, j, 7],           # 1K Inliers Time
-                                    Rate[k, m, c3, i, j, 12],               # Recall
-                                    Rate[k, m, c3, i, j, 13],               # Precision
-                                    Rate[k, m, c3, i, j, 14],               # Repeatibility
-                                    Rate[k, m, c3, i, j, 15]]               # F1-Score
-                            writer.writerow(row)
