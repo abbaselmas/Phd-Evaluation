@@ -140,7 +140,7 @@ def synthetic():
                     legend_groupfig1 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig1, legendgroup=legend_groupfig1, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
+                                name=legend_groupfig1, legendgroup=legend_groupfig1, showlegend=False, hovertemplate="<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate2_I1).any()):
                         traces.append (go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
                         fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett),  row=1, col=1)
@@ -152,7 +152,7 @@ def synthetic():
                         fig1.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
                     if not (np.isnan(Rate2_R).any()):
                         traces.append (go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
-                        fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
+                        fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett, showlegend=True), row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
@@ -190,7 +190,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     Rate2_R_y  = np.nanmean(Rate_rot      [          :, m, c3, i, j, y])
                     legend_groupfig2 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(symbol=symbol_index, size=9, color=colors[color_index]), name=legend_groupfig2, legendgroup=legend_groupfig2,
-                                showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}")
+                                showlegend=False, hovertemplate=f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}")
                     if not (np.isnan(Rate2_I1_x).any() or (np.isnan(Rate2_I1_y).any())):
                         fig2.add_trace(go.Scatter(  x=[Rate2_I1_x], y=[Rate2_I1_y], arg=sett), row=1, col=1)
                     if not (np.isnan(Rate2_I2_x).any() or (np.isnan(Rate2_I2_y).any())):
@@ -198,7 +198,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
                     if not (np.isnan(Rate2_S_x).any() or (np.isnan(Rate2_S_y).any())):
                         fig2.add_trace(go.Scatter(  x=[Rate2_S_x],  y=[Rate2_S_y],  arg=sett), row=2, col=1)
                     if not (np.isnan(Rate2_R_x).any() or (np.isnan(Rate2_R_y).any())):
-                        fig2.add_trace(go.Scatter(  x=[Rate2_R_x],  y=[Rate2_R_y],  arg=sett),   row=2, col=2)
+                        fig2.add_trace(go.Scatter(  x=[Rate2_R_x],  y=[Rate2_R_y],  arg=sett, showlegend=True),   row=2, col=2)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -334,7 +334,7 @@ def oxford():
                     legend_groupfig4 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker_symbol=symbol_index, marker_size=9,
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig4, legendgroup=legend_groupfig4, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
+                                name=legend_groupfig4, legendgroup=legend_groupfig4, showlegend=False, hovertemplate="<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate_Graf).any()):
                         traces.append (go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
                         fig4.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
@@ -362,7 +362,7 @@ def oxford():
                     yval = np.nanmean([Rate_Graf, Rate_Bikes, Rate_Boat, Rate_Leuven, Rate_Wall, Rate_Trees, Rate_Bark, Rate_Ubc], axis=0)
                     if not (np.isnan(yval).any()):
                         traces.append (go.Scatter(x = xvals, y=yval, arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett), row=3, col=3)
+                        fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett, showlegend=True), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     
@@ -410,7 +410,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker_symbol=symbol_index, marker_size=9,
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
+                                name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate_Graf_x).any()     or (np.isnan(Rate_Graf_y).any())):
                         fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett),  row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()    or (np.isnan(Rate_Bikes_y).any())):
@@ -430,7 +430,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     xval = np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)
                     yval = np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)
                     if not (np.isnan(xval).any() or np.isnan(yval).any()):
-                        fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett), row=3, col=3)
+                        fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett, showlegend=True), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
             color_index = (color_index + 26) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
