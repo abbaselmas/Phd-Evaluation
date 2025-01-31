@@ -5,27 +5,27 @@ from uav import *
 from display import *
 from airsim import *
 
-a = 1
-b = 0
+a = 100
+b = 100
 drawing = False
-save = False
-reconstruct = False
+save = True
+reconstruct = True
 mobile = "" # "_mobile"
 
-# execute_scenario_scale        (          a, b, drawing, save)
-# execute_scenario_intensity    (          a, b, drawing, save)
-# execute_scenario_rotation     (          a, b, drawing, save)
-# executeScenarios              ("graf",   a, b, drawing, save)
-# executeScenarios              ("leuven", a, b, drawing, save)
-# executeScenarios              ("bark",   a, b, drawing, save)
-# executeScenarios              ("boat",   a, b, drawing, save)
-# executeScenarios              ("bikes",  a, b, drawing, save)
-# executeScenarios              ("trees",  a, b, drawing, save)
-# executeScenarios              ("wall",   a, b, drawing, save)
-# executeScenarios              ("ubc",    a, b, drawing, save)
+# execute_scenario_rotation     (          a, b, drawing, save, mobile)
+# execute_scenario_scale        (          a, b, drawing, save, mobile)
+# execute_scenario_intensity    (          a, b, drawing, save, mobile)
+# executeScenarios              ("graf",   a, b, drawing, save, mobile)
+# executeScenarios              ("leuven", a, b, drawing, save, mobile)
+# executeScenarios              ("bark",   a, b, drawing, save, mobile)
+# executeScenarios              ("boat",   a, b, drawing, save, mobile)
+# executeScenarios              ("bikes",  a, b, drawing, save, mobile)
+# executeScenarios              ("trees",  a, b, drawing, save, mobile)
+# executeScenarios              ("wall",   a, b, drawing, save, mobile)
+# executeScenarios              ("ubc",    a, b, drawing, save, mobile)
 # executeDroneScenarios         ("drone",  a, b, drawing, save, reconstruct)
 # executeUAVScenarios           ("uav",    a, b, drawing, save)
-# executeAirSimScenarios        ("airsim", a, b, drawing, save, reconstruct)
+# executeAirSimScenarios        ("airsim", a, b, drawing, save)
 
 # synthetic           ()
 # syntheticMulti      ("Precision-Recall", 13, 12)
@@ -54,7 +54,6 @@ mobile = "" # "_mobile"
 # single_timing2      ("airsim")
 
 # rep_err("drone")
-# rep_err("airsim") #TODO: airsim should run with reconstruct true to fill Rate 11 with reprojetion error
 
 # synthetic_timing_mobile()
 # oxford_timing_mobile()
