@@ -125,7 +125,8 @@ def synthetic():
     fig1 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.04, vertical_spacing=0.04)
     fig1.update_layout(title_text="Synthetic Dataset", title_x=0.45, title_y=0.965, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
-    fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot))
+    sett_axis = dict(autorange=False, range=[0, 1])
+    fig1.update_layout(xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot), uirevision="73", yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
     color_index = 0
     symbol_index = 0
     traces = []
@@ -173,7 +174,7 @@ def syntheticMulti(name="Precision-Recall", x=13, y=12):
     fig2 = go.Figure()
     fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
                             horizontal_spacing=0.05, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
-    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x")
+    fig2.update_layout(title_text=f"Synthetic Dataset - {name}", title_x=0.45, hovermode="x", uirevision="73")
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -315,7 +316,8 @@ def oxford():
     fig4 = make_subplots(   rows=3, cols=3, subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.04, vertical_spacing=0.05)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
-    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.45, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    sett_axis = dict(autorange=False, range=[0, 1])
+    fig4.update_layout( title_text="Oxford Affine Dataset", title_x=0.45, title_xanchor="right", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), uirevision="73", yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
     traces = []
@@ -384,7 +386,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
     fig5 = go.Figure()
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.05, vertical_spacing=0.06, x_title=name.split('-')[0], y_title=name.split('-')[1])
-    fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode="x")
+    fig5.update_layout(title_text=f"Oxford Affine Dataset - {name}", title_x=0.45, hovermode="x", uirevision="73")
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -548,7 +550,7 @@ def single(data="drone"):
     xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else (
         ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
         [f"Img{i}" for i in range(653, 774, 5)])
-    fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", yaxis_title="Precision", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig7.update_layout(title_text=f"{data.upper()} Data", title_x=0.45, title_xanchor="right", yaxis_title="Precision", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), uirevision="73", yaxis=dict(range=[0, 1]))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -601,7 +603,7 @@ def singleMulti(data="drone",name="Precision-Recall", x=13, y=12):
         ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
         [f"Img{i}" for i in range(653, 774, 5)])
     fig11.update_layout(title_text=f"{data.upper()} Data - {name}", title_x=0.5, title_xanchor="right", margin=dict(l=20, r=20, t=20, b=20),
-                        xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode="x")
+                        xaxis_title=name.split('-')[0], yaxis_title=name.split('-')[1], hovermode="x", uirevision="73")
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -911,7 +913,7 @@ def rep_err(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig14 = go.Figure()
     title = f"{data} Reprojection Error"
-    fig14.update_layout(title_text=title, title_x=0.5, title_xanchor="right", xaxis_title="pixel", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig14.update_layout(title_text=title, title_x=0.5, title_xanchor="right", xaxis_title="pixel", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), uirevision="73")
     color_index = 0
     symbol_index = 0
     traces = []
