@@ -19,14 +19,16 @@ custom_html = """
     </span>
 </div>
 <script>
+let selectedPoints = new Set();
+let textFilteredTraces = new Set();
+var plot = document.querySelectorAll(".js-plotly-plot")[0];
+
 function applyFilters() {
-    var i, j;
     var filter = document.getElementById("filterInput").value.toUpperCase();
     var minYThreshold = parseFloat(document.getElementById("minYValueInput").value) || -Infinity;
     var maxYThreshold = parseFloat(document.getElementById("maxYValueInput").value) ||  Infinity;
     var minXThreshold = parseFloat(document.getElementById("minXValueInput").value) || -Infinity;
     var maxXThreshold = parseFloat(document.getElementById("maxXValueInput").value) ||  Infinity;
-    var plot = document.querySelectorAll(".js-plotly-plot")[0];
     var data = plot.data;
     var visibleTraceCount = 0;
     var filterParts = filter.split(" ");
@@ -41,7 +43,9 @@ function applyFilters() {
             return true;
     };
     var filterMode = document.querySelector('input[name="filterMode"]:checked').value;
-    for (i = 0; i < data.length; i++) {
+    textFilteredTraces.clear();
+
+    for (let i = 0; i < data.length; i++) {
         var traceName = data[i].name || "";
         var yValues = data[i].y;
         var xValues = data[i].x;
@@ -55,17 +59,49 @@ function applyFilters() {
             };
             if (matchFunc.call(yValues, isValueInRange)) {
                 showTrace = true;
+                textFilteredTraces.add(i);
                 visibleTraceCount++;
             }
         }
-        data[i].visible = showTrace;
     }
+    let update = { visible: [], showlegend: [] };
+    data.forEach((trace, index) => {
+        if (textFilteredTraces.has(index)) {
+            if (selectedPoints.size === 0 || selectedPoints.has(index)) {
+                update.visible.push(true);
+                update.showlegend.push(true);
+            } else {
+                update.visible.push("legendonly");
+                update.showlegend.push(false);
+            }
+        } else {
+            update.visible.push(false);
+            update.showlegend.push(false);
+        }
+    });
+    
     document.getElementById('trace-count').innerText = "Total Traces: " + visibleTraceCount;
-    Plotly.redraw(plot);
+    Plotly.restyle(plot, update);
 }
-window.onload = function() {
+
+document.addEventListener("DOMContentLoaded", function() {
     applyFilters();
-};
+    plot.on('plotly_selected', function(eventData) {
+        selectedPoints.clear();
+        if (eventData && eventData.points) {
+            eventData.points.forEach(point => {
+                if (textFilteredTraces.has(point.curveNumber)) {
+                    selectedPoints.add(point.curveNumber);
+                }
+            });
+        }
+        applyFilters();
+    });    
+    plot.on('plotly_deselect', function() {
+        selectedPoints.clear();
+        applyFilters();
+    });
+});
 </script>
 """
 
