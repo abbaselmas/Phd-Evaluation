@@ -238,7 +238,7 @@ def synthetic_timing():
                     fig3.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig3.add_trace(trace_match_synt_result4, row=2, col=1)
                     trace_match_synt_result4.showlegend = False
                     fig3.add_trace(trace_match_synt_result4, row=4, col=1)
-            color_index = (color_index + 28) % num_combinations
+            color_index = (color_index + 14) % num_combinations
         result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result)):
             trace_detect_synt = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True,  text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
@@ -352,7 +352,7 @@ def oxford():
                         traces.append (go.Scatter(x = xvals, y=yval, arg=sett))
                         fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett, showlegend=True), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
     button_list = []
@@ -420,7 +420,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     if not (np.isnan(xval).any() or np.isnan(yval).any()):
                         fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett, showlegend=True), row=3, col=3)
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
     fig5.write_html(f"./html/oxford/oxford_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxford_{name}.html", "a") as f:
@@ -461,7 +461,7 @@ def oxford_timing():
                     fig6.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig6.add_trace(trace_match_synt_result4, row=2, col=1)
                     trace_match_synt_result4.showlegend = False
                     fig6.add_trace(trace_match_synt_result4, row=4, col=1)
-            color_index = (color_index + 28) % num_combinations            
+            color_index = (color_index + 14) % num_combinations            
         result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result)):
             trace_detect_oxford = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
@@ -515,7 +515,7 @@ def oxford_timing2():
                         traces.append(trace)
                         fig14.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations 
+            color_index = (color_index + 14) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, axis in enumerate(dropdown_xaxis):
@@ -567,7 +567,7 @@ def single(data="drone"):
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -647,7 +647,7 @@ def single_timing(data="drone"):
                     fig12.add_trace(trace_match_synt_result4, row=1, col=1) if m == 0 else fig12.add_trace(trace_match_synt_result4, row=2, col=1)
                     trace_match_synt_result4.showlegend = False
                     fig12.add_trace(trace_match_synt_result4, row=4, col=1)
-            color_index = (color_index + 28) % num_combinations
+            color_index = (color_index + 14) % num_combinations
         result = np.nanmean(Exec_time[:, :, :, i, :, 4])
         if not (result == 0 or np.isnan(result)):
             trace_detect = go.Bar(x=[DetectorsLegend[i]],  y=[result],  name=f".{DetectorsLegend[i]}",  showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
@@ -703,7 +703,7 @@ def single_timing2(data="drone"):
                         traces.append(trace)
                         fig13.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
     button_list = []
     for idx, xaxis in enumerate(dropdown_xaxis):
@@ -769,7 +769,7 @@ def synthetic_timing_mobile():
                     trace_match_synt_result4m.showlegend = False
                     fig15.add_trace(trace_match_synt_result4m, row=4, col=1)
                 
-            color_index = (color_index + 28) % num_combinations
+            color_index = (color_index + 14) % num_combinations
         result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
         resultm= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, :, :, i, :, 4], Exec_time_scale_mobile[:, :, :, i, :, 4], Exec_time_rot_mobile[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result) or resultm == 0 or np.isnan(resultm)):
@@ -857,7 +857,7 @@ def oxford_timing_mobile():
                     trace_match_synt_result4m.showlegend = False
                     fig6.add_trace(trace_match_synt_result4m, row=4, col=1)
                 
-            color_index = (color_index + 28) % num_combinations            
+            color_index = (color_index + 14) % num_combinations            
         result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
         resultm= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, :, :, i, :, 4], Exec_time_wall_mobile[:, :, :, i, :, 4], Exec_time_trees_mobile[:, :, :, i, :, 4], Exec_time_bikes_mobile[:, :, :, i, :, 4], Exec_time_bark_mobile[:, :, :, i, :, 4], Exec_time_boat_mobile[:, :, :, i, :, 4], Exec_time_leuven_mobile[:, :, :, i, :, 4], Exec_time_ubc_mobile[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result) or resultm == 0 or np.isnan(resultm)):
@@ -916,7 +916,7 @@ def rep_err(data="drone"):
                         traces.append(trace)
                         fig14.add_trace(trace)
                     symbol_index = (symbol_index + 1) % 27
-            color_index = (color_index + 26) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     
     fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.045)])
     file = f"./html/{data}/{data}_reprojection_error.html"
