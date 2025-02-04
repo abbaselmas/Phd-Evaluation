@@ -15,7 +15,10 @@ Norm              = ["L2", "HAM"]
 Matcher           = ["BF", "Flann"]
 
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
-colors = sample_colorscale("Turbo", [i / num_combinations for i in range(num_combinations)])
+colors = sample_colorscale("IceFire", [i / num_combinations for i in range(num_combinations)]) #Turbo, Jet, Rainbow, HSV, IceFire, Edge, Phase, Electric, Bluered, Inferno
+marker_symbols = []
+for base in range(14):
+    marker_symbols.extend([base, base + 100, base + 200, base + 300])
 
 ### detectors/descriptors 5
 sift  = cv2.SIFT_create(nfeatures=30000, nOctaveLayers=3, contrastThreshold=0.04, edgeThreshold=10.0, sigma=1.6)
