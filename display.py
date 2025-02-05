@@ -44,6 +44,8 @@ function applyFilters() {
     };
     var filterMode = document.querySelector('input[name="filterMode"]:checked').value;
     textFilteredTraces.clear();
+    let uniqueLegendNames = new Set();
+    let visibleTraces = [];
 
     for (let i = 0; i < data.length; i++) {
         var traceName = data[i].name || "";
@@ -61,15 +63,22 @@ function applyFilters() {
                 showTrace = true;
                 textFilteredTraces.add(i);
                 visibleTraceCount++;
+                visibleTraces.push({ index: i, name: traceName });
             }
         }
     }
     let update = { visible: [], showlegend: [] };
+    let legendSet = new Set();
     data.forEach((trace, index) => {
         if (textFilteredTraces.has(index)) {
             if (selectedPoints.size === 0 || selectedPoints.has(index)) {
                 update.visible.push(true);
-                update.showlegend.push(true);
+                if (!legendSet.has(trace.name)) {
+                    update.showlegend.push(true);
+                    legendSet.add(trace.name);
+                } else {
+                    update.showlegend.push(false);
+                }
             } else {
                 update.visible.push("legendonly");
                 update.showlegend.push(false);
@@ -79,7 +88,6 @@ function applyFilters() {
             update.showlegend.push(false);
         }
     });
-    
     document.getElementById('trace-count').innerText = "Total Traces: " + visibleTraceCount;
     Plotly.restyle(plot, update);
 }
@@ -180,7 +188,7 @@ def synthetic():
                                 name=legend_groupfig1, legendgroup=legend_groupfig1, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate2_I1).any()):
                         traces.append (go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
-                        fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett),  row=1, col=1)
+                        fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
                     if not (np.isnan(Rate2_I2).any()):   
                         traces.append (go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
                         fig1.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
@@ -438,9 +446,9 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=10, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig5, showlegend=False, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
+                                name=legend_groupfig5, showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate_Graf_x).any()     or (np.isnan(Rate_Graf_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett),  row=1, col=1)
+                        fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett), row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()    or (np.isnan(Rate_Bikes_y).any())):
                         fig5.add_trace(go.Scatter(x=[Rate_Bikes_x],  y=[Rate_Bikes_y],  arg=sett), row=1, col=2)
                     if not (np.isnan(Rate_Boat_x).any()     or (np.isnan(Rate_Boat_y).any())):
@@ -458,7 +466,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     xval = np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)
                     yval = np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)
                     if not (np.isnan(xval).any() or np.isnan(yval).any()):
-                        fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett, showlegend=True), row=3, col=3)
+                        fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
@@ -761,7 +769,7 @@ def synthetic_timing_mobile():
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
-                    fig15.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result3,  row=2, col=1)
+                    fig15.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result3, row=2, col=1)
                     trace_match_synt_result3m= go.Bar(  x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]], ["mobile"]], y=[result3m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m",
                                                         text=[f"{result3m:.3f}"], marker_color=colors[color_index],
@@ -777,7 +785,7 @@ def synthetic_timing_mobile():
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
-                    fig15.add_trace(trace_match_synt_result4,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result4,  row=2, col=1)
+                    fig15.add_trace(trace_match_synt_result4,  row=1, col=1) if m == 0 else fig15.add_trace(trace_match_synt_result4, row=2, col=1)
                     trace_match_synt_result4m= go.Bar(  x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]], ["mobile"]], y=[result4m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m",
                                                         text=[f"{result4m:.3f}"], marker_color=colors[color_index],
@@ -793,15 +801,15 @@ def synthetic_timing_mobile():
         result = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, i, :, 4], Exec_time_scale[:, :, :, i, :, 4], Exec_time_rot[:, :, :, i, :, 4]), axis=0))
         resultm= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, :, :, i, :, 4], Exec_time_scale_mobile[:, :, :, i, :, 4], Exec_time_rot_mobile[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result) or resultm == 0 or np.isnan(resultm)):
-            trace_detect_synt  = go.Bar(x=[[DetectorsLegend[i]],["pc"]],     y=[result],  name=f".{DetectorsLegend[i]}-p",    showlegend=True,  text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
-            trace_detect_syntm = go.Bar(x=[[DetectorsLegend[i]],["mobile"]], y=[resultm], name=f".{DetectorsLegend[i]}-m",  showlegend=True,  text=[f"{resultm:.3f}"], marker=dict(color = colors[14*i]))
+            trace_detect_synt  = go.Bar(x=[[DetectorsLegend[i]],["pc"]],     y=[result],  name=f".{DetectorsLegend[i]}-p", showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
+            trace_detect_syntm = go.Bar(x=[[DetectorsLegend[i]],["mobile"]], y=[resultm], name=f".{DetectorsLegend[i]}-m", showlegend=True, text=[f"{resultm:.3f}"], marker=dict(color = colors[14*i]))
             fig15.add_trace(trace_detect_synt,  row=5, col=1)
             fig15.add_trace(trace_detect_syntm, row=5, col=1)
         
         result2 = np.nanmean(np.concatenate((Exec_time_intensity[:, :, :, :, i, 5], Exec_time_scale[:, :, :, :, i, 5], Exec_time_rot[:, :, :, :, i, 5]), axis=0))
         result2m= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, :, :, :, i, 5], Exec_time_scale_mobile[:, :, :, :, i, 5], Exec_time_rot_mobile[:, :, :, :, i, 5]), axis=0))
         if not (result2 == 0 or np.isnan(result2) or result2m == 0 or np.isnan(result2m)):
-            trace_descr_synt  = go.Bar(x=[[DescriptorsLegend[i]],["pc"]],     y=[result2],  name=f"-{DescriptorsLegend[i]}-p",   showlegend=True, text=[f"{result2:.3f}"],  marker=dict(color = colors[14*i]))
+            trace_descr_synt  = go.Bar(x=[[DescriptorsLegend[i]],["pc"]],     y=[result2],  name=f"-{DescriptorsLegend[i]}-p", showlegend=True, text=[f"{result2:.3f}"],  marker=dict(color = colors[14*i]))
             trace_descr_syntm = go.Bar(x=[[DescriptorsLegend[i]],["mobile"]], y=[result2m], name=f"-{DescriptorsLegend[i]}-m", showlegend=True, text=[f"{result2m:.3f}"], marker=dict(color = colors[14*i]))
             fig15.add_trace(trace_descr_synt,  row=5, col=2)
             fig15.add_trace(trace_descr_syntm, row=5, col=2)
@@ -871,7 +879,7 @@ def oxford_timing_mobile():
         result = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, i, :, 4], Exec_time_wall[:, :, :, i, :, 4], Exec_time_trees[:, :, :, i, :, 4], Exec_time_bikes[:, :, :, i, :, 4], Exec_time_bark[:, :, :, i, :, 4], Exec_time_boat[:, :, :, i, :, 4], Exec_time_leuven[:, :, :, i, :, 4], Exec_time_ubc[:, :, :, i, :, 4]), axis=0))
         resultm= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, :, :, i, :, 4], Exec_time_wall_mobile[:, :, :, i, :, 4], Exec_time_trees_mobile[:, :, :, i, :, 4], Exec_time_bikes_mobile[:, :, :, i, :, 4], Exec_time_bark_mobile[:, :, :, i, :, 4], Exec_time_boat_mobile[:, :, :, i, :, 4], Exec_time_leuven_mobile[:, :, :, i, :, 4], Exec_time_ubc_mobile[:, :, :, i, :, 4]), axis=0))
         if not (result == 0 or np.isnan(result) or resultm == 0 or np.isnan(resultm)):
-            trace_detect_oxford = go.Bar(x=[[DetectorsLegend[i]],["pc"]],     y=[result],  name=f".{DetectorsLegend[i]}-p",   showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
+            trace_detect_oxford = go.Bar(x=[[DetectorsLegend[i]],["pc"]],     y=[result],  name=f".{DetectorsLegend[i]}-p", showlegend=True, text=[f"{result:.3f}"],  marker=dict(color = colors[14*i]))
             trace_detect_oxfordm= go.Bar(x=[[DetectorsLegend[i]],["mobile"]], y=[resultm], name=f".{DetectorsLegend[i]}-m", showlegend=True, text=[f"{resultm:.3f}"], marker=dict(color = colors[14*i]))
             fig6.add_trace(trace_detect_oxford,  row=5, col=1)
             fig6.add_trace(trace_detect_oxfordm, row=5, col=1)
@@ -879,7 +887,7 @@ def oxford_timing_mobile():
         result2 = np.nanmean(np.concatenate((Exec_time_graf[:, :, :, :, i, 5], Exec_time_wall[:, :, :, :, i, 5], Exec_time_trees[:, :, :, :, i, 5], Exec_time_bikes[:, :, :, :, i, 5], Exec_time_bark[:, :, :, :, i, 5], Exec_time_boat[:, :, :, :, i, 5], Exec_time_leuven[:, :, :, :, i, 5], Exec_time_ubc[:, :, :, :, i, 5]), axis=0))
         result2m= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, :, :, :, i, 5], Exec_time_wall_mobile[:, :, :, :, i, 5], Exec_time_trees_mobile[:, :, :, :, i, 5], Exec_time_bikes_mobile[:, :, :, :, i, 5], Exec_time_bark_mobile[:, :, :, :, i, 5], Exec_time_boat_mobile[:, :, :, :, i, 5], Exec_time_leuven_mobile[:, :, :, :, i, 5], Exec_time_ubc_mobile[:, :, :, :, i, 5]), axis=0))
         if not (result2 == 0 or np.isnan(result2) or result2m == 0 or np.isnan(result2m)):
-            trace_descr_oxford = go.Bar(x=[[DescriptorsLegend[i]],["pc"]],     y=[result2],  name=f"-{DescriptorsLegend[i]}-p",   showlegend=True, text=[f"{result2:.3f}"],  marker=dict(color = colors[14*i]))
+            trace_descr_oxford = go.Bar(x=[[DescriptorsLegend[i]],["pc"]],     y=[result2],  name=f"-{DescriptorsLegend[i]}-p", showlegend=True, text=[f"{result2:.3f}"],  marker=dict(color = colors[14*i]))
             trace_descr_oxfordm= go.Bar(x=[[DescriptorsLegend[i]],["mobile"]], y=[result2m], name=f"-{DescriptorsLegend[i]}-m", showlegend=True, text=[f"{result2m:.3f}"], marker=dict(color = colors[14*i]))
             fig6.add_trace(trace_descr_oxford,  row=5, col=2)
             fig6.add_trace(trace_descr_oxfordm, row=5, col=2)
