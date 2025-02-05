@@ -99,6 +99,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });    
     plot.on('plotly_deselect', function() {
         selectedPoints.clear();
+        Plotly.relayout(plot, {
+            'dragmode': 'lasso',
+            'selectedpoints': null
+        });
         applyFilters();
     });
 });
@@ -294,7 +298,7 @@ def synthetic_timing():
 
 def synthetic_timing2():
     fig15 = go.Figure()
-    fig15.update_layout(title_text="<b>Synthetic Data Overall Timings</b>", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig15.update_layout(title_text="<b>Synthetic Data Overall Timings</b>", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -516,7 +520,7 @@ def oxford_timing():
 
 def oxford_timing2():
     fig14 = go.Figure()
-    fig14.update_layout(title_text=f"<b>Oxford Data - Timings</b>", title_x=0.5, title_xanchor="center", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
+    fig14.update_layout(title_text=f"<b>Oxford Data - Timings</b>", title_x=0.5, title_xanchor="center", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
     color_index = 0
     symbol_index = 0
     traces = []
