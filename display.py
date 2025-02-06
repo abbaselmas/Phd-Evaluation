@@ -420,7 +420,8 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
     fig5 = go.Figure()
     fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.05, vertical_spacing=0.06, x_title=f"<span style='font-size: 12px;'>{name.split('-')[0]}</span>", y_title=f"<span style='font-size: 12px;'>{name.split('-')[1]}</span>")
-    fig5.update_layout(title_text=f"<b>Oxford Affine Dataset - {name}</b>", title_x=0.5, hovermode="x", uirevision="73", margin=dict(l=60, r=20, t=60, b=50))
+    sett_axis = dict(autorange=False, range=[0, 1])
+    fig5.update_layout(title_text=f"<b>Oxford Affine Dataset - {name}</b>", title_x=0.5, hovermode="x", uirevision="73", margin=dict(l=60, r=20, t=60, b=50), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -446,7 +447,7 @@ def oxfordMulti(name="Precision-Recall", x=13, y=12):
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=10, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig5, showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
+                                name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
                     if not (np.isnan(Rate_Graf_x).any()     or (np.isnan(Rate_Graf_y).any())):
                         fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett), row=1, col=1)
                     if not (np.isnan(Rate_Bikes_x).any()    or (np.isnan(Rate_Bikes_y).any())):
