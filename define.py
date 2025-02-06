@@ -15,7 +15,7 @@ Norm              = ["L2", "HAM"]
 Matcher           = ["BF", "Flann"]
 
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
-colors = sample_colorscale("IceFire", [i / num_combinations for i in range(num_combinations)]) #Turbo, Jet, Rainbow, HSV, IceFire, Edge, Phase, Electric, Bluered, Inferno
+colors = sample_colorscale("IceFire", [i / num_combinations for i in range(num_combinations)]) #Portland, Turbo, Rainbow, HSV, IceFire, Phase, Electric, Inferno, mrybm
 marker_symbols = []
 for base in range(14):
     marker_symbols.extend([base, base + 100, base + 200, base + 300])
