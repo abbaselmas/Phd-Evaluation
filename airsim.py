@@ -14,8 +14,8 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
     for filename in files:
         img.append(cv2.imread(os.path.join(image_folder, filename)))
     
-    Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate      = np.load(f"./arrays/Rate_{folder}{mobile}.npy")      if os.path.exists(f"./arrays/Rate_{folder}{mobile}.npy")      else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((len(img)-1, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
@@ -96,15 +96,19 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
                             for m in range(2):
                                 path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
                                 if os.path.isfile(f"{path}.db"):
-                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Small_Buildings/droneResized", path, 
+                                    maps = pycolmap.incremental_mapping(f"{path}.db", image_folder, path, 
                                                                         pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
                                     # pycolmap.bundle_adjustment(maps[0])
                                     # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
                                     # print(maps[0].summary())
                                     try:
                                         Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
+                                        maps = pycolmap.Reconstruction(f"{path}/0")
+                                        num_3d_points = len(maps.points3D)
+                                        Rate[:, m, c3, i, j, 16] = num_3d_points
                                     except:
                                         Rate[:, m, c3, i, j, 11] = None
+                                        Rate[:, m, c3, i, j, 16] = None
                     else:
                         continue
             else:

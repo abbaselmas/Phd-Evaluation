@@ -7,8 +7,8 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
     print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
-    Rate      = np.load(f"./arrays/Rate_{folder}.npy")      if os.path.exists(f"./arrays/Rate_{folder}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_{folder}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Rate      = np.load(f"./arrays/Rate_{folder}{mobile}.npy")      if os.path.exists(f"./arrays/Rate_{folder}{mobile}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
