@@ -5,11 +5,10 @@ from define import *
 from database import *
 import pycolmap
 
-def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=True, reconstruct=False):
+def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
     image_folder = "./Datasets/AirSimNH/Layer3/pitch-90_yaw0"
-    # Read all the images within image folder into img in order
     img = []
     files = sorted(os.listdir(image_folder))
     for filename in files:
@@ -112,5 +111,8 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
                 continue
     
     if save:
-        np.save(f"./arrays/Rate_{folder}.npy",      Rate)
-        np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
+        np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, folder, mobile)
+        saveAllCSV(Rate, Exec_time, folder, mobile)
+    print(time.ctime() + f" {folder} finished")

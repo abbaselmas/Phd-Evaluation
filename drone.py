@@ -5,7 +5,7 @@ from define import *
 from database import *
 import pycolmap
 
-def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, reconstruct=False):
+def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
@@ -109,5 +109,8 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, recons
                 continue
     
     if save:
-        np.save(f"./arrays/Rate_{folder}.npy",      Rate)
-        np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
+        np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, folder, mobile)
+        saveAllCSV(Rate, Exec_time, folder, mobile)
+    print(time.ctime() + f" {folder} finished")

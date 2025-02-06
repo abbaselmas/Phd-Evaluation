@@ -3,7 +3,7 @@ import numpy as np
 import time, os
 from define import *
 
-def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
+def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
     print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
@@ -63,6 +63,8 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True):
             else:
                 continue
     if save:
-        np.save(f"./arrays/Rate_{folder}.npy",      Rate)
-        np.save(f"./arrays/Exec_time_{folder}.npy", Exec_time)
+        np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
+        np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, folder, mobile)
+        saveAllCSV(Rate, Exec_time, folder, mobile)
     print(time.ctime() + f" {folder} finished")

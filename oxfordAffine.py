@@ -67,4 +67,6 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
     if save:
         np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
+        saveAverageCSV(Rate, Exec_time, folder, mobile)
+        saveAllCSV(Rate, Exec_time, folder, mobile)
     print(time.ctime() + f" {folder} finished")
