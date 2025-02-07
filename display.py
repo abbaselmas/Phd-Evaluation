@@ -164,13 +164,12 @@ Exec_time_airsim            = np.load("./arrays/Exec_time_airsim.npy")
 ########################
 # MARK: - Synthetic Data
 ########################
-def synthetic():
+def syntheticAll4():
     fig1 = go.Figure()
-    fig1 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
-                            horizontal_spacing=0.04, vertical_spacing=0.045)
+    fig1 = make_subplots(rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"], horizontal_spacing=0.04, vertical_spacing=0.045)
     fig1.update_layout(title_text="<b>Synthetic Dataset</b>", title_x=0.5, title_y=0.97, title_xanchor="center", hovermode="x", margin=dict(l=20, r=20, t=60, b=20))
     sett_axis = dict(autorange=False, range=[0, 1])
-    fig1.update_layout( xaxis = dict(tickvals = val_b), xaxis2 = dict(tickvals = val_c), xaxis3 = dict(tickvals = scale), xaxis4 = dict(tickvals = rot), uirevision="73", yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
+    fig1.update_layout(yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
     color_index = 0
     symbol_index = 0
     traces = []
@@ -178,86 +177,127 @@ def synthetic():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate2_I1 = [Rate_intensity[:len(val_b), m, c3, i, j, 13], Rate_intensity[:len(val_b), m, c3, i, j, 12], Rate_intensity[:len(val_b), m, c3, i, j, 14], Rate_intensity[:len(val_b), m, c3, i, j, 15], Rate_intensity[:len(val_b), m, c3, i, j, 9], Rate_intensity[:len(val_b), m, c3, i, j, 10]]
-                    Rate2_I2 = [Rate_intensity[len(val_c):, m, c3, i, j, 13], Rate_intensity[len(val_c):, m, c3, i, j, 12], Rate_intensity[len(val_c):, m, c3, i, j, 14], Rate_intensity[len(val_c):, m, c3, i, j, 15], Rate_intensity[len(val_c):, m, c3, i, j, 9], Rate_intensity[len(val_c):, m, c3, i, j, 10]]
-                    Rate2_S  = [Rate_scale    [          :, m, c3, i, j, 13], Rate_scale    [          :, m, c3, i, j, 12], Rate_scale    [          :, m, c3, i, j, 14], Rate_scale    [          :, m, c3, i, j, 15], Rate_scale    [          :, m, c3, i, j, 9], Rate_scale    [          :, m, c3, i, j, 10]]
-                    Rate2_R  = [Rate_rot      [          :, m, c3, i, j, 13], Rate_rot      [          :, m, c3, i, j, 12], Rate_rot      [          :, m, c3, i, j, 14], Rate_rot      [          :, m, c3, i, j, 15], Rate_rot      [          :, m, c3, i, j, 9], Rate_rot      [          :, m, c3, i, j, 10]]
+                    Rate2_I1 = [Rate_intensity[:len(val_b), m, c3, i, j, 13], Rate_intensity[:len(val_b), m, c3, i, j, 12], Rate_intensity[:len(val_b), m, c3, i, j, 14], Rate_intensity[:len(val_b), m, c3, i, j, 15], Rate_intensity[:len(val_b), m, c3, i, j, 9], Rate_intensity[:len(val_b), m, c3, i, j, 10], Exec_time_intensity[:len(val_b), m, c3, i, j, 6], Exec_time_intensity[:len(val_b), m, c3, i, j, 7]]
+                    Rate2_I2 = [Rate_intensity[len(val_c):, m, c3, i, j, 13], Rate_intensity[len(val_c):, m, c3, i, j, 12], Rate_intensity[len(val_c):, m, c3, i, j, 14], Rate_intensity[len(val_c):, m, c3, i, j, 15], Rate_intensity[len(val_c):, m, c3, i, j, 9], Rate_intensity[len(val_c):, m, c3, i, j, 10], Exec_time_intensity[len(val_c):, m, c3, i, j, 6], Exec_time_intensity[len(val_c):, m, c3, i, j, 7]]
+                    Rate2_S  = [Rate_scale    [          :, m, c3, i, j, 13], Rate_scale    [          :, m, c3, i, j, 12], Rate_scale    [          :, m, c3, i, j, 14], Rate_scale    [          :, m, c3, i, j, 15], Rate_scale    [          :, m, c3, i, j, 9], Rate_scale    [          :, m, c3, i, j, 10], Exec_time_scale    [          :, m, c3, i, j, 6], Exec_time_scale    [          :, m, c3, i, j, 7]]
+                    Rate2_R  = [Rate_rot      [          :, m, c3, i, j, 13], Rate_rot      [          :, m, c3, i, j, 12], Rate_rot      [          :, m, c3, i, j, 14], Rate_rot      [          :, m, c3, i, j, 15], Rate_rot      [          :, m, c3, i, j, 9], Rate_rot      [          :, m, c3, i, j, 10], Exec_time_rot      [          :, m, c3, i, j, 6], Exec_time_rot      [          :, m, c3, i, j, 7]]
                     legend_groupfig1 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=12, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig1, legendgroup=legend_groupfig1, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not (np.isnan(Rate2_I1).any()):
-                        traces.append (go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
-                        fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
-                    if not (np.isnan(Rate2_I2).any()):   
-                        traces.append (go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
-                        fig1.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
-                    if not (np.isnan(Rate2_S).any()):              
-                        traces.append (go.Scatter(x=scale, y=Rate2_S,     arg=sett))
-                        fig1.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
-                    if not (np.isnan(Rate2_R).any()):
-                        traces.append (go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
-                        fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
+                    # Intensity changing I+b
+                    traces.append (go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
+                    fig1.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
+                    # Intensity changing Ixc
+                    traces.append (go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
+                    fig1.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
+                    # Scale changing
+                    traces.append (go.Scatter(x=scale, y=Rate2_S,     arg=sett))
+                    fig1.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
+                    # Rotation changing
+                    traces.append (go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
+                    fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-            color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
+        color_index = (color_index + 14) % num_combinations
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": y, "yaxis2.title": y, "yaxis3.title": y, "yaxis4.title": y}]))
     
     fig1.update_layout(updatemenus=[    dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, x=0, xanchor="left", y=1.06, direction="down")]) 
-    fig1.write_html(f"./html/synthetic/synthetic.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic/synthetic.html", "a") as f:
+    fig1.write_html(f"./html/synthetic/syntheticAll4.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/syntheticAll4.html", "a") as f:
         f.write(custom_html)
 
-#########################################
-# MARK: - Synthetic Data Precision-Recall
-#########################################
-def syntheticMulti(name="Precision-Recall", x=13, y=12):
+def synthetic4():
     fig2 = go.Figure()
-    fig2 = make_subplots(   rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"],
-                            horizontal_spacing=0.05, vertical_spacing=0.06, x_title=f"<span style='font-size: 12px;'>{name.split('-')[0]}</span>", y_title=f"<span style='font-size: 12px;'>{name.split('-')[1]}</span>")
-    fig2.update_layout(title_text=f"<b>Synthetic Dataset - {name}</b>", title_x=0.5, hovermode="x", uirevision="73", margin=dict(l=60, r=20, t=60, b=50))
+    fig2 = make_subplots(rows=2, cols=2, subplot_titles=["Intensity changing I+b", "Intensity changing Ixc", "Scale changing", "Rotation changing"], horizontal_spacing=0.06, vertical_spacing=0.1)
+    fig2.update_layout(title_text=f"<b>Synthetic Dataset</b>", title_x=0.5, title_y=0.97, title_xanchor="center", hovermode="x", margin=dict(l=60, r=20, t=60, b=50))
+    sett_axis = dict(autorange=False, range=[0, 1])
+    fig2.update_layout( xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis,
+                        yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
     color_index = 0
     symbol_index = 0
+    traces = []
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate2_I1_x = np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, x])
-                    Rate2_I1_y = np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, y])
-                    Rate2_I2_x = np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, x])
-                    Rate2_I2_y = np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, y])
-                    Rate2_S_x  = np.nanmean(Rate_scale    [          :, m, c3, i, j, x])
-                    Rate2_S_y  = np.nanmean(Rate_scale    [          :, m, c3, i, j, y])
-                    Rate2_R_x  = np.nanmean(Rate_rot      [          :, m, c3, i, j, x])
-                    Rate2_R_y  = np.nanmean(Rate_rot      [          :, m, c3, i, j, y])
+                    xydata_Intensity1 = [
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 13]),       # Precision
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 12]),       # Recall
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 14]),       # Repeatibility
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 15]),       # F1 Score
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]),       # Inliers
+                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]),       # Matches
+                        np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]),   # 1K Total Time
+                        np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7])    # 1K feature Inlier Time
+                    ]
+                    xydata_Intensity2 = [
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 13]),       # Precision
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 12]),       # Recall
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 14]),       # Repeatibility
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 15]),       # F1 Score
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]),       # Inliers
+                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]),       # Matches
+                        np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]),   # 1K Total Time
+                        np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7])    # 1K feature Inlier Time
+                    ]
+                    xydata_Scale = [
+                        np.nanmean(Rate_scale[:, m, c3, i, j, 13]),       # Precision
+                        np.nanmean(Rate_scale[:, m, c3, i, j, 12]),       # Recall
+                        np.nanmean(Rate_scale[:, m, c3, i, j, 14]),       # Repeatibility
+                        np.nanmean(Rate_scale[:, m, c3, i, j, 15]),       # F1 Score
+                        np.nanmean(Rate_scale[:, m, c3, i, j,  9]),       # Inliers
+                        np.nanmean(Rate_scale[:, m, c3, i, j, 10]),       # Matches
+                        np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]),   # 1K Total Time
+                        np.nanmean(Exec_time_scale[:, m, c3, i, j, 7])    # 1K feature Inlier Time
+                    ]
+                    xydata_Rotation = [
+                        np.nanmean(Rate_rot[:, m, c3, i, j, 13]),       # Precision
+                        np.nanmean(Rate_rot[:, m, c3, i, j, 12]),       # Recall
+                        np.nanmean(Rate_rot[:, m, c3, i, j, 14]),       # Repeatibility
+                        np.nanmean(Rate_rot[:, m, c3, i, j, 15]),       # F1 Score
+                        np.nanmean(Rate_rot[:, m, c3, i, j,  9]),       # Inliers
+                        np.nanmean(Rate_rot[:, m, c3, i, j, 10]),       # Matches
+                        np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]),   # 1K Total Time
+                        np.nanmean(Exec_time_rot[:, m, c3, i, j, 7])    # 1K feature Inlier Time
+                    ]
                     legend_groupfig2 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=12, color=colors[color_index]),
                                 name=legend_groupfig2, legendgroup=legend_groupfig2, showlegend=True,
-                                hovertemplate=f"{name.split('-')[0]}:" + "%{x:.3f} | " + f"{name.split('-')[1]}:" + "%{y:.3f}")
-                    if not (np.isnan(Rate2_I1_x).any() or (np.isnan(Rate2_I1_y).any())):
-                        fig2.add_trace(go.Scatter(  x=[Rate2_I1_x], y=[Rate2_I1_y], arg=sett), row=1, col=1)
-                    if not (np.isnan(Rate2_I2_x).any() or (np.isnan(Rate2_I2_y).any())):
-                        fig2.add_trace(go.Scatter(  x=[Rate2_I2_x], y=[Rate2_I2_y], arg=sett), row=1, col=2)
-                    if not (np.isnan(Rate2_S_x).any()  or (np.isnan(Rate2_S_y).any())):
-                        fig2.add_trace(go.Scatter(  x=[Rate2_S_x],  y=[Rate2_S_y],  arg=sett), row=2, col=1)
-                    if not (np.isnan(Rate2_R_x).any()  or (np.isnan(Rate2_R_y).any())):
-                        fig2.add_trace(go.Scatter(  x=[Rate2_R_x],  y=[Rate2_R_y],  arg=sett), row=2, col=2)
+                                hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
+                    # Intensity changing I+b
+                    traces.append(go.Scatter( x=xydata_Intensity1,      y=xydata_Intensity1, arg=sett))
+                    fig2.add_trace(go.Scatter(x=[xydata_Intensity1[0]], y=[xydata_Intensity1[1]], arg=sett), row=1, col=1)
+                    # Intensity changing Ixc
+                    traces.append(go.Scatter( x=xydata_Intensity2,      y=xydata_Intensity2, arg=sett))
+                    fig2.add_trace(go.Scatter(x=[xydata_Intensity2[0]], y=[xydata_Intensity2[1]], arg=sett), row=1, col=2)
+                    # Scale changing
+                    traces.append(go.Scatter( x=xydata_Scale,           y=xydata_Scale,      arg=sett))
+                    fig2.add_trace(go.Scatter(x=[xydata_Scale[0]],      y=[xydata_Scale[1]],      arg=sett), row=2, col=1)
+                    # Rotation changing
+                    traces.append(go.Scatter( x=xydata_Rotation,        y=xydata_Rotation,   arg=sett))
+                    fig2.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-            color_index = (color_index + 14) % num_combinations
-    fig2.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
-    fig2.write_html(f"./html/synthetic/synthetic_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic/synthetic_{name}.html", "a") as f:
+        color_index = (color_index + 14) % num_combinations
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    button_listx = []
+    button_listy = []
+    for idx, axis in enumerate(dropdown_axis):
+        button_listx.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": axis, "xaxis2.title": axis, "xaxis3.title": axis, "xaxis4.title": axis}]))
+        button_listy.append(dict( label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": axis, "yaxis2.title": axis, "yaxis3.title": axis, "yaxis4.title": axis}]))
+    fig2.update_layout(updatemenus=[dict(type="buttons",  buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)])
+    fig2.write_html(f"./html/synthetic/synthetic4.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/synthetic4.html", "a") as f:
         f.write(custom_html)
 
-################################
-# MARK: - Synthetic Data Timing2
-################################
-def synthetic_timing2():
+def synthetic():
     fig15 = go.Figure()
-    fig15.update_layout(title_text="<b>Synthetic Data Overall Timings</b>", title_x=0.5, yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
+    fig15.update_layout(title_text="<b>Synthetic Data</b>", title_x=0.5, title_y=0.97, title_xanchor="center", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -265,38 +305,38 @@ def synthetic_timing2():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):
                 for m in range(2):
-                    x_data = [
+                    xydata = [
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)), # Precision
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)), # Recall
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)), # Repeatibility
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)), # F1 Score
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), # Inliers
-                        np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0))  # Matches
+                        np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), # Matches
+                        np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), # 1K Total Time
+                        np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))  # 1K feature Inlier Time
                     ]
-                    inlierTime = np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))
-                    if not (inlierTime == 0 or np.isnan(inlierTime) or np.isnan(x_data).any()):
-                        trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                            marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
-                                            name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                            showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                        traces.append(trace)
-                        fig15.add_trace(trace)
+                    traces.append(go.Scatter( x=xydata, y=xydata, mode="markers", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
+                    fig15.add_trace(go.Scatter( x=[xydata[0]], y=[xydata[1]], mode="markers", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
-    button_list = []
-    for idx, axis in enumerate(dropdown_xaxis):
-        button_list.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}])) 
-    fig15.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
-                                        dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig15.write_html(f"./html/synthetic/synthetic_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/synthetic/synthetic_timing2.html", "a") as f:
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    button_listx = []
+    button_listy = []
+    for idx, axis in enumerate(dropdown_axis):
+        button_listx.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": axis}]))
+        button_listy.append(dict( label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": axis}]))
+    fig15.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)])
+    fig15.write_html(f"./html/synthetic/synthetic.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/synthetic/synthetic.html", "a") as f:
         f.write(custom_html)
 
-###############################
-# MARK: Synthetic Timing Mobile
-###############################
-def synthetic_timing_mobile():
+def syntheticTiming():
     fig15 = go.Figure()
     fig15 = make_subplots(  rows=5, cols=2, subplot_titles=[f"<span style='font-size: 12px;'>Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)</span>",
                                                             f"<span style='font-size: 12px;'>Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)</span>",
@@ -367,20 +407,20 @@ def synthetic_timing_mobile():
     fig15.update_layout(updatemenus=[   dict(type="buttons",  buttons=[ dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.02),
                                         dict(type="dropdown", buttons=[ dict(label="Linear",   method="relayout", args=[{"yaxis.type": "linear","yaxis2.type": "linear","yaxis3.type": "linear","yaxis4.type": "linear","yaxis5.type": "linear","yaxis6.type": "linear"}]),
                                                                         dict(label="Log",      method="relayout", args=[{"yaxis.type": "log","yaxis2.type": "log","yaxis3.type": "log","yaxis4.type": "log","yaxis5.type": "log","yaxis6.type": "log"}])], x=0, xanchor="left", y=1.02)])
-    fig15.write_html("./html/synthetic/synthetic_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open("./html/synthetic/synthetic_timing_mobile.html", "a") as f:
+    fig15.write_html("./html/synthetic/syntheticTiming.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open("./html/synthetic/syntheticTiming.html", "a") as f:
         f.write(custom_html)
 
-##################################
-# MARK: - Oxford all 8 and Overall
-##################################
-def oxford():
+################
+# MARK: - Oxford
+################
+def oxfordAll9():
     fig4 = go.Figure()
-    fig4 = make_subplots(   rows=3, cols=3, subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
+    fig4 = make_subplots(rows=3, cols=3, subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
                             horizontal_spacing=0.04, vertical_spacing=0.05)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     sett_axis = dict(autorange=False, range=[0, 1])
-    fig4.update_layout( title_text="<b>Oxford Affine Dataset</b>", title_x=0.5, title_xanchor="center", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), uirevision="73", yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
+    fig4.update_layout(title_text="<b>Oxford Affine Dataset</b>", title_x=0.5, title_xanchor="center", hovermode="x", margin=dict(l=20, r=20, t=60, b=20),  yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
     traces = []
@@ -388,128 +428,203 @@ def oxford():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf  = [Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10]]
-                    Rate_Bikes = [Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10]]
-                    Rate_Boat  = [Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10]]
-                    Rate_Leuven= [Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10]]
-                    Rate_Wall  = [Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10]]
-                    Rate_Trees = [Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10]]
-                    Rate_Bark  = [Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10]]
-                    Rate_Ubc   = [Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10]]
+                    Rate_Graf  = [Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10], Exec_time_graf  [:, m, c3, i, j, 6], Exec_time_graf  [:, m, c3, i, j, 7]]
+                    Rate_Bikes = [Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10], Exec_time_bikes [:, m, c3, i, j, 6], Exec_time_bikes [:, m, c3, i, j, 7]]
+                    Rate_Boat  = [Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10], Exec_time_boat  [:, m, c3, i, j, 6], Exec_time_boat  [:, m, c3, i, j, 7]]
+                    Rate_Leuven= [Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 7]]
+                    Rate_Wall  = [Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10], Exec_time_wall  [:, m, c3, i, j, 6], Exec_time_wall  [:, m, c3, i, j, 7]]
+                    Rate_Trees = [Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10], Exec_time_trees [:, m, c3, i, j, 6], Exec_time_trees [:, m, c3, i, j, 7]]
+                    Rate_Bark  = [Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10], Exec_time_bark  [:, m, c3, i, j, 6], Exec_time_bark  [:, m, c3, i, j, 7]]
+                    Rate_Ubc   = [Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10], Exec_time_ubc   [:, m, c3, i, j, 6], Exec_time_ubc   [:, m, c3, i, j, 7]]
                     legend_groupfig4 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig4, legendgroup=legend_groupfig4, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not (np.isnan(Rate_Graf).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
-                    if not (np.isnan(Rate_Bikes).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
-                    if not (np.isnan(Rate_Boat).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
-                    if not (np.isnan(Rate_Leuven).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
-                    if not (np.isnan(Rate_Wall).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
-                    if not (np.isnan(Rate_Trees).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
-                    if not (np.isnan(Rate_Bark).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
-                    if not (np.isnan(Rate_Ubc).any()):
-                        traces.append (go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
+                    # Graf(Viewpoint)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
+                    # Bikes(Blur)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
+                    # Boat(Zoom + Rotation)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
+                    # Leuven(Light)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
+                    # Wall(Viewpoint)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
+                    # Trees(Blur)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
+                    # Bark(Zoom + Rotation)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
+                    # UBC(JPEG)
+                    traces.append (go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
+                    # Overall
                     yval = np.nanmean([Rate_Graf, Rate_Bikes, Rate_Boat, Rate_Leuven, Rate_Wall, Rate_Trees, Rate_Bark, Rate_Ubc], axis=0)
-                    if not (np.isnan(yval).any()):
-                        traces.append (go.Scatter(x = xvals, y=yval, arg=sett))
-                        fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett), row=3, col=3)
+                    traces.append (go.Scatter(x = xvals, y=yval, arg=sett))
+                    fig4.add_trace(go.Scatter(x = xvals, y=np.nanmean([Rate_Graf[0], Rate_Bikes[0], Rate_Boat[0], Rate_Leuven[0], Rate_Wall[0], Rate_Trees[0], Rate_Bark[0], Rate_Ubc[0]], axis=0), arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-            color_index = (color_index + 14) % num_combinations
-    
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1 Score", "Inliers", "Matches"]
+        color_index = (color_index + 14) % num_combinations
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", 
-                                args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": y, "yaxis2.title": y, "yaxis3.title": y, "yaxis4.title": y, "yaxis5.title": y, "yaxis6.title": y, "yaxis7.title": y, "yaxis8.title": y, "yaxis9.title": y}]))
+                                args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis4.title": y}]))
     fig4.update_layout(updatemenus=[    dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
                                         dict(type="dropdown", buttons=button_list, x=0, xanchor="left", y=1.06)])          
-    fig4.write_html(f"./html/oxford/oxford.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford/oxford.html", "a") as f:
+    fig4.write_html(f"./html/oxford/oxfordAll9.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxfordAll9.html", "a") as f:
         f.write(custom_html)
 
-######################
-# MARK: - Oxford Multi
-######################
-def oxfordMulti(name="Precision-Recall", x=13, y=12):
+def oxford9():
     fig5 = go.Figure()
-    fig5 = make_subplots(   rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"],
-                            horizontal_spacing=0.05, vertical_spacing=0.06, x_title=f"<span style='font-size: 12px;'>{name.split('-')[0]}</span>", y_title=f"<span style='font-size: 12px;'>{name.split('-')[1]}</span>")
+    fig5 = make_subplots(rows=3, cols=3,subplot_titles=["Graf(Viewpoint)", "Bikes(Blur)", "Boat(Zoom + Rotation)", "Leuven(Light)", "Wall(Viewpoint)", "Trees(Blur)", "Bark(Zoom + Rotation)", "UBC(JPEG)", "Overall"], horizontal_spacing=0.05, vertical_spacing=0.07)
+    fig5.update_layout(title_text=f"<b>Oxford Affine Dataset</b>", title_x=0.5, title_y=0.97, title_xanchor="center", hovermode="x", margin=dict(l=60, r=20, t=60, b=50))
     sett_axis = dict(autorange=False, range=[0, 1])
-    fig5.update_layout(title_text=f"<b>Oxford Affine Dataset - {name}</b>", title_x=0.5, hovermode="x", uirevision="73", margin=dict(l=60, r=20, t=60, b=50), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
+    fig5.update_layout( xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis, xaxis5=sett_axis, xaxis6=sett_axis, xaxis7=sett_axis, xaxis8=sett_axis, xaxis9=sett_axis,
+                        yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
+    traces = []
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf_x  = np.nanmean(Rate_graf  [:, m, c3, i, j, x])
-                    Rate_Graf_y  = np.nanmean(Rate_graf  [:, m, c3, i, j, y])
-                    Rate_Bikes_x = np.nanmean(Rate_bikes [:, m, c3, i, j, x])
-                    Rate_Bikes_y = np.nanmean(Rate_bikes [:, m, c3, i, j, y])
-                    Rate_Boat_x  = np.nanmean(Rate_boat  [:, m, c3, i, j, x])
-                    Rate_Boat_y  = np.nanmean(Rate_boat  [:, m, c3, i, j, y])
-                    Rate_Leuven_x= np.nanmean(Rate_leuven[:, m, c3, i, j, x])
-                    Rate_Leuven_y= np.nanmean(Rate_leuven[:, m, c3, i, j, y])
-                    Rate_Wall_x  = np.nanmean(Rate_wall  [:, m, c3, i, j, x])
-                    Rate_Wall_y  = np.nanmean(Rate_wall  [:, m, c3, i, j, y])
-                    Rate_Trees_x = np.nanmean(Rate_trees [:, m, c3, i, j, x])
-                    Rate_Trees_y = np.nanmean(Rate_trees [:, m, c3, i, j, y])
-                    Rate_Bark_x  = np.nanmean(Rate_bark  [:, m, c3, i, j, x])
-                    Rate_Bark_y  = np.nanmean(Rate_bark  [:, m, c3, i, j, y])
-                    Rate_Ubc_x   = np.nanmean(Rate_ubc   [:, m, c3, i, j, x])
-                    Rate_Ubc_y   = np.nanmean(Rate_ubc   [:, m, c3, i, j, y])
+                    xydata_Graf = [
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 13]),
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 12]),
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 14]),
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 15]),
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 9]),
+                        np.nanmean(Rate_graf[:, m, c3, i, j, 10]),
+                        np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]),
+                        np.nanmean(Exec_time_graf[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Bikes = [
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Boat = [
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_boat[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_boat[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Leuven = [
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Wall = [
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_wall[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Trees = [
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_trees[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_trees[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Bark = [
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_bark[:, m, c3, i, j, 10]), 
+                        np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_bark[:, m, c3, i, j, 7])
+                    ]
+                    xydata_Ubc = [
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 13]), 
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 12]), 
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 14]), 
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 15]), 
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 9]), 
+                        np.nanmean(Rate_ubc[:, m, c3, i, j, 10]),
+                        np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), 
+                        np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7])
+                    ]
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
-                    sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
-                                line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
-                                name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=True, hovertemplate=f"{name.split('-')[0]}:" + "<b>%{x:.3f}</b> | " + f"{name.split('-')[1]}:"+ "<b>%{y:.3f}</b>")
-                    if not (np.isnan(Rate_Graf_x).any()     or (np.isnan(Rate_Graf_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Graf_x],   y=[Rate_Graf_y],   arg=sett), row=1, col=1)
-                    if not (np.isnan(Rate_Bikes_x).any()    or (np.isnan(Rate_Bikes_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Bikes_x],  y=[Rate_Bikes_y],  arg=sett), row=1, col=2)
-                    if not (np.isnan(Rate_Boat_x).any()     or (np.isnan(Rate_Boat_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Boat_x],   y=[Rate_Boat_y],   arg=sett), row=1, col=3)
-                    if not (np.isnan(Rate_Leuven_x).any()   or (np.isnan(Rate_Leuven_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Leuven_x], y=[Rate_Leuven_y], arg=sett), row=2, col=1)
-                    if not (np.isnan(Rate_Wall_x).any()     or (np.isnan(Rate_Wall_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Wall_x],   y=[Rate_Wall_y],   arg=sett), row=2, col=2)
-                    if not (np.isnan(Rate_Trees_x).any()    or (np.isnan(Rate_Trees_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Trees_x],  y=[Rate_Trees_y],  arg=sett), row=2, col=3)
-                    if not (np.isnan(Rate_Bark_x).any()     or (np.isnan(Rate_Bark_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Bark_x],   y=[Rate_Bark_y],   arg=sett), row=3, col=1)
-                    if not (np.isnan(Rate_Ubc_x).any()      or (np.isnan(Rate_Ubc_y).any())):
-                        fig5.add_trace(go.Scatter(x=[Rate_Ubc_x],    y=[Rate_Ubc_y],    arg=sett), row=3, col=2)
-                    xval = np.nanmean([Rate_Graf_x, Rate_Bikes_x, Rate_Boat_x, Rate_Leuven_x, Rate_Wall_x, Rate_Trees_x, Rate_Bark_x, Rate_Ubc_x], axis=0)
-                    yval = np.nanmean([Rate_Graf_y, Rate_Bikes_y, Rate_Boat_y, Rate_Leuven_y, Rate_Wall_y, Rate_Trees_y, Rate_Bark_y, Rate_Ubc_y], axis=0)
-                    if not (np.isnan(xval).any() or np.isnan(yval).any()):
-                        fig5.add_trace(go.Scatter(  x=[xval], y=[yval], arg=sett), row=3, col=3)
+                    sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=12, color=colors[color_index]),
+                                name=legend_groupfig5, legendgroup=legend_groupfig5, showlegend=False,
+                                hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
+                    # Graf(Viewpoint)
+                    traces.append(go.Scatter( x=xydata_Graf,        y=xydata_Graf,       arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Graf[0]],   y=[xydata_Graf[1]],  arg=sett), row=1, col=1)
+                    # Bikes(Blur)
+                    traces.append(go.Scatter( x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Bikes[0]],  y=[xydata_Bikes[1]], arg=sett), row=1, col=2)
+                    # Boat(Zoom + Rotation)
+                    traces.append(go.Scatter( x=xydata_Boat,        y=xydata_Boat,       arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Boat[0]],   y=[xydata_Boat[1]],  arg=sett), row=1, col=3)
+                    # Leuven(Light)
+                    traces.append(go.Scatter( x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Leuven[0]], y=[xydata_Leuven[1]],arg=sett), row=2, col=1)
+                    # Wall(Viewpoint)
+                    traces.append(go.Scatter( x=xydata_Wall,        y=xydata_Wall,       arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Wall[0]],   y=[xydata_Wall[1]],  arg=sett), row=2, col=2)
+                    # Trees(Blur)
+                    traces.append(go.Scatter( x=xydata_Trees,       y=xydata_Trees,      arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Trees[0]],  y=[xydata_Trees[1]], arg=sett), row=2, col=3)
+                    # Bark(Zoom + Rotation)
+                    traces.append(go.Scatter( x=xydata_Bark,        y=xydata_Bark,       arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Bark[0]],   y=[xydata_Bark[1]],  arg=sett), row=3, col=1)
+                    # UBC(JPEG)
+                    traces.append(go.Scatter( x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
+                    fig5.add_trace(go.Scatter(x=[xydata_Ubc[0]],    y=[xydata_Ubc[1]],   arg=sett), row=3, col=2)
+                    # Overall
+                    yval = np.nanmean([xydata_Graf, xydata_Bikes, xydata_Boat, xydata_Leuven, xydata_Wall, xydata_Trees, xydata_Bark, xydata_Ubc], axis=0)
+                    traces.append(go.Scatter( x=yval,       y=yval,      arg=sett))
+                    fig5.add_trace(go.Scatter(x=[yval[0]],  y=[yval[1]], arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-            color_index = (color_index + 14) % num_combinations
-    fig5.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06)])
-    fig5.write_html(f"./html/oxford/oxford_{name}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford/oxford_{name}.html", "a") as f:
+        color_index = (color_index + 14) % num_combinations
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    button_listx = []
+    button_listy = []
+    for idx, axis in enumerate(dropdown_axis):
+        button_listx.append(dict(label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": axis}]))
+        button_listy.append(dict(label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": axis}]))
+    fig5.update_layout(updatemenus=[dict(type="buttons",  buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)])
+    fig5.write_html(f"./html/oxford/oxford9.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford9.html", "a") as f:
         f.write(custom_html)
 
-########################
-# MARK: - Oxford Timing2
-########################
-def oxford_timing2():
+def oxford():
     fig14 = go.Figure()
-    fig14.update_layout(title_text=f"<b>Oxford Data - Timings</b>", title_x=0.5, title_xanchor="center", yaxis_title="1/Inlier Time", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
+    fig14.update_layout(title_text=f"<b>Oxford Data Timings</b>", title_x=0.5, title_y=0.97, title_xanchor="center", hovermode="x", margin=dict(l=20, r=20, t=60, b=20), xaxis=dict(autorange=False, range=[0, 1]))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -517,38 +632,38 @@ def oxford_timing2():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):
                 for m in range(2):
-                    x_data = [
+                    xydata = [
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),  # Precision
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),  # Recall
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),  # Repeatibility
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),  # F1 Score
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 9],  Rate_bikes[:, m, c3, i, j, 9],  Rate_boat[:, m, c3, i, j, 9],  Rate_leuven[:, m, c3, i, j, 9],  Rate_wall[:, m, c3, i, j, 9],  Rate_trees[:, m, c3, i, j, 9],  Rate_bark[:, m, c3, i, j, 9],  Rate_ubc[:, m, c3, i, j, 9]), axis=0)),   # Inliers
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0))   # Matches
+                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),   # Matches
+                        np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),  # Total Time
+                        np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))   # Inlier Time
                     ]
-                    inlierTime = np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))
-                    if not (inlierTime == 0 or np.isnan(inlierTime) or np.isnan(x_data).any()):
-                        trace = go.Scatter( x=x_data, y=[1/inlierTime], mode="markers", 
-                                            marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
-                                            name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                            showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                        traces.append(trace)
-                        fig14.add_trace(trace)
+                    traces.append(  go.Scatter( x=xydata, y=xydata, mode="markers", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
+                    fig14.add_trace(go.Scatter( x=[xydata[0]], y=[xydata[1]], mode="markers", marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_xaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches"]
-    button_list = []
-    for idx, axis in enumerate(dropdown_xaxis):
-        button_list.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}]))    
-    fig14.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
-                                        dict(type="dropdown", buttons=button_list, direction="up", x=0.55, y=-0.04)])
-    fig14.write_html(f"./html/oxford/oxford_timing2.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford/oxford_timing2.html", "a") as f:
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    button_listx = []
+    button_listy = []
+    for idx, axis in enumerate(dropdown_axis):
+        button_listx.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": axis}]))
+        button_listy.append(dict( label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": axis}]))
+    fig14.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)])
+    fig14.write_html(f"./html/oxford/oxford.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxford.html", "a") as f:
         f.write(custom_html)
 
-############################
-# MARK: Oxford Timing Mobile
-############################
-def oxford_timing_mobile():
+def oxfordTiming():
     fig6 = go.Figure()
     fig6 = make_subplots(  rows=5, cols=2, subplot_titles=[ f"<span style='font-size: 12px;'>Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)</span>",
                                                             f"<span style='font-size: 12px;'>Average 1k Total & Inlier time (Detect + Descript + Match(FLANN) | RANSAC)</span>",
@@ -619,14 +734,14 @@ def oxford_timing_mobile():
     fig6.update_layout(updatemenus=[dict(type="buttons",  buttons=[ dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.02),
                                     dict(type="dropdown", buttons=[ dict(label="Linear",   method="relayout", args=[{"yaxis.type": "linear","yaxis2.type": "linear","yaxis3.type": "linear","yaxis4.type": "linear","yaxis5.type": "linear","yaxis6.type": "linear"}]),
                                                                     dict(label="Log",      method="relayout", args=[{"yaxis.type": "log","yaxis2.type": "log","yaxis3.type": "log","yaxis4.type": "log","yaxis5.type": "log","yaxis6.type": "log"}])], x=0, xanchor="left", y=1.02)])
-    fig6.write_html("./html/oxford/oxford_timing_mobile.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/oxford/oxford_timing_mobile.html", "a") as f:
+    fig6.write_html("./html/oxford/oxfordTiming.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/oxford/oxfordTiming.html", "a") as f:
         f.write(custom_html)
 
-#################################
-# MARK: - Single Data (Drone-UAV)
-#################################
-def single(data="drone"):
+########################################
+# MARK: - Single Data (Drone-UAV-AirSim)
+########################################
+def singleAll(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig7 = go.Figure()
@@ -648,17 +763,14 @@ def single(data="drone"):
                         Rate[:, m, c3, i, j, 15],       # F1 Score
                         Rate[:, m, c3, i, j,  9],       # Inliers
                         Rate[:, m, c3, i, j, 10],       # Matches
-                        Rate[:, m, c3, i, j, 11],       # Reprojection Error
-                        1/Exec_time[:, m, c3, i, j, 6], # 1K Total Time
-                        1/Exec_time[:, m, c3, i, j, 7], # 1K feature Inlier Time
-                        Rate[:, m, c3, i, j, 16]]       # 3D Points Count
-                # if not (np.isnan(y_data).any()):
+                        Exec_time[:, m, c3, i, j, 6],   # 1K Total Time
+                        Exec_time[:, m, c3, i, j, 7],   # 1K feature Inlier Time
+                    ]
                     traces.append(go.Scatter(x=xvals, y=y_data, mode="markers+lines",
                                             marker=dict(symbol=marker_symbols[symbol_index], color=colors[color_index], size=12),
                                             line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                             showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
-                # if not (np.isnan(y_data).any()):
                     fig7.add_trace(go.Scatter(  x=xvals, y=y_data[0], mode="markers+lines",
                                             marker=dict(symbol=marker_symbols[symbol_index], color=colors[color_index], size=12),
                                             line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
@@ -666,21 +778,18 @@ def single(data="drone"):
                                             showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error(pixel)", "1/Total Time(1K)", "1/Inlier Time(1K)", "3D Points Count"]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": y}]))
     
     fig7.update_layout(updatemenus=[dict(type="buttons",  buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
-                                    dict(type="dropdown", buttons=button_list, active=0, x=0, xanchor="left", y=1.06)])
-    fig7.write_html(f"./html/{data}/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}/{data}.html", "a") as f:
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_list, x=0, xanchor="left", y=1.06)])
+    fig7.write_html(f"./html/{data}/{data}All.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}All.html", "a") as f:
         f.write(custom_html)
 
-##########################################
-# MARK: - Single Timing (Drone-UAV-AirSim)
-##########################################
-def single_timing(data="drone"):
+def singleTiming(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig12 = go.Figure()
     fig12 = make_subplots(  rows=5, cols=2, subplot_titles=[f"<span style='font-size: 12px;'>Average 1k Total & Inlier time (Detect + Descript + Match(Brute Force) | RANSAC)</span>",
@@ -729,14 +838,11 @@ def single_timing(data="drone"):
     fig12.update_layout(updatemenus=[   dict(type="buttons",  buttons=[ dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.02),
                                         dict(type="dropdown", buttons=[ dict(label="Linear",   method="relayout", args=[{"yaxis.type": "linear","yaxis2.type": "linear","yaxis3.type": "linear","yaxis4.type": "linear","yaxis5.type": "linear","yaxis6.type": "linear"}]),
                                                                         dict(label="Log",      method="relayout", args=[{"yaxis.type": "log","yaxis2.type": "log","yaxis3.type": "log","yaxis4.type": "log","yaxis5.type": "log","yaxis6.type": "log"}])], x=0, xanchor="left", y=1.02)])
-    fig12.write_html(f"./html/{data}/{data}_timing.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}/{data}_timing.html", "a") as f:
+    fig12.write_html(f"./html/{data}/{data}Timing.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}Timing.html", "a") as f:
         f.write(custom_html)
 
-#############################################
-# MARK: - Single 3D Points (Drone-UAV-AirSim)
-#############################################
-def single_3DPoints(data="drone"):
+def single(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig13 = go.Figure()
@@ -757,29 +863,28 @@ def single_3DPoints(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate[:, m, c3, i, j, 10]),       # Matches
                         np.nanmean(Rate[:, m, c3, i, j, 11]),       # Reprojection Error
-                        1/np.nanmean(Exec_time[:, m, c3, i, j, 6]), # 1K Total Time
-                        1/np.nanmean(Exec_time[:, m, c3, i, j, 7]),  # 1K feature Inlier Time
-                        np.nanmean(Rate[:, m, c3, i, j, 16])] # 3D Points Count
-                    #if not (np.isnan(xydata).any()):
-                    trace = go.Scatter( x=xydata, y=xydata, mode="markers", 
+                        np.nanmean(Exec_time[:, m, c3, i, j, 6]),   # 1K Total Time
+                        np.nanmean(Exec_time[:, m, c3, i, j, 7]),   # 1K feature Inlier Time
+                        np.nanmean(Rate[:, m, c3, i, j, 16])]       # 3D Points Count
+                    traces.append(  go.Scatter(x=xydata, y=xydata, mode="markers", 
                                         marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                        showlegend=True, hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
-                    traces.append(trace)
-                    fig13.add_trace(trace)
+                                        showlegend=True, hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>"))
+                    fig13.add_trace(go.Scatter(x=[xydata[0]], y=[xydata[1]], mode="markers", 
+                                        marker=dict(color=colors[color_index], size=12, symbol=marker_symbols[symbol_index]),
+                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                        showlegend=True, hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error(pixel)", "1/Total Time(1K)", "1/Inlier Time(1K)", "3D Points Count"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error(pixel)", "Total Time(1K)", "Inlier Time(1K)", "3D Points Count"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict( label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": axis}]))
         button_listy.append(dict( label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": axis}]))
-    fig13.update_layout(updatemenus=[   dict(type="buttons", buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
-                                        dict(type="dropdown", buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
-                                        dict(type="dropdown", buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)],
-                        annotations=[   dict(text="X-Axis", x=0,    xref="paper", y=1.03, yref="paper", showarrow=False),
-                                        dict(text="Y-Axis", x=0.14, xref="paper", y=1.03, yref="paper", showarrow=False)])
-    fig13.write_html(f"./html/{data}/{data}_3DPoints.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}/{data}_3DPoints.html", "a") as f:
+    fig13.update_layout(updatemenus=[dict(type="buttons",  buttons=[dict(label="≡ Legend", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1.06),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,    xanchor="left", y=1),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0.14, xanchor="left", y=1)])
+    fig13.write_html(f"./html/{data}/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}.html", "a") as f:
         f.write(custom_html)
