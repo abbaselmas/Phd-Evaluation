@@ -62,7 +62,7 @@ def get_cam_rot(Img, rotationAngle):
 def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Intensity started")
     print("Scenario 1 Intensity")
-    Rate      = np.load(f"./arrays/Rate_intensity{mobile}.npy")      if os.path.exists(f"./arrays/Rate_intensity{mobile}.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Rate      = np.load(f"./arrays/Rate_intensity{mobile}.npy")      if os.path.exists(f"./arrays/Rate_intensity{mobile}.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_intensity{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_intensity{mobile}.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache     = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache   = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
@@ -131,7 +131,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
 def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Scale started")
     print("Scenario 2 Scale")
-    Rate        = np.load(f"./arrays/Rate_scale{mobile}.npy")          if os.path.exists(f"./arrays/Rate_scale{mobile}.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Rate        = np.load(f"./arrays/Rate_scale{mobile}.npy")          if os.path.exists(f"./arrays/Rate_scale{mobile}.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
     Exec_time   = np.load(f"./arrays/Exec_time_scale{mobile}.npy")     if os.path.exists(f"./arrays/Exec_time_scale{mobile}.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
@@ -199,7 +199,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
 def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Rotation started")
     print("Scenario 3 Rotation")
-    Rate          = np.load(f"./arrays/Rate_rot{mobile}.npy")       if os.path.exists(f"./arrays/Rate_rot{mobile}.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 16), np.nan)
+    Rate          = np.load(f"./arrays/Rate_rot{mobile}.npy")       if os.path.exists(f"./arrays/Rate_rot{mobile}.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
     Exec_time     = np.load(f"./arrays/Exec_time_rot{mobile}.npy")  if os.path.exists(f"./arrays/Exec_time_rot{mobile}.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
