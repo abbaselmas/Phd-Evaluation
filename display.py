@@ -645,7 +645,7 @@ def oxford9():
 
 def oxford():
     fig14 = go.Figure()
-    fig14.update_layout(font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Data Timings</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig14.update_layout(font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), xaxis=dict(range=[-0.01, 1.01]), yaxis=dict(range=[-0.01, 1.01]))
     color_index = 0
     symbol_index = 0
