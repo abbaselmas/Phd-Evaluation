@@ -38,13 +38,13 @@ oxford()
 oxfordTiming()
 
 singleAll("drone")
-singleTiming("drone")
 single("drone")
+singleTiming("drone")
 
 singleAll("uav")
-singleTiming("uav")
 single("uav")
+singleTiming("uav")
 
 singleAll("airsim")
-singleTiming("airsim")
 single("airsim")
+singleTiming("airsim")
