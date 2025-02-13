@@ -176,10 +176,10 @@ def syntheticAll4():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate2_I1 = [Rate_intensity[:len(val_b), m, c3, i, j, 13], Rate_intensity[:len(val_b), m, c3, i, j, 12], Rate_intensity[:len(val_b), m, c3, i, j, 14], Rate_intensity[:len(val_b), m, c3, i, j, 15], Rate_intensity[:len(val_b), m, c3, i, j, 9], Rate_intensity[:len(val_b), m, c3, i, j, 10], Exec_time_intensity[:len(val_b), m, c3, i, j, 6], Exec_time_intensity[:len(val_b), m, c3, i, j, 7]]
-                    Rate2_I2 = [Rate_intensity[len(val_c):, m, c3, i, j, 13], Rate_intensity[len(val_c):, m, c3, i, j, 12], Rate_intensity[len(val_c):, m, c3, i, j, 14], Rate_intensity[len(val_c):, m, c3, i, j, 15], Rate_intensity[len(val_c):, m, c3, i, j, 9], Rate_intensity[len(val_c):, m, c3, i, j, 10], Exec_time_intensity[len(val_c):, m, c3, i, j, 6], Exec_time_intensity[len(val_c):, m, c3, i, j, 7]]
-                    Rate2_S  = [Rate_scale    [          :, m, c3, i, j, 13], Rate_scale    [          :, m, c3, i, j, 12], Rate_scale    [          :, m, c3, i, j, 14], Rate_scale    [          :, m, c3, i, j, 15], Rate_scale    [          :, m, c3, i, j, 9], Rate_scale    [          :, m, c3, i, j, 10], Exec_time_scale    [          :, m, c3, i, j, 6], Exec_time_scale    [          :, m, c3, i, j, 7]]
-                    Rate2_R  = [Rate_rot      [          :, m, c3, i, j, 13], Rate_rot      [          :, m, c3, i, j, 12], Rate_rot      [          :, m, c3, i, j, 14], Rate_rot      [          :, m, c3, i, j, 15], Rate_rot      [          :, m, c3, i, j, 9], Rate_rot      [          :, m, c3, i, j, 10], Exec_time_rot      [          :, m, c3, i, j, 6], Exec_time_rot      [          :, m, c3, i, j, 7]]
+                    Rate2_I1 = [Rate_intensity[:len(val_b), m, c3, i, j, 13], Rate_intensity[:len(val_b), m, c3, i, j, 12], Rate_intensity[:len(val_b), m, c3, i, j, 14], Rate_intensity[:len(val_b), m, c3, i, j, 15], Rate_intensity[:len(val_b), m, c3, i, j, 9], Rate_intensity[:len(val_b), m, c3, i, j, 10], 1/Exec_time_intensity[:len(val_b), m, c3, i, j, 6], 1/Exec_time_intensity[:len(val_b), m, c3, i, j, 7]]
+                    Rate2_I2 = [Rate_intensity[len(val_c):, m, c3, i, j, 13], Rate_intensity[len(val_c):, m, c3, i, j, 12], Rate_intensity[len(val_c):, m, c3, i, j, 14], Rate_intensity[len(val_c):, m, c3, i, j, 15], Rate_intensity[len(val_c):, m, c3, i, j, 9], Rate_intensity[len(val_c):, m, c3, i, j, 10], 1/Exec_time_intensity[len(val_c):, m, c3, i, j, 6], 1/Exec_time_intensity[len(val_c):, m, c3, i, j, 7]]
+                    Rate2_S  = [Rate_scale    [          :, m, c3, i, j, 13], Rate_scale    [          :, m, c3, i, j, 12], Rate_scale    [          :, m, c3, i, j, 14], Rate_scale    [          :, m, c3, i, j, 15], Rate_scale    [          :, m, c3, i, j, 9], Rate_scale    [          :, m, c3, i, j, 10], 1/Exec_time_scale    [          :, m, c3, i, j, 6], 1/Exec_time_scale    [          :, m, c3, i, j, 7]]
+                    Rate2_R  = [Rate_rot      [          :, m, c3, i, j, 13], Rate_rot      [          :, m, c3, i, j, 12], Rate_rot      [          :, m, c3, i, j, 14], Rate_rot      [          :, m, c3, i, j, 15], Rate_rot      [          :, m, c3, i, j, 9], Rate_rot      [          :, m, c3, i, j, 10], 1/Exec_time_rot      [          :, m, c3, i, j, 6], 1/Exec_time_rot      [          :, m, c3, i, j, 7]]
                     legend_groupfig1 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
@@ -195,7 +195,7 @@ def syntheticAll4():
                         fig1.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis3.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))    
@@ -225,8 +225,8 @@ def synthetic4():
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 15]),       # F1 Score
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]),       # Matches
-                        np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]),   # 1K Total Time
-                        np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7])    # 1K feature Inlier Time
+                        1/np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]),   # 1K Total Time
+                        1/np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7])    # 1K feature Inlier Time
                     ]
                     xydata_Intensity2 = [
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 13]),       # Precision
@@ -235,8 +235,8 @@ def synthetic4():
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 15]),       # F1 Score
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]),       # Matches
-                        np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]),   # 1K Total Time
-                        np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7])    # 1K feature Inlier Time
+                        1/np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]),   # 1K Total Time
+                        1/np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7])    # 1K feature Inlier Time
                     ]
                     xydata_Scale = [
                         np.nanmean(Rate_scale[:, m, c3, i, j, 13]),       # Precision
@@ -245,8 +245,8 @@ def synthetic4():
                         np.nanmean(Rate_scale[:, m, c3, i, j, 15]),       # F1 Score
                         np.nanmean(Rate_scale[:, m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate_scale[:, m, c3, i, j, 10]),       # Matches
-                        np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]),   # 1K Total Time
-                        np.nanmean(Exec_time_scale[:, m, c3, i, j, 7])    # 1K feature Inlier Time
+                        1/np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]),   # 1K Total Time
+                        1/np.nanmean(Exec_time_scale[:, m, c3, i, j, 7])    # 1K feature Inlier Time
                     ]
                     xydata_Rotation = [
                         np.nanmean(Rate_rot[:, m, c3, i, j, 13]),       # Precision
@@ -255,8 +255,8 @@ def synthetic4():
                         np.nanmean(Rate_rot[:, m, c3, i, j, 15]),       # F1 Score
                         np.nanmean(Rate_rot[:, m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate_rot[:, m, c3, i, j, 10]),       # Matches
-                        np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]),   # 1K Total Time
-                        np.nanmean(Exec_time_rot[:, m, c3, i, j, 7])    # 1K feature Inlier Time
+                        1/np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]),   # 1K Total Time
+                        1/np.nanmean(Exec_time_rot[:, m, c3, i, j, 7])    # 1K feature Inlier Time
                     ]
                     legend_groupfig2 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
@@ -273,7 +273,7 @@ def synthetic4():
                         fig2.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
@@ -304,8 +304,8 @@ def synthetic():
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)), # F1 Score
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), # Inliers
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), # Matches
-                        np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), # 1K Total Time
-                        np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))  # 1K feature Inlier Time
+                        1/np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), # 1K Total Time
+                        1/np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0))  # 1K feature Inlier Time
                     ]
                     if not np.isnan(xydata).any():
                         traces.append(go.Scatter(   x=xydata, y=xydata, mode="markers", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
@@ -316,7 +316,7 @@ def synthetic():
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
@@ -413,14 +413,14 @@ def oxfordAll9():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf  = [Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10], Exec_time_graf  [:, m, c3, i, j, 6], Exec_time_graf  [:, m, c3, i, j, 7]]
-                    Rate_Bikes = [Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10], Exec_time_bikes [:, m, c3, i, j, 6], Exec_time_bikes [:, m, c3, i, j, 7]]
-                    Rate_Boat  = [Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10], Exec_time_boat  [:, m, c3, i, j, 6], Exec_time_boat  [:, m, c3, i, j, 7]]
-                    Rate_Leuven= [Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 7]]
-                    Rate_Wall  = [Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10], Exec_time_wall  [:, m, c3, i, j, 6], Exec_time_wall  [:, m, c3, i, j, 7]]
-                    Rate_Trees = [Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10], Exec_time_trees [:, m, c3, i, j, 6], Exec_time_trees [:, m, c3, i, j, 7]]
-                    Rate_Bark  = [Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10], Exec_time_bark  [:, m, c3, i, j, 6], Exec_time_bark  [:, m, c3, i, j, 7]]
-                    Rate_Ubc   = [Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10], Exec_time_ubc   [:, m, c3, i, j, 6], Exec_time_ubc   [:, m, c3, i, j, 7]]
+                    Rate_Graf  = [Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10], 1/Exec_time_graf  [:, m, c3, i, j, 6], 1/Exec_time_graf  [:, m, c3, i, j, 7]]
+                    Rate_Bikes = [Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10], 1/Exec_time_bikes [:, m, c3, i, j, 6], 1/Exec_time_bikes [:, m, c3, i, j, 7]]
+                    Rate_Boat  = [Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10], 1/Exec_time_boat  [:, m, c3, i, j, 6], 1/Exec_time_boat  [:, m, c3, i, j, 7]]
+                    Rate_Leuven= [Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10], 1/Exec_time_leuven[:, m, c3, i, j, 6], 1/Exec_time_leuven[:, m, c3, i, j, 7]]
+                    Rate_Wall  = [Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10], 1/Exec_time_wall  [:, m, c3, i, j, 6], 1/Exec_time_wall  [:, m, c3, i, j, 7]]
+                    Rate_Trees = [Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10], 1/Exec_time_trees [:, m, c3, i, j, 6], 1/Exec_time_trees [:, m, c3, i, j, 7]]
+                    Rate_Bark  = [Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10], 1/Exec_time_bark  [:, m, c3, i, j, 6], 1/Exec_time_bark  [:, m, c3, i, j, 7]]
+                    Rate_Ubc   = [Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10], 1/Exec_time_ubc   [:, m, c3, i, j, 6], 1/Exec_time_ubc   [:, m, c3, i, j, 7]]
                     Overall    = np.nanmean([Rate_Graf, Rate_Bikes, Rate_Boat, Rate_Leuven, Rate_Wall, Rate_Trees, Rate_Bark, Rate_Ubc], axis=0)
                     legend_groupfig4 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
@@ -447,7 +447,7 @@ def oxfordAll9():
                         fig4.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", 
@@ -481,8 +481,8 @@ def oxford9():
                         np.nanmean(Rate_graf[:, m, c3, i, j, 15]),
                         np.nanmean(Rate_graf[:, m, c3, i, j, 9]),
                         np.nanmean(Rate_graf[:, m, c3, i, j, 10]),
-                        np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]),
-                        np.nanmean(Exec_time_graf[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]),
+                        1/np.nanmean(Exec_time_graf[:, m, c3, i, j, 7])
                     ]
                     xydata_Bikes = [
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 13]), 
@@ -491,8 +491,8 @@ def oxford9():
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7])
                     ]
                     xydata_Boat = [
                         np.nanmean(Rate_boat[:, m, c3, i, j, 13]), 
@@ -501,8 +501,8 @@ def oxford9():
                         np.nanmean(Rate_boat[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_boat[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_boat[:, m, c3, i, j, 7])
                     ]
                     xydata_Leuven = [
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 13]), 
@@ -511,8 +511,8 @@ def oxford9():
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7])
                     ]
                     xydata_Wall = [
                         np.nanmean(Rate_wall[:, m, c3, i, j, 13]), 
@@ -521,8 +521,8 @@ def oxford9():
                         np.nanmean(Rate_wall[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_wall[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_wall[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_wall[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_wall[:, m, c3, i, j, 7])
                     ]
                     xydata_Trees = [
                         np.nanmean(Rate_trees[:, m, c3, i, j, 13]), 
@@ -531,8 +531,8 @@ def oxford9():
                         np.nanmean(Rate_trees[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_trees[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_trees[:, m, c3, i, j, 7])
                     ]
                     xydata_Bark = [
                         np.nanmean(Rate_bark[:, m, c3, i, j, 13]), 
@@ -541,8 +541,8 @@ def oxford9():
                         np.nanmean(Rate_bark[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 10]), 
-                        np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_bark[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_bark[:, m, c3, i, j, 7])
                     ]
                     xydata_Ubc = [
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 13]), 
@@ -551,8 +551,8 @@ def oxford9():
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 15]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 9]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 10]),
-                        np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), 
-                        np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7])
+                        1/np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), 
+                        1/np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7])
                     ]
                     Overall = np.nanmean([xydata_Graf, xydata_Bikes, xydata_Boat, xydata_Leuven, xydata_Wall, xydata_Trees, xydata_Bark, xydata_Ubc], axis=0)
                     legend_groupfig5 = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
@@ -580,7 +580,7 @@ def oxford9():
                         fig5.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
@@ -611,8 +611,8 @@ def oxford():
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),  # F1 Score
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 9],  Rate_bikes[:, m, c3, i, j, 9],  Rate_boat[:, m, c3, i, j, 9],  Rate_leuven[:, m, c3, i, j, 9],  Rate_wall[:, m, c3, i, j, 9],  Rate_trees[:, m, c3, i, j, 9],  Rate_bark[:, m, c3, i, j, 9],  Rate_ubc[:, m, c3, i, j, 9]), axis=0)),   # Inliers
                         np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),   # Matches
-                        np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),  # Total Time
-                        np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))   # Inlier Time
+                        1/np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),  # Total Time
+                        1/np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0))   # Inlier Time
                     ]
                     if not np.isnan(xydata).any():
                         traces.append(  go.Scatter( x=xydata, y=xydata, mode="markers", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
@@ -623,7 +623,7 @@ def oxford():
                                             showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
@@ -727,8 +727,8 @@ def singleAll(data="drone"):
                         Rate[:, m, c3, i, j, 15],       # F1 Score
                         Rate[:, m, c3, i, j,  9],       # Inliers
                         Rate[:, m, c3, i, j, 10],       # Matches
-                        Exec_time[:, m, c3, i, j, 6],   # 1K Total Time
-                        Exec_time[:, m, c3, i, j, 7],   # 1K feature Inlier Time
+                        1/Exec_time[:, m, c3, i, j, 6],   # 1K Total Time
+                        1/Exec_time[:, m, c3, i, j, 7],   # 1K feature Inlier Time
                     ]
                     if not np.isnan(y_data).any():
                         traces.append(go.Scatter(   x=xvals, y=y_data, mode="markers+lines",
@@ -743,7 +743,7 @@ def singleAll(data="drone"):
                                                     showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Total Time(1K)", "Inlier Time(1K)"]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=y, method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))
@@ -775,8 +775,8 @@ def single(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j,  9]),       # Inliers
                         np.nanmean(Rate[:, m, c3, i, j, 10]),       # Matches
                         np.nanmean(Rate[:, m, c3, i, j, 11]),       # Reprojection Error
-                        np.nanmean(Exec_time[:, m, c3, i, j, 6]),   # 1K Total Time
-                        np.nanmean(Exec_time[:, m, c3, i, j, 7]),   # 1K feature Inlier Time
+                        1/np.nanmean(Exec_time[:, m, c3, i, j, 6]),   # 1K Total Time
+                        1/np.nanmean(Exec_time[:, m, c3, i, j, 7]),   # 1K feature Inlier Time
                         np.nanmean(Rate[:, m, c3, i, j, 16])]       # 3D Points Count
                     if not np.isnan(xydata).all():
                         traces.append(  go.Scatter( x=xydata, y=xydata, mode="markers", 
@@ -789,7 +789,7 @@ def single(data="drone"):
                                                     showlegend=True, hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error(pixel)", "Total Time(1K)", "Inlier Time(1K)", "3D Points Count"]
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "Reprojection Error(pixel)", "1/Total Time(1K)", "1/Inlier Time(1K)", "3D Points Count"]
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
