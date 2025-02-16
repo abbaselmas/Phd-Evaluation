@@ -257,3 +257,8 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                                     Rate[k, m, c3, i, j, 11],               # Reprojection Error
                                     Rate[k, m, c3, i, j, 16] if scenario=="drone" else None ]               # 3D Points Count
                             writer.writerow(row)
+
+def normalize(x, arr):
+    x = np.where(x==0, np.nan, x)
+    arr = np.where(arr==0, np.nan, arr)
+    return (1/x - np.nanmin(1/arr)) / (np.nanmax(1/arr) - np.nanmin(1/arr))
