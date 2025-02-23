@@ -8,7 +8,7 @@ nbre_img = len(val_b) + len(val_c)          # number of intensity change values 
 scale    = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5]   # s ∈]1.1 : 0.2 : 2.3]
 rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15 : 15 : 90
 
-DetectorsLegend   = ["sift", "akaze", "orb", "brisk", "kaze", "fast", "mser", "agast", "gftt", "gftt_harris", "star", "hl", "msd", "tbmr"]
+DetectorsLegend   = ["sift", "akaze", "orb", "brisk", "kaze", "fast", "mser", "agast", "gftt", "gftt_har", "star", "hl", "msd", "tbmr"]
 DescriptorsLegend = ["sift", "akaze", "orb", "brisk", "kaze", "daisy", "freak", "brief", "lucid", "latch", "vgg", "beblid", "teblid", "boost"]
 line_styles       = ["solid", "dash", "dot"] #, "dashdot"]
 Norm              = ["L2", "HAM"]
@@ -67,14 +67,11 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
     else: # Flann-based matcher
         if norm_type == cv2.NORM_L2:
             index_params = dict(algorithm=1, trees=5)
-            search_params = dict(checks=50)
         elif norm_type == cv2.NORM_HAMMING:
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-            search_params = dict(checks=50)
+        search_params = dict(checks=50, cross_check=True)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches1to2 = flann.match(Dspt1, Dspt2)
-        matches2to1 = flann.match(Dspt2, Dspt1)
-        matches = cross_check_matches(matches1to2, matches2to1)
+        matches = flann.match(Dspt1, Dspt2)
     points1 = np.array([KP1[match.queryIdx].pt for match in matches], dtype=np.float32)
     points2 = np.array([KP2[match.trainIdx].pt for match in matches], dtype=np.float32)
     
@@ -259,6 +256,23 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                             writer.writerow(row)
 
 def normalize(x, arr):
+    
+    x = np.where(x==0, np.nan, x)
+    arr = np.where(arr==0, np.nan, arr)
+    return (x - np.nanmin(arr)) / (np.nanmax(arr) - np.nanmin(arr))
+
+def normalize_inverse(x, arr):
     x = np.where(x==0, np.nan, x)
     arr = np.where(arr==0, np.nan, arr)
     return (1/x - np.nanmin(1/arr)) / (np.nanmax(1/arr) - np.nanmin(1/arr))
+
+def normalize_metric(value, data, inverse=False):
+    # Remove zeros and nans from data for calculation
+    valid_data = data[~np.isnan(data) & (data != 0)]
+    
+    if len(valid_data) == 0 or np.isnan(value) or value == 0:
+        return 0
+        
+    min_val = np.min(valid_data)
+    max_val = np.max(valid_data)
+    return np.exp(-(value - min_val) / (max_val - min_val)) if inverse else (value - min_val) / (max_val - min_val)

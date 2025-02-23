@@ -922,48 +922,148 @@ def singleTiming(data="drone"):
         f.write(custom_html)
 
 def singleEfficiency(data="drone"):
-    """
-    Efficiency Score =  0.15 * normalized(3D Point Count)
-                        0.10 * normalized(F1 Score)
-                        0.05 * normalized(Precision)
-                        0.05 * normalized(Recall)
-                        0.05 * normalized(Repeatibility)
-                        0.15 * 1 - normalized(1K Inlier Time)
-                        0.10 * 1 - normalized(1K Total Time)
-                        0.15 * 1 - normalized(Reprojection Error)
-                        0.10 * normalized(Inliers)
-                        0.10 * normalized(Matches)
-    """
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig16 = go.Figure()
-    fig16.update_layout(font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
+    fig16.update_layout(font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
     color_index = 0
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for c3 in range(2):
+                for m in range(2):
+                    eff_score = (
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) + # Precision
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) + # Recall
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) + # Repeatibility
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) + # F1 Score
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :, 9].flatten()) +  # Inliers
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) + # Matches
+                        0.15 * normalize_metric(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), inverse=True) + # 1K Inlier Time
+                        0.10 * normalize_metric(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), inverse=True)   # 1K Total Time
+                    )
+                    if data == "drone":
+                        eff_score += (
+                            0.15 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), inverse=True) + # Reprojection Error
+                            0.15 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten())   # 3D Points Count
+                        )
+                    if not eff_score == 0:
+                        fig16.add_trace(go.Bar(x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[eff_score], name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", marker=dict(color=colors[color_index]), showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.4f}</b>"))
+            color_index = (color_index + 14) % num_combinations
+    fig16.update_layout(updatemenus=[   dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1),
+                                        dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
+                                                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1)])
+    fig16.write_html(f"./html/{data}/{data}_Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}_Efficiency.html", "a") as f:
+        f.write(custom_html)
+
+def heatmap(data="drone"):
+    Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+    Rate = np.load(f"./arrays/Rate_{data}.npy")    
+    scores = np.zeros((len(DetectorsLegend), len(DescriptorsLegend), 2, 2)) 
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    eff_score = (
-                        0.05 *      normalize(np.nanmean(Rate       [:, m, c3, i, j, 13]), Rate     [:, :, :, :, :, 13]) +  # Precision
-                        0.05 *      normalize(np.nanmean(Rate       [:, m, c3, i, j, 12]), Rate     [:, :, :, :, :, 12]) +  # Recall
-                        0.05 *      normalize(np.nanmean(Rate       [:, m, c3, i, j, 14]), Rate     [:, :, :, :, :, 14]) +  # Repeatibility
-                        0.10 *      normalize(np.nanmean(Rate       [:, m, c3, i, j, 15]), Rate     [:, :, :, :, :, 15]) +  # F1 Score
-                        0.10 *      normalize(np.nanmean(Rate       [:, m, c3, i, j,  9]), Rate     [:, :, :, :, :,  9]) +  # Inliers
-                        0.10 *      normalize(np.nanmean(Rate       [:, m, c3, i, j, 10]), Rate     [:, :, :, :, :, 10]) +  # Matches
-                        (0.15 * (1 - normalize(np.nanmean(Rate      [:, m, c3, i, j, 11]), Rate     [:, :, :, :, :, 11])) if data == "drone" else 0) + # Reprojection Error
-                        0.15 * (1 - normalize(np.nanmean(Exec_time  [:, m, c3, i, j,  7]), Exec_time[:, :, :, :, :,  7])) + # 1K Inlier Time
-                        0.10 * (1 - normalize(np.nanmean(Exec_time  [:, m, c3, i, j,  6]), Exec_time[:, :, :, :, :,  6])) + # 1K Total Time
-                        (0.15 *      normalize(np.nanmean(Rate      [:, m, c3, i, j, 16]), Rate     [:, :, :, :, :, 16]) if data == "drone" else 0) # 3D Points Count
+                    scores[i, j, c3, m] = (
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) + # Precision
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) + # Recall
+                        0.05 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) + # Repeatibility
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) + # F1 Score
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :, 9].flatten()) +  # Inliers
+                        0.10 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) + # Matches
+                        0.15 * normalize_metric(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), inverse=True) + # 1K Inlier Time
+                        0.10 * normalize_metric(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), inverse=True)   # 1K Total Time
                     )
-                    if not np.isnan(eff_score).any():
-                        fig16.add_trace(go.Bar( x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]], [Norm[c3]+'-'+Matcher[m]]], y=[eff_score],
-                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
-                                                marker=dict(color=colors[color_index]), showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
-            color_index = (color_index +14) % num_combinations
-    fig16.update_layout(updatemenus=[   dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1),
-                                        dict(type="dropdown", buttons=[ dict(label="Linear",   method="relayout", args=[{"yaxis.type": "linear"}]),
-                                                                        dict(label="Log",      method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1)])
-    fig16.write_html(f"./html/{data}/{data}Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
-    with open(f"./html/{data}/{data}Efficiency.html", "a") as f:
+                    
+                    if data == "drone":
+                        scores[i, j, c3, m] += (
+                            0.15 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), inverse=True) + # Reprojection Error
+                            0.15 * normalize_metric(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten())   # 3D Points Count
+                        )
+    scores[scores == 0] = np.nan
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    for c3 in range(2):
+        for m in range(2):
+            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DetectorsLegend, y=DescriptorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}<extra></extra>"), row=c3+1, col=m+1)
+
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
+    fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
+
+def correlationHeatmap(data="drone"):
+    Rate = np.load(f"./arrays/Rate_{data}.npy")
+    Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")    
+    
+    metrics = {
+        "Precision":            Rate[:, :, :, :, :, 13].flatten(),
+        "Recall":               Rate[:, :, :, :, :, 12].flatten(),
+        "Repeatibility":        Rate[:, :, :, :, :, 14].flatten(),
+        "F1 Score":             Rate[:, :, :, :, :, 15].flatten(),
+        "Inliers":              Rate[:, :, :, :, :,  9].flatten(),
+        "Matches":              Rate[:, :, :, :, :, 10].flatten(),
+        "1K Total Time":   Exec_time[:, :, :, :, :,  6].flatten(),
+        "1K Inlier Time":  Exec_time[:, :, :, :, :,  7].flatten(),
+    }
+    
+    if data == "drone":
+        metrics.update({
+            "Reprojection Error": 1/Rate[:, :, :, :, :, 11].flatten(),
+            "3D Points Count":    Rate[:, :, :, :, :, 16].flatten()
+        })
+    
+    metric_names = list(metrics.keys())
+    corr_matrix = np.zeros((len(metric_names), len(metric_names)))
+    for i, name1 in enumerate(metric_names):
+        for j, name2 in enumerate(metric_names):
+            data1 = metrics[name1]
+            data2 = metrics[name2]
+            mask = ~(np.isnan(data1) | np.isnan(data2) | np.isinf(data1) | np.isinf(data2))
+            if np.sum(mask) > 1:
+                corr_matrix[i,j] = np.corrcoef(data1[mask], data2[mask])[0,1]
+            else:
+                corr_matrix[i,j] = 0
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='rdylgn', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
+    fig.update_layout(template="ggplot2", font_size=14, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.write_html(f"./html/{data}/{data}_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
+
+def violinPlot(data="drone"):
+    Rate = np.load(f"./arrays/Rate_{data}.npy")
+    Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+    fig = go.Figure()
+    traces = []
+    for i in range(len(DetectorsLegend)):
+        for j in range(len(DescriptorsLegend)):
+            for c3 in range(2):  # Normalization Type
+                for m in range(2):  # Matcher Type
+                    xydata = [
+                        Rate[:, m, c3, i, j, 13],  # Precision
+                        Rate[:, m, c3, i, j, 12],  # Recall 
+                        Rate[:, m, c3, i, j, 14],  # Repeatibility
+                        Rate[:, m, c3, i, j, 15],  # F1 Score
+                        Rate[:, m, c3, i, j, 9],   # Inliers
+                        Rate[:, m, c3, i, j, 10],  # Matches
+                        1/Exec_time[:, m, c3, i, j, 6],  # 1K Total Time
+                        1/Exec_time[:, m, c3, i, j, 7]   # 1K Inlier Time
+                    ]
+                    if not np.isnan(xydata).any():
+                        traces.append(go.Violin(
+                                x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata,
+                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                box_visible=True, meanline_visible=True))
+                        fig.add_trace(go.Violin(
+                                x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata[0],
+                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                box_visible=True, meanline_visible=True))
+    dropdown_axis = ["Precision", "Recall", "Repeatibility", "F1Score", "Inliers", "Matches", "1/Total Time(1K)", "1/Inlier Time(1K)"]
+    button_list = []
+    for idx, axis in enumerate(dropdown_axis):
+        button_list.append(dict(label=axis, method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}])
+    )
+    fig.update_layout(  template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Violin Plots</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20), hovermode="x unified", 
+                        updatemenus=[   dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1),
+                                        dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=0, xanchor="left", y=1)])
+    
+    fig.write_html(f"./html/{data}/{data}_Violin.html", include_plotlyjs="cdn", full_html=True, config=config)
+    with open(f"./html/{data}/{data}_Violin.html", "a") as f:
         f.write(custom_html)
