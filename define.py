@@ -255,24 +255,25 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                                     Rate[k, m, c3, i, j, 16] if scenario=="drone" else None ]               # 3D Points Count
                             writer.writerow(row)
 
-def normalize(x, arr):
-    
-    x = np.where(x==0, np.nan, x)
-    arr = np.where(arr==0, np.nan, arr)
-    return (x - np.nanmin(arr)) / (np.nanmax(arr) - np.nanmin(arr))
-
-def normalize_inverse(x, arr):
-    x = np.where(x==0, np.nan, x)
-    arr = np.where(arr==0, np.nan, arr)
-    return (1/x - np.nanmin(1/arr)) / (np.nanmax(1/arr) - np.nanmin(1/arr))
-
-def normalize_metric(value, data, inverse=False):
-    # Remove zeros and nans from data for calculation
+def normalize(value, data):
     valid_data = data[~np.isnan(data) & (data != 0)]
-    
-    if len(valid_data) == 0 or np.isnan(value) or value == 0:
-        return 0
-        
-    min_val = np.min(valid_data)
-    max_val = np.max(valid_data)
-    return np.exp(-(value - min_val) / (max_val - min_val)) if inverse else (value - min_val) / (max_val - min_val)
+
+    if len(valid_data) == 0:
+        return np.zeros_like(value)  # Return array of zeros if data is invalid
+
+    min_val = np.nanmin(valid_data)
+    max_val = np.nanmax(valid_data)
+
+    if min_val == max_val:
+        return np.ones_like(value) #If all values are the same, return array of ones.
+
+    return (value - min_val) / (max_val - min_val)
+
+# def normalize_metric(value, data, inverse=False):
+#     # Remove zeros and nans from data for calculation
+#     valid_data = data[~np.isnan(data) & (data != 0)]
+#     if len(valid_data) == 0 or np.isnan(value) or value == 0:
+#         return 0
+#     min_val = np.min(valid_data)
+#     max_val = np.max(valid_data)
+#     return np.exp(-(value - min_val) / (max_val - min_val)) if inverse else (value - min_val) / (max_val - min_val)
