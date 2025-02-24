@@ -5,12 +5,18 @@ Synthetic
 [synthetic4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic4.html)  
 [syntheticAll4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticAll4.html)  
 [syntheticTiming](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticTiming.html)
+[synthetic Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Efficiency.html)
+[synthetic Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Heatmap.html)
+[synthetic Violin](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Violin.html)
 
 Oxford  
 [oxford](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford.html)  
 [oxford9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford9.html)  
 [oxfordAll9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordAll9.html)  
-[oxfordTiming](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordTiming.html)
+[oxfordTiming](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordTiming.html)  
+[oxford Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Efficiency.html)  
+[oxford Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Heatmap.html)  
+[oxford Violin](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Violin.html)
 
 Drone  
 [drone](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone.html)  
