@@ -34,7 +34,8 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization Type 0: L2 1: Hamming
-                            for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
+                            # for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
+                                m = 1
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
