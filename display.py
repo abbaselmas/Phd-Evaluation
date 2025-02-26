@@ -166,7 +166,7 @@ def syntheticAll4():
     fig1 = go.Figure()
     fig1 = make_subplots(rows=2, cols=2, subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>", "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>", "<span style='font-size: 20px;'><b>Scale changing</b></span>", "<span style='font-size: 20px;'><b>Rotation changing</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     sett_axis = dict(range=[-0.01, 1.01])
-    fig1.update_layout( font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig1.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=60, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis,
                         xaxis=dict(tickmode="array", tickvals=val_b), xaxis2=dict(tickmode="array", tickvals=val_c), xaxis3=dict(tickmode="array", tickvals=scale), xaxis4=dict(tickmode="array", tickvals=rot))
     color_index = 0
@@ -244,7 +244,7 @@ def synthetic4():
     fig2 = go.Figure()
     fig2 = make_subplots(rows=2, cols=2, subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>", "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>", "<span style='font-size: 20px;'><b>Scale changing</b></span>", "<span style='font-size: 20px;'><b>Rotation changing</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     sett_axis = dict(range=[-0.01, 1.01])
-    fig2.update_layout( font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig2.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=70, b=20),
                         xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis,
                         yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
@@ -331,7 +331,7 @@ def synthetic4():
 
 def synthetic():
     fig15 = go.Figure()
-    fig15.update_layout(font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig15.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), xaxis=dict(range=[-0.01, 1.01]), yaxis=dict(range=[-0.01, 1.01]))
     color_index = 0
     symbol_index = 0
@@ -382,7 +382,7 @@ def syntheticTiming():
                                                             "<span style='font-size: 22px;'>Total time (Detect + Descript + Match(BF+Flann))</span>", "<span style='font-size: 22px;'>Inlier time (Detect + Descript + Match(BF+Flann) + MAGSAC++)</span>",
                                                             "<span style='font-size: 22px;'>Detect time</span>", "<span style='font-size: 22px;'>Describe time</span>"],
                             specs=[[{"colspan": 2}, None], [{"colspan": 2}, None],[{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.05)
-    fig15.update_layout(font_size=12, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
+    fig15.update_layout(template="ggplot2", font_size=12, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -443,7 +443,7 @@ def syntheticTiming():
 
 def syntheticEfficiency():
     fig = go.Figure()
-    fig.update_layout(font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+    fig.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
     color_index = 0
     color_index = 0
@@ -480,7 +480,8 @@ def syntheticEfficiency():
         f.write(custom_html)
 
 def syntheticHeatmap():
-    scores = np.zeros((len(DetectorsLegend), len(DescriptorsLegend), 2, 2))
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
@@ -503,12 +504,9 @@ def syntheticHeatmap():
                         0.10 * (1-normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)),
                                                     np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0)))
                     )
-    scores[scores == 0] = np.nan
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
     for c3 in range(2):
         for m in range(2):
-            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DetectorsLegend, y=DescriptorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}<extra></extra>"), row=c3+1, col=m+1)
-
+            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
     fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/synthetic/synthetic_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
@@ -569,7 +567,7 @@ def oxfordAll9():
                                                             "<span style='font-size: 20px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 20px;'><b>UBC(JPEG)", "<span style='font-size: 20px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     sett_axis = dict(range=[-0.01, 1.01])
-    fig4.update_layout(font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig4.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                                                 hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=70, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
@@ -638,7 +636,7 @@ def oxford9():
                                                         "<span style='font-size: 20px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 20px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 20px;'><b>Trees(Blur)</b></span>", 
                                                         "<span style='font-size: 20px;'><b>Bark(Zoom + Rotation)</b></span>","<span style='font-size: 20px;'><b>UBC(JPEG)</b></span>", "<span style='font-size: 20px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     sett_axis = dict(range=[-0.01, 1.01])
-    fig5.update_layout( font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+    fig5.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=70, b=20),
                         xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis, xaxis5=sett_axis, xaxis6=sett_axis, xaxis7=sett_axis, xaxis8=sett_axis, xaxis9=sett_axis,
                         yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
@@ -778,7 +776,7 @@ def oxford9():
 
 def oxford():
     fig14 = go.Figure()
-    fig14.update_layout(font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig14.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), xaxis=dict(range=[-0.01, 1.01]), yaxis=dict(range=[-0.01, 1.01]))
     color_index = 0
     symbol_index = 0
@@ -830,7 +828,7 @@ def oxfordTiming():
                                                             "<span style='font-size: 22px;'>Total time (Detect + Descript + Match(BF+Flann))</span>", "<span style='font-size: 22px;'>Inlier time (Detect + Descript + Match(BF+Flann) + MAGSAC++)</span>",
                                                             "<span style='font-size: 22px;'>Detect time</span>", "<span style='font-size: 22px;'>Describe time</span>"],
                             specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.05)
-    fig6.update_layout(font_size=12, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
+    fig6.update_layout(template="ggplot2", font_size=12, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -891,7 +889,7 @@ def oxfordTiming():
 
 def oxfordEfficiency():
     fig = go.Figure()
-    fig.update_layout(font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+    fig.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
     color_index = 0
     color_index = 0
@@ -928,7 +926,8 @@ def oxfordEfficiency():
         f.write(custom_html)
 
 def oxfordHeatmap():
-    scores = np.zeros((len(DetectorsLegend), len(DescriptorsLegend), 2, 2))
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
@@ -951,12 +950,9 @@ def oxfordHeatmap():
                         0.10 * (1-normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),
                                                     np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0)))
                     )
-    scores[scores == 0] = np.nan
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
     for c3 in range(2):
         for m in range(2):
-            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DetectorsLegend, y=DescriptorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}<extra></extra>"), row=c3+1, col=m+1)
-
+            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
     fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/oxford/oxford_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
@@ -1016,7 +1012,7 @@ def singleAll(data="drone"):
     xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else (
         ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
         [f"Img{i}" for i in range(653, 774, 5)])
-    fig7.update_layout( font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Data</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+    fig7.update_layout( template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Data</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(range=[-0.01, 1.01]))
     color_index = 0
     symbol_index = 0
@@ -1063,7 +1059,7 @@ def single(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig13 = go.Figure()
-    fig13.update_layout(font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()}</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+    fig13.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()}</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         hovermode="x", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), xaxis=dict(range=[-0.01, 1.01]), yaxis=dict(range=[-0.01, 1.01]))
     color_index = 0
     symbol_index = 0
@@ -1118,7 +1114,7 @@ def singleTiming(data="drone"):
                                                             "<span style='font-size: 22px;'>Total time (Detect + Descript + Match(BF+Flann))</span>", "<span style='font-size: 22px;'>Inlier time (Detect + Descript + Match(BF+Flann) + MAGSAC++)</span>",
                                                             "<span style='font-size: 22px;'>Detect time</span>", "<span style='font-size: 22px;'>Describe time</span>"],
                             specs=[[{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]],horizontal_spacing=0.05, vertical_spacing=0.05)
-    fig12.update_layout(font_size=12, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
+    fig12.update_layout(template="ggplot2", font_size=12, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2000, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -1160,7 +1156,7 @@ def singleEfficiency(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig16 = go.Figure()
-    fig16.update_layout(font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
+    fig16.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -1194,8 +1190,9 @@ def singleEfficiency(data="drone"):
 
 def heatmap(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
-    Rate = np.load(f"./arrays/Rate_{data}.npy")    
-    scores = np.zeros((len(DetectorsLegend), len(DescriptorsLegend), 2, 2)) 
+    Rate = np.load(f"./arrays/Rate_{data}.npy")  
+    fig = make_subplots(rows=2, cols=2, subplot_titles=["L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
@@ -1210,18 +1207,14 @@ def heatmap(data="drone"):
                         0.15 * (1-normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten())) + # 1K Inlier Time
                         0.10 * (1-normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten()))   # 1K Total Time
                     )
-                    
                     if data == "drone":
                         scores[i, j, c3, m] += (
                             0.15 * (1-normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) + # Reprojection Error
                             0.15 * normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten())   # 3D Points Count
                         )
-    scores[scores == 0] = np.nan
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
     for c3 in range(2):
-        for m in range(2):
-            fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DetectorsLegend, y=DescriptorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}<extra></extra>"), row=c3+1, col=m+1)
-
+        for m in range(2):            
+            fig.add_trace(go.Heatmap(z=scores[:, :, c3, m],x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
     fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
@@ -1258,7 +1251,7 @@ def correlationHeatmap(data="drone"):
             else:
                 corr_matrix[i,j] = 0
     fig = go.Figure()
-    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='rdylgn', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
+    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
     fig.update_layout(template="ggplot2", font_size=14, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
 
