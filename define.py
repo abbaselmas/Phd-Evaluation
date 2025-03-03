@@ -55,12 +55,7 @@ Descriptors   = list([sift, akaze, orb, brisk, kaze, daisy, freak, brief, lucid,
 #                     0     1      2    3      4     5      6      7      8      9      10   11      12      13
 Normalization = list([cv2.NORM_L2, cv2.NORM_HAMMING])
 
-def cross_check_matches(matches1to2, matches2to1):
-    matches2to1_dict = { (m.trainIdx, m.queryIdx): m for m in matches2to1 }
-    cross_checked_matches = [m for m in matches1to2 if (m.queryIdx, m.trainIdx) in matches2to1_dict]
-    return cross_checked_matches
-
-def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_type):
+def evaluate_with_fundamentalMat_and_XSAC(matcher=0, KP1=None, KP2=None, Dspt1=None, Dspt2=None, norm_type=cv2.NORM_L2, ratio=0.8):
     if matcher == 0: # Brute-force matcher
         bf = cv2.BFMatcher(norm_type, crossCheck=True) 
         matches = bf.match(Dspt1, Dspt2)
@@ -69,12 +64,16 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher, KP1, KP2, Dspt1, Dspt2, norm_
             index_params = dict(algorithm=1, trees=5)
         elif norm_type == cv2.NORM_HAMMING:
             index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
-        search_params = dict(checks=50, cross_check=True)
+        search_params = dict(checks=50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.match(Dspt1, Dspt2)
-    points1 = np.array([KP1[match.queryIdx].pt for match in matches], dtype=np.float32)
-    points2 = np.array([KP2[match.trainIdx].pt for match in matches], dtype=np.float32)
+        # KNN matching
+        knn_matches = flann.knnMatch(Dspt1, Dspt2, k=2)
+        # Apply Lowe's ratio test
+        matches = [m[0] for m in knn_matches if len(m) == 2 and m[0].distance < ratio * m[1].distance]
     
+    if len(matches) < 8: return [], matches
+    points1 = np.float32([KP1[m.queryIdx].pt for m in matches]).reshape(-1, 2)
+    points2 = np.float32([KP2[m.trainIdx].pt for m in matches]).reshape(-1, 2)
     _, mask = cv2.findFundamentalMat(points1, points2, cv2.USAC_MAGSAC) # MAGSAC++
     inliers = [matches[i] for i in range(len(matches)) if mask[i] == 1]
     return inliers, matches
