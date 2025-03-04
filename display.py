@@ -487,21 +487,21 @@ def syntheticHeatmap():
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
                     scores[i, j, c3, m] = (
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)), 
+                        0.18 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)), 
                                                     np.concatenate((Rate_intensity[:, :, :, :, :, 13], Rate_scale[:, :, :, :, :, 13], Rate_rot[:, :, :, :, :, 13]), axis=0)) +
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)),
                                                     np.concatenate((Rate_intensity[:, :, :, :, :, 12], Rate_scale[:, :, :, :, :, 12], Rate_rot[:, :, :, :, :, 12]), axis=0)) +
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)),
                                                     np.concatenate((Rate_intensity[:, :, :, :, :, 14], Rate_scale[:, :, :, :, :, 14], Rate_rot[:, :, :, :, :, 14]), axis=0)) +
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)),
                                                     np.concatenate((Rate_intensity[:, :, :, :, :, 15], Rate_scale[:, :, :, :, :, 15], Rate_rot[:, :, :, :, :, 15]), axis=0)) +
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)),
+                        0.15 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)),
                                                     np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0)) +
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)),
+                        0.07 * normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)),
                                                     np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0)) +
                         0.15 * (1-normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)),
                                                     np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0))) +
-                        0.10 * (1-normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)),
+                        0.09 * (1-normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)),
                                                     np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0)))
                     )
     for c3 in range(2):
@@ -933,21 +933,21 @@ def oxfordHeatmap():
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
                     scores[i, j, c3, m] = (
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),
+                        0.18 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :, 13], Rate_bikes[:, :, :, :, :, 13], Rate_boat[:, :, :, :, :, 13], Rate_leuven[:, :, :, :, :, 13], Rate_wall[:, :, :, :, :, 13], Rate_trees[:, :, :, :, :, 13], Rate_bark[:, :, :, :, :, 13], Rate_ubc[:, :, :, :, :, 13]), axis=0))+
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :, 12], Rate_bikes[:, :, :, :, :, 12], Rate_boat[:, :, :, :, :, 12], Rate_leuven[:, :, :, :, :, 12], Rate_wall[:, :, :, :, :, 12], Rate_trees[:, :, :, :, :, 12], Rate_bark[:, :, :, :, :, 12], Rate_ubc[:, :, :, :, :, 12]), axis=0))+
-                        0.05 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :, 14], Rate_bikes[:, :, :, :, :, 14], Rate_boat[:, :, :, :, :, 14], Rate_leuven[:, :, :, :, :, 14], Rate_wall[:, :, :, :, :, 14], Rate_trees[:, :, :, :, :, 14], Rate_bark[:, :, :, :, :, 14], Rate_ubc[:, :, :, :, :, 14]), axis=0))+
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),
+                        0.12 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :, 15], Rate_bikes[:, :, :, :, :, 15], Rate_boat[:, :, :, :, :, 15], Rate_leuven[:, :, :, :, :, 15], Rate_wall[:, :, :, :, :, 15], Rate_trees[:, :, :, :, :, 15], Rate_bark[:, :, :, :, :, 15], Rate_ubc[:, :, :, :, :, 15]), axis=0))+
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),
+                        0.15 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :,  9], Rate_bikes[:, :, :, :, :,  9], Rate_boat[:, :, :, :, :,  9], Rate_leuven[:, :, :, :, :,  9], Rate_wall[:, :, :, :, :,  9], Rate_trees[:, :, :, :, :,  9], Rate_bark[:, :, :, :, :,  9], Rate_ubc[:, :, :, :, :,  9]), axis=0))+
-                        0.10 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),
+                        0.07 * normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),
                                                     np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0))+
                         0.15 * (1-normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),
                                                     np.concatenate((Exec_time_graf[:, :, :, :, :, 7], Exec_time_bikes[:, :, :, :, :, 7], Exec_time_boat[:, :, :, :, :, 7], Exec_time_leuven[:, :, :, :, :, 7], Exec_time_wall[:, :, :, :, :, 7], Exec_time_trees[:, :, :, :, :, 7], Exec_time_bark[:, :, :, :, :, 7], Exec_time_ubc[:, :, :, :, :, 7]), axis=0)))+
-                        0.10 * (1-normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),
+                        0.09 * (1-normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),
                                                     np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0)))
                     )
     for c3 in range(2):
@@ -1200,19 +1200,21 @@ def heatmap(data="drone"):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
                     scores[i, j, c3, m] = (
-                        0.05 * normalize(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) + # Precision
-                        0.05 * normalize(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) + # Recall
-                        0.05 * normalize(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) + # Repeatibility
-                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) + # F1 Score
-                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :, 9].flatten()) +  # Inliers
-                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) + # Matches
-                        0.15 * (1-normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten())) + # 1K Inlier Time
-                        0.10 * (1-normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten()))   # 1K Total Time
+                        0.15 * normalize(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) +  # Precision
+                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) +  # Recall
+                        0.08 * normalize(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) +  # Repeatability
+                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) +  # F1 Score
+                        0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :, 9].flatten()) +   # Inliers
+                        0.07 * normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) +  # Matches
+                        0.10 * (1 - normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten())) +  # 1K Inlier Time
+                        0.05 * (1 - normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten()))    # 1K Total Time
                     )
                     if data == "drone":
                         scores[i, j, c3, m] += (
-                            0.15 * (1-normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) + # Reprojection Error
-                            0.15 * normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten())   # 3D Points Count
+                            0.05 * (1 - normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +  # Reprojection Error
+                            0.10 * normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten()) +        # 3D Points Count
+                            0.10 * (1 - normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, 
+                                                (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten()))  # 1K 3D Point Reconstruction Time
                         )
     for c3 in range(2):
         for m in range(2):            

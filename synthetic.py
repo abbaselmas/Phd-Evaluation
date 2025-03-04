@@ -63,7 +63,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
     print(time.ctime() + " Intensity started")
     print("Scenario 1 Intensity")
     Rate      = np.load(f"./arrays/Rate_intensity{mobile}.npy")      if os.path.exists(f"./arrays/Rate_intensity{mobile}.npy")      else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_intensity{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_intensity{mobile}.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_intensity{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_intensity{mobile}.npy") else np.full((nbre_img, 2, len(Normalization), len(Detectors), len(Descriptors), 9), np.nan)
     keypoints_cache     = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache   = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     img, List8Img = get_intensity_8Img(Image, val_b, val_c)
@@ -91,8 +91,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
-                            # for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                m = 1
+                            for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img, keypoints1)
@@ -114,7 +113,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0: # and Rate[k, m, c3, i, j, 13] > 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/intensity/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -127,13 +126,13 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
         np.save(f"./arrays/Exec_time_intensity{mobile}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "intensity", mobile)
         saveAllCSV(Rate, Exec_time, "intensity", mobile)
-    print(time.ctime() + " Intensity finished")
+    print(time.ctime() + " Intensity finished\n")
 
 def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Scale started")
     print("Scenario 2 Scale")
     Rate        = np.load(f"./arrays/Rate_scale{mobile}.npy")          if os.path.exists(f"./arrays/Rate_scale{mobile}.npy")          else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
-    Exec_time   = np.load(f"./arrays/Exec_time_scale{mobile}.npy")     if os.path.exists(f"./arrays/Exec_time_scale{mobile}.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Exec_time   = np.load(f"./arrays/Exec_time_scale{mobile}.npy")     if os.path.exists(f"./arrays/Exec_time_scale{mobile}.npy")     else np.full((len(scale), 2, len(Normalization), len(Detectors), len(Descriptors), 9), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(scale)):
@@ -160,8 +159,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
-                            # for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                m = 1
+                            for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -183,7 +181,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0: # and Rate[k, m, c3, i, j, 13] > 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/scale/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -196,13 +194,13 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
         np.save(f"./arrays/Exec_time_scale{mobile}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "scale", mobile)
         saveAllCSV(Rate, Exec_time, "scale", mobile)
-    print(time.ctime() + " Scale finished")
+    print(time.ctime() + " Scale finished\n")
 
 def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + " Rotation started")
     print("Scenario 3 Rotation")
     Rate          = np.load(f"./arrays/Rate_rot{mobile}.npy")       if os.path.exists(f"./arrays/Rate_rot{mobile}.npy")      else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
-    Exec_time     = np.load(f"./arrays/Exec_time_rot{mobile}.npy")  if os.path.exists(f"./arrays/Exec_time_rot{mobile}.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Exec_time     = np.load(f"./arrays/Exec_time_rot{mobile}.npy")  if os.path.exists(f"./arrays/Exec_time_rot{mobile}.npy") else np.full((len(rot), 2, len(Normalization), len(Detectors), len(Descriptors), 9), np.nan)
     keypoints_cache   = np.empty((nbre_img, len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(rot)):
@@ -229,8 +227,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                     if j == b or b == 100:
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
-                            # for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
-                                m = 1
+                            for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -252,7 +249,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0: # and Rate[k, m, c3, i, j, 13] > 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/rot/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -265,4 +262,4 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
         np.save(f"./arrays/Exec_time_rot{mobile}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, "rot", mobile)
         saveAllCSV(Rate, Exec_time, "rot", mobile)
-    print(time.ctime() + " Rotation finished")
+    print(time.ctime() + " Rotation finished\n")

@@ -5,7 +5,7 @@ from define import *
 from database import *
 import pycolmap
 
-def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
+def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
     print(time.ctime())
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/Small_Buildings/droneResized/DSC00{i}.JPG") for i in range(153, 189)]
@@ -75,7 +75,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0 and Rate[k, m, c3, i, j, 13] > 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -103,6 +103,7 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
                                     except:
                                         Rate[:, m, c3, i, j, 11] = None
                                         Rate[:, m, c3, i, j, 16] = None
+                                        Exec_time[:, m, c3, i, j, 8] = None
                     else:
                         continue
             else:
@@ -112,4 +113,4 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
         np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, folder, mobile)
         saveAllCSV(Rate, Exec_time, folder, mobile)
-    print(time.ctime() + f" {folder} finished")
+    print(time.ctime() + f" {folder} finished\n")

@@ -8,7 +8,7 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
     Rate      = np.load(f"./arrays/Rate_{folder}{mobile}.npy")      if os.path.exists(f"./arrays/Rate_{folder}{mobile}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
-    Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 8), np.nan)
+    Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 9), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
@@ -54,7 +54,7 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and m == 0: # and Rate[k, m, c3, i, j, 13] > 0.5 and Rate[k, m, c3, i, j, 15] > 0.35 and Exec_time[k, m, c3, i, j, 7] < 1 and Rate[k, m, c3, i, j, 12] > 0.15:
+                                if drawing:
                                     img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -67,4 +67,4 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
         np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
         saveAverageCSV(Rate, Exec_time, folder, mobile)
         saveAllCSV(Rate, Exec_time, folder, mobile)
-    print(time.ctime() + f" {folder} finished")
+    print(time.ctime() + f" {folder} finished\n")
