@@ -9,7 +9,7 @@ a = 100
 b = 100
 drawing = False
 save = True
-reconstruct = False
+reconstruct = True
 mobile = "" #"_mobile"
 
 # execute_scenario_rotation (a, b, drawing, save, mobile)
@@ -46,7 +46,7 @@ mobile = "" #"_mobile"
 # singleAll("drone")
 # single("drone")
 # singleTiming("drone")
-# singleEfficiency("drone")
+singleEfficiency("drone")
 # heatmap("drone")
 # correlationHeatmap("drone")
 # violinPlot("drone")

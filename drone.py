@@ -67,8 +67,6 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
                                         db.add_keypoints(image_id, keypoints1_np)
                                         db.add_descriptors(image_id, descriptors1)
                                         # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
-                                        # db.add_matches(image_id, image_id+1, matches_np)
-                                        # db.add_two_view_geometry(image_id, image_id+1, matches_np)
                                         inliers_np = np.array([[m.queryIdx, m.trainIdx] for m in inliers], dtype=np.uint32)
                                         db.add_matches(image_id, image_id+1, inliers_np)
                                         db.add_two_view_geometry(image_id, image_id+1, inliers_np)
@@ -95,12 +93,8 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
                                 path = f"./workspace/{folder}_{DetectorsLegend[i]}_{DescriptorsLegend[j]}_{Norm[c3]}_{Matcher[m]}"
                                 if os.path.isfile(f"{path}.db"):
                                     start_time = time.perf_counter_ns()
-                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Datasets/Small_Buildings/droneResized", path, 
-                                                                        pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
-                                    Exec_time[:, m, c3, i, j, 8] = (time.perf_counter_ns() - start_time) / (10 ** 9)
-                                    # pycolmap.bundle_adjustment(maps[0])
-                                    # maps[0].export_PLY(f"{path}/0/sparse_model.ply")
-                                    # print(maps[0].summary())
+                                    maps = pycolmap.incremental_mapping(f"{path}.db", "./Datasets/Small_Buildings/droneResized", path, pycolmap.IncrementalPipelineOptions({'init_image_id1': 17, 'init_image_id2': 18}))
+                                    Exec_time[:, m, c3, i, j, 8] = (time.perf_counter_ns() - start_time) / (10 ** 9) # Reconstruction Time
                                     try:
                                         Rate[:, m, c3, i, j, 11] = maps[0].compute_mean_reprojection_error()
                                         maps = pycolmap.Reconstruction(f"{path}/0")
@@ -113,7 +107,6 @@ def executeDroneScenarios(folder, a=100, b=100, drawing=False, save=True, mobile
                         continue
             else:
                 continue
-    
     if save:
         np.save(f"./arrays/Rate_{folder}{mobile}.npy",      Rate)
         np.save(f"./arrays/Exec_time_{folder}{mobile}.npy", Exec_time)
