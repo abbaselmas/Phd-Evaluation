@@ -267,3 +267,53 @@ def normalize(value, data):
     if min_val == max_val:
         return np.ones_like(value) #If all values are the same, return array of ones.
     return (value - min_val) / (max_val - min_val)
+
+def log_normalize(value, data):
+    valid_data = data[~np.isnan(data) & (data != 0)]
+    if len(valid_data) == 0:
+        return np.zeros_like(value)
+    
+    # Apply log transform to compress the range
+    log_data = np.log1p(valid_data)  # log1p to handle potential zeros
+    log_value = np.log1p(value)
+    
+    min_val = np.nanmin(log_data)
+    max_val = np.nanmax(log_data)
+    
+    if min_val == max_val:
+        return np.ones_like(value)
+        
+    # Normalize in log space, then reverse
+    return 1 - (log_value - min_val) / (max_val - min_val)
+
+def percentile_normalize(value, data):
+    valid_data = data[~np.isnan(data) & (data != 0)]
+    if len(valid_data) == 0:
+        return np.zeros_like(value)
+    
+    # Calculate percentile rank of the value in the data
+    percentile = np.sum(valid_data <= value) / len(valid_data)
+    
+    # Since lower is better, return 1-percentile
+    return 1 - percentile
+
+def nonlinear_normalize(value, data, alpha=0.5):
+    valid_data = data[~np.isnan(data) & (data != 0)]
+    if len(valid_data) == 0:
+        return np.zeros_like(value)
+    
+    min_val = np.nanmin(valid_data)
+    max_val = np.nanmax(valid_data)
+    
+    if min_val == max_val:
+        return np.ones_like(value)
+    
+    # Standard normalization
+    norm_value = (value - min_val) / (max_val - min_val)
+    
+    # Apply power transformation to spread values more evenly
+    # Lower alpha makes distribution more uniform (alpha=1 is linear)
+    transformed = norm_value ** alpha
+    
+    # Reverse since lower is better
+    return 1 - transformed
