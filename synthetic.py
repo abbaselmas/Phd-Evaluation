@@ -205,8 +205,8 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
     descriptors_cache = np.empty((nbre_img, len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(rot)):
         if drawing:
-                if k != 4:
-                    continue
+            if k != 4:
+                continue
         img = get_cam_rot(Image, rot[k])
         for i in range(len(Detectors)):
             if i == a or a == 100:
@@ -249,7 +249,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing and Rate[k, m, c3, i, j, 13] > 0.8:
                                     img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/rot/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)

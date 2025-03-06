@@ -3,7 +3,6 @@ import numpy as np
 import time, os
 from define import *
 from database import *
-import pycolmap
 
 def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime())
@@ -18,6 +17,8 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
+        if drawing and k != 2:
+            continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -59,7 +60,7 @@ def executeAirSimScenarios(folder="airsim", a=100, b=100, drawing=False, save=Tr
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing and Rate[k, m, c3, i, j, 13] > 0.8:
                                     img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)

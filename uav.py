@@ -3,7 +3,7 @@ import numpy as np
 import time, os
 from define import *
 
-def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="", reconstruct=False):
+def executeUAVScenarios(folder="uav", a=100, b=100, drawing=False, save=True, mobile=""):
     print(time.ctime() + f" {folder} started")
     print(f"Folder: {folder}")
     img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
@@ -12,6 +12,9 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
+        if drawing:
+            if n != 8:
+                continue
         k = int(n/2) # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         for i in range(len(Detectors)):
             if (i == a or a == 100):
@@ -54,7 +57,7 @@ def executeUAVScenarios(folder, a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing and Rate[k, m, c3, i, j, 13] > 0.8:
                                     img_matches = draw_matches(img[n], keypoints1, img[n+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
