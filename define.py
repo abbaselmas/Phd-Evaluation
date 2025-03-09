@@ -284,18 +284,36 @@ def log_normalize(value, data):
         return np.ones_like(value)
         
     # Normalize in log space, then reverse
-    return 1 - (log_value - min_val) / (max_val - min_val)
+    return (log_value - min_val) / (max_val - min_val)
 
 def percentile_normalize(value, data):
+    # Extract valid data points
     valid_data = data[~np.isnan(data) & (data != 0)]
     if len(valid_data) == 0:
         return np.zeros_like(value)
-    
-    # Calculate percentile rank of the value in the data
-    percentile = np.sum(valid_data <= value) / len(valid_data)
-    
-    # Since lower is better, return 1-percentile
-    return 1 - percentile
+    # Flatten the valid data for percentile calculation
+    flat_valid_data = valid_data.flatten()
+    # Handle different input types
+    if np.isscalar(value):
+        # For a single value
+        percentile = np.mean(flat_valid_data <= value)
+    else:
+        # For array inputs - calculate percentile for each element
+        # Create a result array with the same shape as the input
+        result = np.zeros_like(value, dtype=float)
+        # Flatten the input for iteration
+        flat_value = value.flatten()
+        flat_result = result.flatten()
+        # Calculate percentile for each value
+        for i, v in enumerate(flat_value):
+            if np.isnan(v) or v == 0:
+                flat_result[i] = 0
+            else:
+                flat_result[i] = np.mean(flat_valid_data <= v)
+        # Reshape back to original shape
+        result = flat_result.reshape(value.shape)
+        return result    
+    return percentile
 
 def nonlinear_normalize(value, data, alpha=0.5):
     valid_data = data[~np.isnan(data) & (data != 0)]
@@ -316,4 +334,4 @@ def nonlinear_normalize(value, data, alpha=0.5):
     transformed = norm_value ** alpha
     
     # Reverse since lower is better
-    return 1 - transformed
+    return transformed
