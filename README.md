@@ -1,100 +1,40 @@
 ## Results
 
-Synthetic  
-[synthetic](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic.html)  
-[synthetic4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic4.html)  
-[syntheticAll4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticAll4.html)  
-[syntheticTiming](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticTiming.html)
-[synthetic Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Efficiency.html)
-[synthetic Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Heatmap.html)
-[synthetic Violin](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Violin.html)
+### Dataset Links
 
-Oxford  
-[oxford](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford.html)  
-[oxford9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford9.html)  
-[oxfordAll9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordAll9.html)  
-[oxfordTiming](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordTiming.html)  
-[oxford Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Efficiency.html)  
-[oxford Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Heatmap.html)  
-[oxford Violin](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Violin.html)
-
-Drone  
-[drone](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone.html)  
-[droneAll](https://abbaselmas.github.io/Phd-Evaluation/html/drone/droneAll.html)  
-[droneTiming](https://abbaselmas.github.io/Phd-Evaluation/html/drone/droneTiming.html)  
-[drone Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Correlation.html)  
-[drone Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Efficiency.html)  
-[drone Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Heatmap.html)  
-[drone Violin](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Violin.html)
-
-UAV  
-[uav](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav.html)  
-[uavAll](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavAll.html)  
-[uavTiming](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavTiming.html)  
-[uav Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Correlation.html)  
-[uav Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Efficiency.html)  
-[uav Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Heatmap.html)  
-[uav Violin](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Violin.html)
-
-AirSim  
-[airsim](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim.html)  
-[airsimAll](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimAll.html)  
-[airsimTiming](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimTiming.html)  
-[airsim Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Correlation.html)  
-[airsim Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Efficiency.html)  
-[airsim Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Heatmap.html)  
-[airsim Violin](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Violin.html)
-
+| Dataset    | Main Page | Variants | Timing | Correlation | Efficiency | Heatmap | Violin |
+|------------|-----------|----------|--------|-------------|------------|---------|--------|
+| **Synthetic** | [synthetic](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic.html)    | [synthetic4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic4.html), [syntheticAll4](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticAll4.html)  | [syntheticTiming](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/syntheticTiming.html) | -                                                                                            | [synthetic Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Efficiency.html)  | [synthetic Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Heatmap.html)    | [synthetic Violin](https://abbaselmas.github.io/Phd-Evaluation/html/synthetic/synthetic_Violin.html)  |
+| **Oxford**    | [oxford](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford.html)             | [oxford9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford9.html),          [oxfordAll9](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordAll9.html)           | [oxfordTiming](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxfordTiming.html) | -                                                                                                     | [oxford Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Efficiency.html)           | [oxford Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Heatmap.html)             | [oxford Violin](https://abbaselmas.github.io/Phd-Evaluation/html/oxford/oxford_Violin.html)           |
+| **Drone**     | [drone](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone.html)                | [droneAll](https://abbaselmas.github.io/Phd-Evaluation/html/drone/droneAll.html)                                                                                                          | [droneTiming](https://abbaselmas.github.io/Phd-Evaluation/html/drone/droneTiming.html)    |  [drone Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Correlation.html)   | [drone Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Efficiency.html)              | [drone Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Heatmap.html)                | [drone Violin](https://abbaselmas.github.io/Phd-Evaluation/html/drone/drone_Violin.html)              |
+| **UAV**       | [uav](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav.html)                      | [uavAll](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavAll.html)                                                                                                                | [uavTiming](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavTiming.html)          | [uav Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Correlation.html)          | [uav Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Efficiency.html)                    | [uav Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Heatmap.html)                      | [uav Violin](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Violin.html)                    |
+| **AirSim**    | [airsim](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim.html)             | [airsimAll](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimAll.html)                                                                                                       | [airsimTiming](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimTiming.html) | [airsim Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Correlation.html) | [airsim Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Efficiency.html)           | [airsim Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Heatmap.html)             | [airsim Violin](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Violin.html)           |
 
 ## UAV Data Visualisations
-|AKAZE-SIFT-L2-BF|
-|---|
-|![0_1AKAZE_0SIFT_L2_BF](/draws/uav/0_1AKAZE_0SIFT_L2_BF.png)|
-|![1_1AKAZE_0SIFT_L2_BF](/draws/uav/1_1AKAZE_0SIFT_L2_BF.png)|
-|![2_1AKAZE_0SIFT_L2_BF](/draws/uav/2_1AKAZE_0SIFT_L2_BF.png)|
-|![3_1AKAZE_0SIFT_L2_BF](/draws/uav/3_1AKAZE_0SIFT_L2_BF.png)|
-|![4_1AKAZE_0SIFT_L2_BF](/draws/uav/4_1AKAZE_0SIFT_L2_BF.png)|
-|![5_1AKAZE_0SIFT_L2_BF](/draws/uav/5_1AKAZE_0SIFT_L2_BF.png)|
-|![6_1AKAZE_0SIFT_L2_BF](/draws/uav/6_1AKAZE_0SIFT_L2_BF.png)|
-|![7_1AKAZE_0SIFT_L2_BF](/draws/uav/7_1AKAZE_0SIFT_L2_BF.png)|
-|![8_1AKAZE_0SIFT_L2_BF](/draws/uav/8_1AKAZE_0SIFT_L2_BF.png)|
-|![9_1AKAZE_0SIFT_L2_BF](/draws/uav/9_1AKAZE_0SIFT_L2_BF.png)|
+|![SIFT SIFT L2 FLANN](/draws/uav/4_0SIFT_0SIFT_L2_Flann.png)|  
+|![AKAZE AKAZE HAM FLANN](/draws/uav/4_1AKAZE_1AKAZE_HAM_Flann.png)|  
+|![STAR DAISY L2 FLANN](/draws/uav/4_10STAR_5DAISY_L2_Flann.png)|
 
 ## Oxford Data Visualisations
-|AKAZE-SIFT-L2-BF|
-|---|
-|![3_1AKAZE_0SIFT_L2_BF](/draws/bark/3_1AKAZE_0SIFT_L2_BF.png)   |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/bikes/3_1AKAZE_0SIFT_L2_BF.png)  |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/boat/3_1AKAZE_0SIFT_L2_BF.png)   |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/graf/3_1AKAZE_0SIFT_L2_BF.png)   |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/leuven/3_1AKAZE_0SIFT_L2_BF.png) |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/trees/3_1AKAZE_0SIFT_L2_BF.png)  |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/ubc/3_1AKAZE_0SIFT_L2_BF.png)    |
-|![3_1AKAZE_0SIFT_L2_BF](/draws/wall/3_1AKAZE_0SIFT_L2_BF.png)   |
+|scenario|example draw|
+|--------|------------|
+|bikes  |![AKAZE AKAZE HAM FLANN](/draws/bikes/3_1AKAZE_1AKAZE_HAM_Flann.png)   |
+|bikes  |![ORB BEBLID HAM BF](/draws/bikes/3_2ORB_11BEBLID_HAM_BF.png)          |
+|boat   |![BRISK TEBLID HAM FLANN](/draws/boat/3_3BRISK_12TEBLID_HAM_Flann.png) |
+|leuven |![STAR SIFT L2 BF](/draws/leuven/3_10STAR_0SIFT_L2_BF.png)             |
+|trees  |![AKAZE AKAZE HAM FLANN](/draws/trees/3_1AKAZE_1AKAZE_HAM_Flann.png)   |
+|ubc    |![AKAZE AKAZE HAM FLANN](/draws/ubc/3_1AKAZE_1AKAZE_HAM_Flann.png)     |
+|ubc    |![STAR DAISY L2 FLANN](/draws/ubc/3_10STAR_5DAISY_L2_Flann.png)        |
 
 ## Synthetic Data Visualisations
-### AKAZE-SIFT-L2-BF
-|Intensity|Scale|Rotation|
-|---|---|---|
-|![Intensity](/draws/intensity/bird_7_1AKAZE_0SIFT_L2_BF.png)         |![Scale](/draws/scale/bird_4_1AKAZE_0SIFT_L2_BF.png)         |![Rotation](/draws/rot/bird_4_1AKAZE_0SIFT_L2_BF.png)        |
-|![Intensity](/draws/intensity/colors_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/colors_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/colors_4_1AKAZE_0SIFT_L2_BF.png)      |
-|![Intensity](/draws/intensity/dogman_7_1AKAZE_0SIFT_L2_BF.png)       |![Scale](/draws/scale/dogman_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/dogman_4_1AKAZE_0SIFT_L2_BF.png)      |
-|![Intensity](/draws/intensity/tempera_7_1AKAZE_0SIFT_L2_BF.png)      |![Scale](/draws/scale/tempera_4_1AKAZE_0SIFT_L2_BF.png)      |![Rotation](/draws/rot/tempera_4_1AKAZE_0SIFT_L2_BF.png)     |
-|![Intensity](/draws/intensity/woman_7_1AKAZE_0SIFT_L2_BF.png)        |![Scale](/draws/scale/woman_4_1AKAZE_0SIFT_L2_BF.png)        |![Rotation](/draws/rot/woman_4_1AKAZE_0SIFT_L2_BF.png)       |
-|![Intensity](/draws/intensity/wormhole_7_1AKAZE_0SIFT_L2_BF.png)     |![Scale](/draws/scale/wormhole_4_1AKAZE_0SIFT_L2_BF.png)     |![Rotation](/draws/rot/wormhole_4_1AKAZE_0SIFT_L2_BF.png)    |
-|![Intensity](/draws/intensity/yard_7_1AKAZE_0SIFT_L2_BF.png)         |![Scale](/draws/scale/yard_4_1AKAZE_0SIFT_L2_BF.png)         |![Rotation](/draws/rot/yard_4_1AKAZE_0SIFT_L2_BF.png)        |
+|Method Combination| Intensity | Scale | Rotation |
+|------------------|-----------|-------|----------|
+|AKAZE SIFT L2 BF       |![Intensity](/draws/intensity/woman_7_1AKAZE_0SIFT_L2_BF.png)      |![Scale](/draws/scale/woman_4_1AKAZE_0SIFT_L2_BF.png)       |![Rotation](/draws/rot/woman_4_1AKAZE_0SIFT_L2_BF.png)       |
+|AKAZE AKAZE HAM FLANN  |![Intensity](/draws/intensity/woman_7_1AKAZE_1AKAZE_HAM_Flann.png) |![Scale](/draws/scale/woman_4_1AKAZE_1AKAZE_HAM_Flann.png)  |![Rotation](/draws/rot/woman_4_1AKAZE_1AKAZE_HAM_Flann.png)  |
+|STAR BRISK HAM FLANN   |![Intensity](/draws/intensity/woman_7_10STAR_3BRISK_HAM_Flann.png) |![Scale](/draws/scale/woman_4_10STAR_3BRISK_HAM_Flann.png)  |![Rotation](/draws/rot/woman_4_10STAR_3BRISK_HAM_Flann.png)  |
 
 
 ## AirSim Data Visualisations
-|AKAZE-SIFT-L2-BF|
-|---|
-|![0_1AKAZE_0SIFT_L2_BF](/draws/airsim/0_1AKAZE_0SIFT_L2_BF.png)|
-|![1_1AKAZE_0SIFT_L2_BF](/draws/airsim/1_1AKAZE_0SIFT_L2_BF.png)|
-|![2_1AKAZE_0SIFT_L2_BF](/draws/airsim/2_1AKAZE_0SIFT_L2_BF.png)|
-|![3_1AKAZE_0SIFT_L2_BF](/draws/airsim/3_1AKAZE_0SIFT_L2_BF.png)|
-|![4_1AKAZE_0SIFT_L2_BF](/draws/airsim/4_1AKAZE_0SIFT_L2_BF.png)|
-|![5_1AKAZE_0SIFT_L2_BF](/draws/airsim/5_1AKAZE_0SIFT_L2_BF.png)|
-|![6_1AKAZE_0SIFT_L2_BF](/draws/airsim/6_1AKAZE_0SIFT_L2_BF.png)|
-|![7_1AKAZE_0SIFT_L2_BF](/draws/airsim/7_1AKAZE_0SIFT_L2_BF.png)|
-|![8_1AKAZE_0SIFT_L2_BF](/draws/airsim/8_1AKAZE_0SIFT_L2_BF.png)|
-|![9_1AKAZE_0SIFT_L2_BF](/draws/airsim/9_1AKAZE_0SIFT_L2_BF.png)|
+|![AKAZE SIFT L2 FLANN](/draws/airsim/2_1AKAZE_0SIFT_L2_Flann.png)|
+|![AKAZE AKAZE HAM FLANN](/draws/airsim/2_1AKAZE_1AKAZE_HAM_Flann.png)|
+|![STAR DAISY L2 FLANN](/draws/airsim/2_10STAR_5DAISY_L2_Flann.png)|

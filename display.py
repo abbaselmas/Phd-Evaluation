@@ -322,8 +322,8 @@ def synthetic4():
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis3.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=5, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
     fig.write_html(f"./html/synthetic/synthetic4.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/synthetic/synthetic4.html", "a") as f:
@@ -367,8 +367,8 @@ def synthetic():
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=5, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
     fig.write_html(f"./html/synthetic/synthetic.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/synthetic/synthetic.html", "a") as f:
@@ -536,9 +536,9 @@ def syntheticViolin():
 ################
 def oxfordAll9():
     fig = go.Figure()
-    fig = make_subplots(rows=3, cols=3, subplot_titles=[   "<span style='font-size: 20px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 20px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 20px;'><b>Boat(Zoom + Rotation)</b></span>", 
-                                                            "<span style='font-size: 20px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 20px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 20px;'><b>Trees(Blur)</b></span>", 
-                                                            "<span style='font-size: 20px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 20px;'><b>UBC(JPEG)", "<span style='font-size: 20px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=3, cols=3, subplot_titles=[   "<span style='font-size: 18px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 18px;'><b>Boat(Zoom + Rotation)</b></span>", 
+                                                            "<span style='font-size: 18px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 18px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Trees(Blur)</b></span>", 
+                                                            "<span style='font-size: 18px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 18px;'><b>UBC(JPEG)", "<span style='font-size: 18px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     sett_axis = dict(range=[-0.01, 1.01])
     fig.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
@@ -596,10 +596,10 @@ def oxfordAll9():
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
-        button_list.append(dict(label=y, method="update", 
+        button_list.append(dict(label=f"y: {y}", method="update", 
                                 args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=0, xanchor="left", y=1, yanchor="bottom")]) 
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=-0.04, xanchor="left", y=1, yanchor="bottom")]) 
     fig.write_html(f"./html/oxford/oxfordAll9.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxfordAll9.html", "a") as f:
         f.write(custom_html)
@@ -707,31 +707,31 @@ def oxford9():
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
                     if not np.isnan(xydata_Graf).any():
-                        traces.append(go.Scatter( x=xydata_Graf,        y=xydata_Graf,       arg=sett))
+                        traces.append(go.Scatter(x=xydata_Graf,        y=xydata_Graf,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Graf[0]],   y=[xydata_Graf[1]],  arg=sett), row=1, col=1)
                     if not np.isnan(xydata_Bikes).any():
-                        traces.append(go.Scatter( x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
+                        traces.append(go.Scatter(x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bikes[0]],  y=[xydata_Bikes[1]], arg=sett), row=1, col=2)
                     if not np.isnan(xydata_Boat).any():
-                        traces.append(go.Scatter( x=xydata_Boat,        y=xydata_Boat,       arg=sett))
+                        traces.append(go.Scatter(x=xydata_Boat,        y=xydata_Boat,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Boat[0]],   y=[xydata_Boat[1]],  arg=sett), row=1, col=3)
                     if not np.isnan(xydata_Leuven).any():
-                        traces.append(go.Scatter( x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
+                        traces.append(go.Scatter(x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Leuven[0]], y=[xydata_Leuven[1]],arg=sett), row=2, col=1)
                     if not np.isnan(xydata_Wall).any():
-                        traces.append(go.Scatter( x=xydata_Wall,        y=xydata_Wall,       arg=sett))
+                        traces.append(go.Scatter(x=xydata_Wall,        y=xydata_Wall,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Wall[0]],   y=[xydata_Wall[1]],  arg=sett), row=2, col=2)
                     if not np.isnan(xydata_Trees).any():
-                        traces.append(go.Scatter( x=xydata_Trees,       y=xydata_Trees,      arg=sett))
+                        traces.append(go.Scatter(x=xydata_Trees,       y=xydata_Trees,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Trees[0]],  y=[xydata_Trees[1]], arg=sett), row=2, col=3)
                     if not np.isnan(xydata_Bark).any():
-                        traces.append(go.Scatter( x=xydata_Bark,        y=xydata_Bark,       arg=sett))
+                        traces.append(go.Scatter(x=xydata_Bark,        y=xydata_Bark,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bark[0]],   y=[xydata_Bark[1]],  arg=sett), row=3, col=1)
                     if not np.isnan(xydata_Ubc).any():
-                        traces.append(go.Scatter( x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
+                        traces.append(go.Scatter(x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Ubc[0]],    y=[xydata_Ubc[1]],   arg=sett), row=3, col=2)
                     if not np.isnan(Overall).any():
-                        traces.append(go.Scatter( x=Overall,            y=Overall,           arg=sett))
+                        traces.append(go.Scatter(x=Overall,            y=Overall,           arg=sett))
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
         color_index = (color_index + 14) % num_combinations
@@ -739,11 +739,11 @@ def oxford9():
     button_listx = []
     button_listy = []
     for idx, axis in enumerate(dropdown_axis):
-        button_listx.append(dict(label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-        button_listy.append(dict(label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
+        button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
+        button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom")])
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom")])
     fig.write_html(f"./html/oxford/oxford9.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxford9.html", "a") as f:
         f.write(custom_html)
@@ -785,12 +785,12 @@ def oxford():
     button_listy = []
     button_listz = []
     for idx, axis in enumerate(dropdown_axis):
-        button_listx.append(dict(label=axis, method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-        button_listy.append(dict(label=axis, method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-        button_listz.append(dict(label=axis, method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
+        button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
+        button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
+        button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=5, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
     fig.write_html(f"./html/oxford/oxford.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxford.html", "a") as f:
@@ -1070,8 +1070,8 @@ def single(data="drone"):
             button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
             button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=5, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
     fig.write_html(f"./html/{data}/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}.html", "a") as f:
