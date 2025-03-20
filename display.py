@@ -442,7 +442,7 @@ def syntheticTiming():
 def syntheticEfficiency():
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
+                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]), xaxis_tickangle=90)
     color_index = 0
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -864,7 +864,7 @@ def oxfordTiming():
 def oxfordEfficiency():
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
+                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]), xaxis_tickangle=90)
     color_index = 0
     color_index = 0
     for i in range(len(DetectorsLegend)):
@@ -1127,7 +1127,7 @@ def singleEfficiency(data="drone"):
     Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16,title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency</b></span>",x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]))
+                        barmode="stack", hovermode="x unified", hoverdistance=900, margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(autorange=True, range=[-0.01, 1.01]), xaxis_tickangle=90)
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
