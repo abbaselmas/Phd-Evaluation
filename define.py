@@ -15,7 +15,7 @@ Norm              = ["L2", "HAM"]
 Matcher           = ["BF", "Flann"]
 
 num_combinations = len(DetectorsLegend) * len(DescriptorsLegend)
-colors = sample_colorscale("IceFire", [i / num_combinations for i in range(num_combinations)]) #Portland, Turbo, Rainbow, HSV, IceFire, Phase, Electric, Inferno, mrybm
+colors = sample_colorscale("mrybm", [i / num_combinations for i in range(num_combinations)]) #Portland, Turbo, Rainbow, HSV, IceFire, Phase, Electric, Inferno, mrybm
 marker_symbols = []
 for base in range(14):
     marker_symbols.extend([base, base + 100, base + 200, base + 300])
@@ -259,6 +259,7 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                             writer.writerow(row)
 
 def normalize(value, data):
+    data = np.where(data == 0, np.nan, data)
     valid_data = data[~np.isnan(data) & (data != 0)]
     if len(valid_data) == 0:
         return np.zeros_like(value)  # Return array of zeros if data is invalid
@@ -269,69 +270,31 @@ def normalize(value, data):
     return (value - min_val) / (max_val - min_val)
 
 def log_normalize(value, data):
+    data = np.where(data == 0, np.nan, data)
     valid_data = data[~np.isnan(data) & (data != 0)]
     if len(valid_data) == 0:
         return np.zeros_like(value)
-    
-    # Apply log transform to compress the range
-    log_data = np.log1p(valid_data)  # log1p to handle potential zeros
+    log_data = np.log1p(data)
     log_value = np.log1p(value)
-    
     min_val = np.nanmin(log_data)
     max_val = np.nanmax(log_data)
-    
     if min_val == max_val:
         return np.ones_like(value)
-        
-    # Normalize in log space, then reverse
     return (log_value - min_val) / (max_val - min_val)
 
-def percentile_normalize(value, data):
-    # Extract valid data points
-    valid_data = data[~np.isnan(data) & (data != 0)]
-    if len(valid_data) == 0:
-        return np.zeros_like(value)
-    # Flatten the valid data for percentile calculation
-    flat_valid_data = valid_data.flatten()
-    # Handle different input types
-    if np.isscalar(value):
-        # For a single value
-        percentile = np.mean(flat_valid_data <= value)
-    else:
-        # For array inputs - calculate percentile for each element
-        # Create a result array with the same shape as the input
-        result = np.zeros_like(value, dtype=float)
-        # Flatten the input for iteration
-        flat_value = value.flatten()
-        flat_result = result.flatten()
-        # Calculate percentile for each value
-        for i, v in enumerate(flat_value):
-            if np.isnan(v) or v == 0:
-                flat_result[i] = 0
-            else:
-                flat_result[i] = np.mean(flat_valid_data <= v)
-        # Reshape back to original shape
-        result = flat_result.reshape(value.shape)
-        return result    
-    return percentile
-
 def nonlinear_normalize(value, data, alpha=0.5):
+    data = np.where(data == 0, np.nan, data)
     valid_data = data[~np.isnan(data) & (data != 0)]
     if len(valid_data) == 0:
         return np.zeros_like(value)
     
-    min_val = np.nanmin(valid_data)
-    max_val = np.nanmax(valid_data)
+    min_val = np.nanmin(data)
+    max_val = np.nanmax(data)
     
     if min_val == max_val:
         return np.ones_like(value)
     
-    # Standard normalization
     norm_value = (value - min_val) / (max_val - min_val)
-    
-    # Apply power transformation to spread values more evenly
-    # Lower alpha makes distribution more uniform (alpha=1 is linear)
     transformed = norm_value ** alpha
     
-    # Reverse since lower is better
     return transformed
