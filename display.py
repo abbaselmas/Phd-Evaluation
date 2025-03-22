@@ -380,7 +380,7 @@ def syntheticTiming():
                                                             "<span style='font-size: 22px;'>Total time (Detect + Descript + Match(BF+Flann))</span>", "<span style='font-size: 22px;'>Inlier time (Detect + Descript + Match(BF+Flann) + MAGSAC++)</span>",
                                                             "<span style='font-size: 22px;'>Detect time</span>", "<span style='font-size: 22px;'>Describe time</span>"],
                         specs=[[{"colspan": 2}, None], [{"colspan": 2}, None],[{"colspan": 2}, None], [{"colspan": 2}, None], [{}, {}]], horizontal_spacing=0.05, vertical_spacing=0.06)
-    fig.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2500, margin=dict(l=20, r=20, t=80, b=20), hovermode="y unified")
+    fig.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset Timings for Average 1k</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), barmode="stack", height=2500, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified")
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
