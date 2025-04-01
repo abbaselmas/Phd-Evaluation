@@ -563,7 +563,7 @@ def syntheticHeatmap():
     for c3 in range(2):
         for m in range(2):
             fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/synthetic/synthetic_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def syntheticViolin():
@@ -1058,7 +1058,7 @@ def oxfordHeatmap():
     for c3 in range(2):
         for m in range(2):
             fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/oxford/oxford_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def oxfordViolin():
@@ -1342,7 +1342,7 @@ def heatmap(data="drone"):
     for c3 in range(2):
         for m in range(2):            
             fig.add_trace(go.Heatmap(z=scores[:, :, c3, m],x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=14, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def correlationHeatmap(data="drone"):
@@ -1379,7 +1379,7 @@ def correlationHeatmap(data="drone"):
                 corr_matrix[i,j] = 0
     fig = go.Figure()
     fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
-    fig.update_layout(template="ggplot2", font_size=14, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def violinPlot(data="drone"):
