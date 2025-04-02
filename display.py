@@ -544,7 +544,7 @@ def syntheticEfficiency():
         f.write(custom_html)
 
 def syntheticHeatmap():
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.07, vertical_spacing=0.08)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -563,7 +563,7 @@ def syntheticHeatmap():
     for c3 in range(2):
         for m in range(2):
             fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/synthetic/synthetic_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def syntheticViolin():
@@ -1039,7 +1039,7 @@ def oxfordEfficiency():
         f.write(custom_html)
 
 def oxfordHeatmap():
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.07, vertical_spacing=0.08)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -1058,7 +1058,7 @@ def oxfordHeatmap():
     for c3 in range(2):
         for m in range(2):
             fig.add_trace(go.Heatmap( z=scores[:,:,c3,m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hoverongaps=False, hovertemplate="Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}"), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/oxford/oxford_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def oxfordViolin():
@@ -1315,7 +1315,7 @@ def singleEfficiency(data="drone"):
 def heatmap(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     Rate = np.load(f"./arrays/Rate_{data}.npy")  
-    fig = make_subplots(rows=2, cols=2, subplot_titles=["L2-BruteForce", "L2-Flann", "Hamming-BruteForce", "Hamming-Flann"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.07, vertical_spacing=0.08)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -1342,7 +1342,7 @@ def heatmap(data="drone"):
     for c3 in range(2):
         for m in range(2):            
             fig.add_trace(go.Heatmap(z=scores[:, :, c3, m],x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=16, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def correlationHeatmap(data="drone"):
