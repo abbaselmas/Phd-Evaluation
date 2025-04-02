@@ -566,6 +566,34 @@ def syntheticHeatmap():
     fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/synthetic/synthetic_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
+def syntheticCorrelationHeatmap():
+    
+    metrics = {
+        "Precision":            np.concatenate((Rate_intensity[:, :, :, :, :, 13].flatten(), Rate_scale[:, :, :, :, :, 13].flatten(), Rate_rot[:, :, :, :, :, 13].flatten())),
+        "Recall":               np.concatenate((Rate_intensity[:, :, :, :, :, 12].flatten(), Rate_scale[:, :, :, :, :, 12].flatten(), Rate_rot[:, :, :, :, :, 12].flatten())),
+        "Repeatibility":        np.concatenate((Rate_intensity[:, :, :, :, :, 14].flatten(), Rate_scale[:, :, :, :, :, 14].flatten(), Rate_rot[:, :, :, :, :, 14].flatten())),
+        "F1 Score":             np.concatenate((Rate_intensity[:, :, :, :, :, 15].flatten(), Rate_scale[:, :, :, :, :, 15].flatten(), Rate_rot[:, :, :, :, :, 15].flatten())),
+        "Inliers":              np.concatenate((Rate_intensity[:, :, :, :, :,  9].flatten(), Rate_scale[:, :, :, :, :,  9].flatten(), Rate_rot[:, :, :, :, :,  9].flatten())),
+        "Matches":              np.concatenate((Rate_intensity[:, :, :, :, :, 10].flatten(), Rate_scale[:, :, :, :, :, 10].flatten(), Rate_rot[:, :, :, :, :, 10].flatten())),
+        "1K Total Time":   np.concatenate((Exec_time_intensity[:, :, :, :, :,  6].flatten(), Exec_time_scale[:, :, :, :, :,  6].flatten(), Exec_time_rot[:, :, :, :, :,  6].flatten())),
+        "1K Inlier Time":  np.concatenate((Exec_time_intensity[:, :, :, :, :,  7].flatten(), Exec_time_scale[:, :, :, :, :,  7].flatten(), Exec_time_rot[:, :, :, :, :,  7].flatten()))
+    }
+    metric_names = list(metrics.keys())
+    corr_matrix = np.zeros((len(metric_names), len(metric_names)))
+    for i, name1 in enumerate(metric_names):
+        for j, name2 in enumerate(metric_names):
+            data1 = metrics[name1]
+            data2 = metrics[name2]
+            mask = ~(np.isnan(data1) | np.isnan(data2) | np.isinf(data1) | np.isinf(data2))
+            if np.sum(mask) > 1:
+                corr_matrix[i,j] = np.corrcoef(data1[mask], data2[mask])[0,1]
+            else:
+                corr_matrix[i,j] = 0
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
+    fig.update_layout(template="ggplot2", font_size=20, title=dict(text=f"<span style='font-size: 26px;'><b>Synthetic Dataset Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.write_html(f"./html/synthetic/synthetic_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
+
 def syntheticViolin():
     fig = go.Figure()
     traces = []
@@ -1061,6 +1089,36 @@ def oxfordHeatmap():
     fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>Oxford Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/oxford/oxford_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
+def oxfordCorrelationHeatmap():
+    metrics = {
+        "Precision":            np.concatenate((Rate_graf[:, :, :, :, :, 13], Rate_bikes[:, :, :, :, :, 13], Rate_boat[:, :, :, :, :, 13], Rate_leuven[:, :, :, :, :, 13], Rate_wall[:, :, :, :, :, 13], Rate_trees[:, :, :, :, :, 13], Rate_bark[:, :, :, :, :, 13], Rate_ubc[:, :, :, :, :, 13]), axis=0).flatten(),
+        "Recall":               np.concatenate((Rate_graf[:, :, :, :, :, 12], Rate_bikes[:, :, :, :, :, 12], Rate_boat[:, :, :, :, :, 12], Rate_leuven[:, :, :, :, :, 12], Rate_wall[:, :, :, :, :, 12], Rate_trees[:, :, :, :, :, 12], Rate_bark[:, :, :, :, :, 12], Rate_ubc[:, :, :, :, :, 12]), axis=0).flatten(),
+        "Repeatibility":        np.concatenate((Rate_graf[:, :, :, :, :, 14], Rate_bikes[:, :, :, :, :, 14], Rate_boat[:, :, :, :, :, 14], Rate_leuven[:, :, :, :, :, 14], Rate_wall[:, :, :, :, :, 14], Rate_trees[:, :, :, :, :, 14], Rate_bark[:, :, :, :, :, 14], Rate_ubc[:, :, :, :, :, 14]), axis=0).flatten(),
+        "F1 Score":             np.concatenate((Rate_graf[:, :, :, :, :, 15], Rate_bikes[:, :, :, :, :, 15], Rate_boat[:, :, :, :, :, 15], Rate_leuven[:, :, :, :, :, 15], Rate_wall[:, :, :, :, :, 15], Rate_trees[:, :, :, :, :, 15], Rate_bark[:, :, :, :, :, 15], Rate_ubc[:, :, :, :, :, 15]), axis=0).flatten(),
+        "Inliers":              np.concatenate((Rate_graf[:, :, :, :, :,  9], Rate_bikes[:, :, :, :, :,  9], Rate_boat[:, :, :, :, :,  9], Rate_leuven[:, :, :, :, :,  9], Rate_wall[:, :, :, :, :,  9], Rate_trees[:, :, :, :, :,  9], Rate_bark[:, :, :, :, :,  9], Rate_ubc[:, :, :, :, :,  9]), axis=0).flatten(),
+        "Matches":              np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0).flatten(),
+        "1K Total Time":        np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0).flatten(),
+        "1K Inlier Time":       np.concatenate((Exec_time_graf[:, :, :, :, :, 7], Exec_time_bikes[:, :, :, :, :, 7], Exec_time_boat[:, :, :, :, :, 7], Exec_time_leuven[:, :, :, :, :, 7], Exec_time_wall[:, :, :, :, :, 7], Exec_time_trees[:, :, :, :, :, 7], Exec_time_bark[:, :, :, :, :, 7], Exec_time_ubc[:, :, :, :, :, 7]), axis=0).flatten()
+    }
+    
+    metric_names = list(metrics.keys())
+    corr_matrix = np.zeros((len(metric_names), len(metric_names)))
+    
+    for i, name1 in enumerate(metric_names):
+        for j, name2 in enumerate(metric_names):
+            data1 = metrics[name1]
+            data2 = metrics[name2]
+            mask = ~(np.isnan(data1) | np.isnan(data2) | np.isinf(data1) | np.isinf(data2))
+            if np.sum(mask) > 1:
+                corr_matrix[i,j] = np.corrcoef(data1[mask], data2[mask])[0,1]
+            else:
+                corr_matrix[i,j] = 0
+    
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu',zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
+    fig.update_layout(template="ggplot2", font_size=20, title=dict(text="<span style='font-size: 26px;'><b>Oxford Dataset Metric Correlations</b></span>", x=0.5,xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.write_html(f"./html/oxford/oxford_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
+
 def oxfordViolin():
     fig = go.Figure()
     traces = []
@@ -1379,7 +1437,7 @@ def correlationHeatmap(data="drone"):
                 corr_matrix[i,j] = 0
     fig = go.Figure()
     fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
-    fig.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", font_size=20, title=dict(text=f"<span style='font-size: 26px;'><b>{data.upper()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
     fig.write_html(f"./html/{data}/{data}_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def violinPlot(data="drone"):
