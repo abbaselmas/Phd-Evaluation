@@ -94,19 +94,21 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
-                                        _, descriptors1 = method_dscrpt.compute(img, keypoints1)
+                                        keypoints1_updated, descriptors1 = method_dscrpt.compute(img, keypoints1)
                                         descriptors_cache[0, i, j, 0] = descriptors1
                                     else:
                                         descriptors1 = descriptors_cache[0, i, j, 0]
+                                        keypoints1_updated = keypoints_cache[0, i, 0]
                                     if descriptors_cache[k, i, j, 1] is None:
                                         start_time = time.perf_counter_ns()
-                                        _, descriptors2 = method_dscrpt.compute(img2, keypoints2)
+                                        keypoints2_updated, descriptors2 = method_dscrpt.compute(img2, keypoints2)
                                         descript_time = time.perf_counter_ns() - start_time
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
+                                        keypoints2_updated = keypoints_cache[k, i, 1]
                                     start_time = time.perf_counter_ns()
-                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1_updated, keypoints2_updated, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                 except:
@@ -114,7 +116,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
-                                    img_matches = draw_matches(img, keypoints1, img2, keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img, keypoints1_updated, img2, keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/intensity/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
@@ -162,19 +164,21 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
-                                        _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
+                                        keypoints1_updated, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
                                         descriptors_cache[0, i, j, 0] = descriptors1
                                     else:
                                         descriptors1 = descriptors_cache[0, i, j, 0]
+                                        keypoints1_updated = keypoints_cache[0, i, 0]
                                     if descriptors_cache[k, i, j, 1] is None:
                                         start_time = time.perf_counter_ns()
-                                        _, descriptors2 = method_dscrpt.compute(img[1], keypoints2)
+                                        keypoints2_updated, descriptors2 = method_dscrpt.compute(img[1], keypoints2)
                                         descript_time = time.perf_counter_ns() - start_time
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
+                                        keypoints2_updated = keypoints_cache[k, i, 1]
                                     start_time = time.perf_counter_ns()
-                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1_updated, keypoints2_updated, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                 except:
@@ -182,7 +186,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
-                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img[0], keypoints1_updated, img[1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/scale/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
@@ -230,19 +234,21 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
-                                        _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
+                                        keypoints1_updated, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
                                         descriptors_cache[0, i, j, 0] = descriptors1
                                     else:
                                         descriptors1 = descriptors_cache[0, i, j, 0]
+                                        keypoints1_updated = keypoints_cache[0, i, 0]
                                     if descriptors_cache[k, i, j, 1] is None:
                                         start_time = time.perf_counter_ns()
-                                        _, descriptors2 = method_dscrpt.compute(img[1], keypoints2)
+                                        keypoints2_updated, descriptors2 = method_dscrpt.compute(img[1], keypoints2)
                                         descript_time = time.perf_counter_ns() - start_time
                                         descriptors_cache[k, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k, i, j, 1]
+                                        keypoints2_updated = keypoints_cache[k, i, 1]
                                     start_time = time.perf_counter_ns()
-                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1_updated, keypoints2_updated, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                 except:
@@ -250,7 +256,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
-                                    img_matches = draw_matches(img[0], keypoints1, img[1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img[0], keypoints1_updated, img[1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/rot/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
