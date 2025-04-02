@@ -73,9 +73,7 @@ def evaluate_with_fundamentalMat_and_XSAC(matcher=0, KP1=None, KP2=None, Dspt1=N
         flann = cv2.FlannBasedMatcher(index_params, search_params)
         matches1to2 = flann.match(Dspt1, Dspt2)
         matches2to1 = flann.match(Dspt2, Dspt1)
-        # Apply cross-checking
         matches = cross_check_matches(matches1to2, matches2to1)
-    if len(matches) < 8: return [], matches
     points1 = np.float32([KP1[m.queryIdx].pt for m in matches]).reshape(-1, 2)
     points2 = np.float32([KP2[m.trainIdx].pt for m in matches]).reshape(-1, 2)
     _, mask = cv2.findFundamentalMat(points1, points2, cv2.USAC_MAGSAC) # MAGSAC++

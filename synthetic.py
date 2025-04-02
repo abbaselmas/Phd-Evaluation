@@ -92,6 +92,8 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
+                                if m == 0:
+                                    continue
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         keypoints1_updated, descriptors1 = method_dscrpt.compute(img, keypoints1)
@@ -162,6 +164,8 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
+                                if m == 0:
+                                    continue
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         keypoints1_updated, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
@@ -232,6 +236,8 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization type 0: L2, 1: HAMMING
                             for m in range(2): # Matching type 0: BruteForce, 1: FlannBased
+                                if m == 0:
+                                    continue
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
                                         keypoints1_updated, descriptors1 = method_dscrpt.compute(img[0], keypoints1)

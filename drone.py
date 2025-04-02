@@ -37,21 +37,25 @@ def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                             for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
+                                if m == 0:
+                                    continue
                                 try:
                                     if descriptors_cache[k, i, j, 0] is None:
-                                        _, descriptors1 = method_dscrpt.compute(img[k], keypoints1)
+                                        keypoints1_updated, descriptors1 = method_dscrpt.compute(img[k], keypoints1)
                                         descriptors_cache[k, i, j, 0] = descriptors1
                                     else:
                                         descriptors1 = descriptors_cache[k, i, j, 0]
+                                        keypoints1_updated = keypoints_cache[k, i, 0]
                                     if descriptors_cache[k+1, i, j, 1] is None:
                                         start_time = time.perf_counter_ns()
-                                        _, descriptors2 = method_dscrpt.compute(img[k+1], keypoints2)
+                                        keypoints2_updated, descriptors2 = method_dscrpt.compute(img[k+1], keypoints2)
                                         descript_time = time.perf_counter_ns() - start_time
                                         descriptors_cache[k+1, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k+1, i, j, 1]
+                                        keypoints2_updated = keypoints_cache[k+1, i, 1]
                                     start_time = time.perf_counter_ns()
-                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1_updated, keypoints2_updated, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                     if reconstruct:
@@ -63,7 +67,7 @@ def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True
                                             db = COLMAPDatabase.connect(database_path)
                                         camera_id = db.add_camera(model=2, width=img[k].shape[1], height=img[k].shape[0], params = np.array((660, 500, 333, 0.0082)))
                                         image_id = db.add_image(name=f"DSC00{k+153}.JPG", camera_id=camera_id)
-                                        keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1], dtype=np.float32)
+                                        keypoints1_np = np.array([[kp.pt[0], kp.pt[1], kp.size, kp.angle, kp.response, kp.octave] for kp in keypoints1_updated], dtype=np.float32)
                                         db.add_keypoints(image_id, keypoints1_np)
                                         db.add_descriptors(image_id, descriptors1)
                                         # matches_np = np.array([[m.queryIdx, m.trainIdx] for m in matches], dtype=np.uint32)
@@ -76,7 +80,7 @@ def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
                                 if drawing and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
-                                    img_matches = draw_matches(img[k], keypoints1, img[k+1], keypoints2, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
+                                    img_matches = draw_matches(img[k], keypoints1_updated, img[k+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
                     else:
