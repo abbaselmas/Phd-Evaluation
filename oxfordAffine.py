@@ -37,19 +37,21 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
                             for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
                                 try:
                                     if descriptors_cache[0, i, j, 0] is None:
-                                        _, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
+                                        keypoints1_updated, descriptors1 = method_dscrpt.compute(img[0], keypoints1)
                                         descriptors_cache[0, i, j, 0] = descriptors1
                                     else:
                                         descriptors1 = descriptors_cache[0, i, j, 0]
+                                        keypoints1_updated = keypoints_cache[0, i, 0]
                                     if descriptors_cache[k+1, i, j, 1] is None:
                                         start_time = time.perf_counter_ns()
-                                        _, descriptors2 = method_dscrpt.compute(img[k+1], keypoints2)
+                                        keypoints2_updated, descriptors2 = method_dscrpt.compute(img[k+1], keypoints2)
                                         descript_time = time.perf_counter_ns() - start_time
                                         descriptors_cache[k+1, i, j, 1] = descriptors2
                                     else:
                                         descriptors2 = descriptors_cache[k+1, i, j, 1]
+                                        keypoints2_updated = keypoints_cache[k+1, i, 1]
                                     start_time = time.perf_counter_ns()
-                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1, keypoints2, descriptors1, descriptors2, Normalization[c3])
+                                    inliers, matches = evaluate_with_fundamentalMat_and_XSAC(m, keypoints1_updated, keypoints2_updated, descriptors1, descriptors2, Normalization[c3])
                                     Exec_time[k, m, c3, i, j, 2] = (time.perf_counter_ns() - start_time) / (10 ** 9)
                                     Rate, Exec_time = process_matches(Rate, Exec_time, k, m, c3, i, j, len(keypoints1), len(keypoints2), len(descriptors1), len(descriptors2), len(inliers), len(matches), detect_time, descript_time)
                                 except:
