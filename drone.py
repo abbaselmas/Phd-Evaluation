@@ -37,8 +37,6 @@ def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True
                         method_dscrpt = Descriptors[j]
                         for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                             for m in range(2): # Matching Type 0: BruteForce 1: FlannBased
-                                if m == 0:
-                                    continue
                                 try:
                                     if descriptors_cache[k, i, j, 0] is None:
                                         keypoints1_updated, descriptors1 = method_dscrpt.compute(img[k], keypoints1)
