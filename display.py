@@ -347,8 +347,8 @@ def synthetic():
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)),                 # F1 Score
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)),                 # Inliers
                         np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)),                 # Matches
-                        1 - normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0)),  # 1K Total Time
-                        1 - normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0))]  # 1K feature Inlier Time
+                        1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0)),  # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0))]  # 1K feature Inlier Time
                     if not np.isnan(xydata).any():
                         traces.append(go.Scatter(   x=xydata,       y=xydata,       mode="markers", marker=dict(color=colors[color_index], size=xydata, symbol=marker_symbols[symbol_index]),
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
@@ -1233,9 +1233,9 @@ def single(data="drone"):
                         1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7]), # 1K feature Inlier Time
                     ]
                     if data == "drone":
-                        xydata.append(1 - normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11])) # Reprojection Error
+                        xydata.append(1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11])) # Reprojection Error
                         xydata.append(np.nanmean(Rate[:, m, c3, i, j, 16])) # 3D Points Count
-                        xydata.append(1 - normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, 
+                        xydata.append(1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, 
                                                                (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten())) # 1K 3D Point Reconstruction Time
                     if not np.isnan(xydata).any():
                         traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers", 
