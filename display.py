@@ -392,13 +392,13 @@ def syntheticTiming():
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7],         Exec_time_scale[:, m, :, i, j, 7],          Exec_time_rot[:, m, :, i, j, 7]),           axis=0))
                 if not np.isnan(result3) and result3 > 0:
                     trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
-                                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
+                                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig.add_trace(trace_match_synt_result3, row=2, col=1)
                 if not np.isnan(result4) and result4 > 0:
                     trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
-                                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
+                                                        name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result4,  row=3, col=1) if m == 0 else fig.add_trace(trace_match_synt_result4, row=4, col=1)
