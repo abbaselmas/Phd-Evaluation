@@ -1,16 +1,16 @@
 from synthetic import *
 from oxfordAffine import *
-from drone import *
-from uav import *
+# from drone import *
+# from uav import *
 from display import *
-from airsim import *
+# from airsim import *
 
 a = 100
 b = 100
-drawing = True
-save = False
+drawing = False
+save = True
 reconstruct = False
-mobile = "" #"_mobile"
+mobile = "_mobile"
 
 # execute_scenario_rotation (a, b, drawing, save, mobile)
 # execute_scenario_scale    (a, b, drawing, save, mobile)
@@ -33,6 +33,7 @@ mobile = "" #"_mobile"
 # syntheticTiming()
 # syntheticEfficiency()
 # syntheticHeatmap()
+# syntheticCorrelationHeatmap()
 # syntheticViolin()
 
 # oxfordAll9()
@@ -41,6 +42,7 @@ mobile = "" #"_mobile"
 # oxfordTiming()
 # oxfordEfficiency()
 # oxfordHeatmap()
+# oxfordCorrelationHeatmap()
 # oxfordViolin()
 
 # singleAll("drone")
