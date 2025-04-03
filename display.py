@@ -216,16 +216,17 @@ def syntheticAll4():
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not np.isnan(Rate2_I1).any():
+                    if not (np.isnan(Rate2_I1).any() or np.isnan(Rate2_I2).any() or np.isnan(Rate2_S).any() or np.isnan(Rate2_R).any()):
+                    # if not np.isnan(Rate2_I1).any():
                         traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
                         fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
-                    if not np.isnan(Rate2_I2).any():
+                    # if not np.isnan(Rate2_I2).any():
                         traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
                         fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
-                    if not np.isnan(Rate2_S).any():
+                    # if not np.isnan(Rate2_S).any():
                         traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
                         fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
-                    if not np.isnan(Rate2_R).any():
+                    # if not np.isnan(Rate2_R).any():
                         traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
                         fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -299,16 +300,17 @@ def synthetic4():
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
-                    if not np.isnan(xydata_Intensity1).any():
+                    if not (np.isnan(xydata_Intensity1).any() or np.isnan(xydata_Intensity2).any() or np.isnan(xydata_Scale).any() or np.isnan(xydata_Rotation).any()):
+                    # if not np.isnan(xydata_Intensity1).any():
                         traces.append(go.Scatter( x=xydata_Intensity1,      y=xydata_Intensity1,      arg=sett, marker_size=xydata_Intensity1))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity1[0]], y=[xydata_Intensity1[1]], arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Intensity2).any():
+                    # if not np.isnan(xydata_Intensity2).any():
                         traces.append(go.Scatter( x=xydata_Intensity2,      y=xydata_Intensity2,      arg=sett, marker_size=xydata_Intensity2))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity2[0]], y=[xydata_Intensity2[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Scale).any():
+                    # if not np.isnan(xydata_Scale).any():
                         traces.append(go.Scatter( x=xydata_Scale,           y=xydata_Scale,           arg=sett, marker_size=xydata_Scale))
                         fig.add_trace(go.Scatter(x=[xydata_Scale[0]],      y=[xydata_Scale[1]],      arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Rotation).any():
+                    # if not np.isnan(xydata_Rotation).any():
                         traces.append(go.Scatter( x=xydata_Rotation,        y=xydata_Rotation,        arg=sett, marker_size=xydata_Rotation))
                         fig.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -390,25 +392,22 @@ def syntheticTiming():
             for m in range(2):
                 result3 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 6],         Exec_time_scale[:, m, :, i, j, 6],          Exec_time_rot[:, m, :, i, j, 6]),           axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7],         Exec_time_scale[:, m, :, i, j, 7],          Exec_time_rot[:, m, :, i, j, 7]),           axis=0))
-                if not np.isnan(result3) and result3 > 0:
+                if not np.isnan(result3) and result3 > 0 and not np.isnan(result4) and result4 > 0:
                     trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result3,  row=1, col=1) if m == 0 else fig.add_trace(trace_match_synt_result3, row=2, col=1)
-                if not np.isnan(result4) and result4 > 0:
                     trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result4,  row=3, col=1) if m == 0 else fig.add_trace(trace_match_synt_result4, row=4, col=1)
-                # All timings
-                if not np.isnan(result3) and result3 > 0:
+                    # All timings
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total']], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=6, col=1 )
-                if not np.isnan(result4) and result4 > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier']], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
@@ -451,49 +450,41 @@ def syntheticTimingMobile():
                 result3m= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 6], Exec_time_scale_mobile[:, m, :, i, j, 6], Exec_time_rot_mobile[:, m, :, i, j, 6]), axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7],         Exec_time_scale[:, m, :, i, j, 7],          Exec_time_rot[:, m, :, i, j, 7]),           axis=0))
                 result4m= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 7], Exec_time_scale_mobile[:, m, :, i, j, 7], Exec_time_rot_mobile[:, m, :, i, j, 7]), axis=0))
-                if not np.isnan(result3) and result3 > 0:
+                if not np.isnan(result3) and result3 > 0 and not np.isnan(result4) and result4 > 0 and not np.isnan(result3m) and result3m > 0 and not np.isnan(result4m) and result4m > 0:
                     trace_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result3,  row=1, col=1) if m == 0 else fig.add_trace(trace_result3, row=2, col=1)
-                if not np.isnan(result4) and result4 > 0:
                     trace_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result4,  row=3, col=1) if m == 0 else fig.add_trace(trace_result4, row=4, col=1)
-                # Mobile timings
-                if not np.isnan(result3m) and result3m > 0:
+                    # Mobile timings
                     trace_result3m= go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m",
                                                         text=[f"{result3m:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result3m, row=1+4, col=1) if m == 0 else fig.add_trace(trace_result3m, row=2+4, col=1)
-                if not np.isnan(result4m) and result4m > 0:
                     trace_result4m = go.Bar( x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m",
                                                         text=[f"{result4m:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
-                    fig.add_trace(trace_result4m, row=3+4, col=1) if m == 0 else fig.add_trace(trace_result4m, row=4+4, col=1)
-                    
-                # All timings
-                if not np.isnan(result3) and result3 > 0:
+                    fig.add_trace(trace_result4m, row=3+4, col=1) if m == 0 else fig.add_trace(trace_result4m, row=4+4, col=1)                    
+                    # All timings
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total-p']], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result3m) and result3m > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total-m']], y=[result3m],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m",
                                             text=[f"{result3m:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result4) and result4 > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier-p']], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result4m) and result4m > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier-m']], y=[result4m],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m",
                                             text=[f"{result4m:.3f}"], marker_color=colors[color_index],
@@ -638,9 +629,9 @@ def syntheticViolin():
 ################
 def oxfordAll9():
     fig = go.Figure()
-    fig = make_subplots(rows=3, cols=3, subplot_titles=[   "<span style='font-size: 18px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 18px;'><b>Boat(Zoom + Rotation)</b></span>", 
-                                                            "<span style='font-size: 18px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 18px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Trees(Blur)</b></span>", 
-                                                            "<span style='font-size: 18px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 18px;'><b>UBC(JPEG)", "<span style='font-size: 18px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=3, cols=3, subplot_titles=["<span style='font-size: 18px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 18px;'><b>Boat(Zoom + Rotation)</b></span>", 
+                                                        "<span style='font-size: 18px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 18px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Trees(Blur)</b></span>", 
+                                                        "<span style='font-size: 18px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 18px;'><b>UBC(JPEG)", "<span style='font-size: 18px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     sett_axis = dict(range=[-0.01, 1.01])
     fig.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
@@ -665,32 +656,33 @@ def oxfordAll9():
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    # if not np.isnan(Rate_Graf or Rate_Bikes or Rate_Boat or Rate_Leuven or Rate_Wall or Rate_Trees or Rate_Bark or Rate_Ubc).all():
-                    if not np.isnan(Rate_Graf).any():
+                    # Check for each trace individually and only add if it doesn't contain NaN values
+                    if not (np.isnan(Rate_Graf).any() or np.isnan(Rate_Bikes).any() or np.isnan(Rate_Boat).any() or np.isnan(Rate_Leuven).any() or np.isnan(Rate_Wall).any() or np.isnan(Rate_Trees).any() or np.isnan(Rate_Bark).any() or np.isnan(Rate_Ubc).any() or np.isnan(Overall).any()):
+                    # if not np.isnan(Rate_Graf).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
-                    if not np.isnan(Rate_Bikes).any():
+                    # if not np.isnan(Rate_Bikes).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
-                    if not np.isnan(Rate_Boat).any():
+                    # if not np.isnan(Rate_Boat).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
-                    if not np.isnan(Rate_Leuven).any():
+                    # if not np.isnan(Rate_Leuven).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
-                    if not np.isnan(Rate_Wall).any():
+                    # if not np.isnan(Rate_Wall).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
-                    if not np.isnan(Rate_Trees).any():
+                    # if not np.isnan(Rate_Trees).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
-                    if not np.isnan(Rate_Bark).any():
+                    # if not np.isnan(Rate_Bark).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
-                    if not np.isnan(Rate_Ubc).any():
+                    # if not np.isnan(Rate_Ubc).any():
                         traces.append(go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
-                    if not np.isnan(Overall).any():
+                    # if not np.isnan(Overall).any():
                         traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -700,7 +692,7 @@ def oxfordAll9():
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=f"y: {y}", method="update", 
                                 args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))
-    fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+    fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=-0.04, xanchor="left", y=1, yanchor="bottom")]) 
     fig.write_html(f"./html/oxford/oxfordAll9.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxfordAll9.html", "a") as f:
@@ -808,31 +800,32 @@ def oxford9():
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>")
-                    if not np.isnan(xydata_Graf).any():
+                    if not (np.isnan(xydata_Graf).any() or np.isnan(xydata_Bikes).any() or np.isnan(xydata_Boat).any() or np.isnan(xydata_Leuven).any() or np.isnan(xydata_Wall).any() or np.isnan(xydata_Trees).any() or np.isnan(xydata_Bark).any() or np.isnan(xydata_Ubc).any() or np.isnan(Overall).any()):
+                    # if not np.isnan(xydata_Graf).any():
                         traces.append(go.Scatter(x=xydata_Graf,        y=xydata_Graf,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Graf[0]],   y=[xydata_Graf[1]],  arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Bikes).any():
+                    # if not np.isnan(xydata_Bikes).any():
                         traces.append(go.Scatter(x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bikes[0]],  y=[xydata_Bikes[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Boat).any():
+                    # if not np.isnan(xydata_Boat).any():
                         traces.append(go.Scatter(x=xydata_Boat,        y=xydata_Boat,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Boat[0]],   y=[xydata_Boat[1]],  arg=sett), row=1, col=3)
-                    if not np.isnan(xydata_Leuven).any():
+                    # if not np.isnan(xydata_Leuven).any():
                         traces.append(go.Scatter(x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Leuven[0]], y=[xydata_Leuven[1]],arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Wall).any():
+                    # if not np.isnan(xydata_Wall).any():
                         traces.append(go.Scatter(x=xydata_Wall,        y=xydata_Wall,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Wall[0]],   y=[xydata_Wall[1]],  arg=sett), row=2, col=2)
-                    if not np.isnan(xydata_Trees).any():
+                    # if not np.isnan(xydata_Trees).any():
                         traces.append(go.Scatter(x=xydata_Trees,       y=xydata_Trees,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Trees[0]],  y=[xydata_Trees[1]], arg=sett), row=2, col=3)
-                    if not np.isnan(xydata_Bark).any():
+                    # if not np.isnan(xydata_Bark).any():
                         traces.append(go.Scatter(x=xydata_Bark,        y=xydata_Bark,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bark[0]],   y=[xydata_Bark[1]],  arg=sett), row=3, col=1)
-                    if not np.isnan(xydata_Ubc).any():
+                    # if not np.isnan(xydata_Ubc).any():
                         traces.append(go.Scatter(x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Ubc[0]],    y=[xydata_Ubc[1]],   arg=sett), row=3, col=2)
-                    if not np.isnan(Overall).any():
+                    # if not np.isnan(Overall).any():
                         traces.append(go.Scatter(x=Overall,            y=Overall,           arg=sett))
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -890,7 +883,7 @@ def oxford():
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40+10)%50) for trace in traces]}]))
-    fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+    fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=5, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
@@ -914,25 +907,22 @@ def oxfordTiming():
             for m in range(2):
                 result3 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 6],          Exec_time_wall[:, m, :, i, j, 6],           Exec_time_trees[:, m, :, i, j, 6],          Exec_time_bikes[:, m, :, i, j, 6],          Exec_time_bark[:, m, :, i, j, 6],           Exec_time_boat[:, m, :, i, j, 6],           Exec_time_leuven[:, m, :, i, j, 6],         Exec_time_ubc[:, m, :, i, j, 6]),           axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7],          Exec_time_wall[:, m, :, i, j, 7],           Exec_time_trees[:, m, :, i, j, 7],          Exec_time_bikes[:, m, :, i, j, 7],          Exec_time_bark[:, m, :, i, j, 7],           Exec_time_boat[:, m, :, i, j, 7],           Exec_time_leuven[:, m, :, i, j, 7],         Exec_time_ubc[:, m, :, i, j, 7]),           axis=0))
-                if not np.isnan(result3) and result3 > 0:
+                if not np.isnan(result3) and result3 > 0 and not np.isnan(result4) and result4 > 0:
                     trace_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result3,  row=1, col=1) if m == 0 else fig.add_trace(trace_result3, row=2, col=1)                    
-                if not np.isnan(result4) and result4 > 0:
                     trace_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result4,  row=3, col=1) if m == 0 else fig.add_trace(trace_result4, row=4, col=1)
-                # All Data Timings
-                if not np.isnan(result3) and result3 > 0:
+                    # All Data Timings
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total']], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=6, col=1 )
-                if not np.isnan(result4) and result4 > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier']], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
@@ -975,48 +965,41 @@ def oxfordTimingMobile():
                 result3m= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 6],   Exec_time_wall_mobile[:, m, :, i, j, 6],    Exec_time_trees_mobile[:, m, :, i, j, 6],   Exec_time_bikes_mobile[:, m, :, i, j, 6],   Exec_time_bark_mobile[:, m, :, i, j, 6],    Exec_time_boat_mobile[:, m, :, i, j, 6],    Exec_time_leuven_mobile[:, m, :, i, j, 6],  Exec_time_ubc_mobile[:, m, :, i, j, 6]),    axis=0))
                 result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7],          Exec_time_wall[:, m, :, i, j, 7],           Exec_time_trees[:, m, :, i, j, 7],          Exec_time_bikes[:, m, :, i, j, 7],          Exec_time_bark[:, m, :, i, j, 7],           Exec_time_boat[:, m, :, i, j, 7],           Exec_time_leuven[:, m, :, i, j, 7],         Exec_time_ubc[:, m, :, i, j, 7]),           axis=0))
                 result4m= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 7],   Exec_time_wall_mobile[:, m, :, i, j, 7],    Exec_time_trees_mobile[:, m, :, i, j, 7],   Exec_time_bikes_mobile[:, m, :, i, j, 7],   Exec_time_bark_mobile[:, m, :, i, j, 7],    Exec_time_boat_mobile[:, m, :, i, j, 7],    Exec_time_leuven_mobile[:, m, :, i, j, 7],  Exec_time_ubc_mobile[:, m, :, i, j, 7]),    axis=0))
-                if not np.isnan(result3) and result3 > 0:
+                if not np.isnan(result3) and result3 > 0 and not np.isnan(result4) and result4 > 0 and not np.isnan(result3m) and result3m > 0 and not np.isnan(result4m) and result4m > 0:
                     trace_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
                                                         text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result3,  row=1, col=1) if m == 0 else fig.add_trace(trace_result3, row=2, col=1)
-                if not np.isnan(result4) and result4 > 0:
                     trace_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
                                                         text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result4,  row=3, col=1) if m == 0 else fig.add_trace(trace_result4, row=4, col=1)
-                #mobile
-                if not np.isnan(result3m) and result3m > 0:
+                    #mobile
                     trace_result3m= go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m",
                                                         text=[f"{result3m:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result3m, row=1+4, col=1) if m == 0 else fig.add_trace(trace_result3m, row=2+4, col=1)
-                if not np.isnan(result4m) and result4m > 0:
                     trace_result4m = go.Bar( x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4m],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m",
                                                         text=[f"{result4m:.3f}"], marker_color=colors[color_index],
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_result4m, row=3+4, col=1) if m == 0 else fig.add_trace(trace_result4m, row=4+4, col=1)
-                # All Data Timings
-                if not np.isnan(result3) and result3 > 0:
+                    # All Data Timings
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total-p']], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-p",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result3m) and result3m > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total-m']], y=[result3m],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m",
                                             text=[f"{result3m:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result4) and result4 > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier-p']], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-p",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=9, col=1 )
-                if not np.isnan(result4m) and result4m > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier-m']], y=[result4m],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m",
                                             text=[f"{result4m:.3f}"], marker_color=colors[color_index],
@@ -1283,25 +1266,22 @@ def singleTiming(data="drone"):
             for m in range(2):
                 result3 = np.nanmean(Exec_time[:, m, :, i, j, 6])
                 result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
-                if not np.isnan(result3) and result3 > 0:
+                if not np.isnan(result3) and result3 > 0 and not np.isnan(result4) and result4 > 0:
                     trace_match_synt_result3 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result3],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                         text=[f"{result3:.3f}"], marker=dict(color = colors[color_index]),
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result3, row=1, col=1) if m == 0 else fig.add_trace(trace_match_synt_result3, row=2, col=1)
-                if not np.isnan(result4) and result4 > 0:
                     trace_match_synt_result4 = go.Bar(  x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[result4],
                                                         name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                         text=[f"{result4:.3f}"], marker=dict(color = colors[color_index]),
                                                         showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>")
                     fig.add_trace(trace_match_synt_result4, row=3, col=1) if m == 0 else fig.add_trace(trace_match_synt_result4, row=4, col=1)
-                #All Timings
-                if not np.isnan(result3) and result3 > 0:
+                    #All Timings
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-total']], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=6, col=1 )
-                if not np.isnan(result4) and result4 > 0:
                     fig.add_trace(go.Bar(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j] + '-' + Matcher[m] + '-inlier']], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
