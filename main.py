@@ -1,7 +1,7 @@
 from synthetic import *
 from oxfordAffine import *
 # from drone import *
-# from uav import *
+from uav import *
 from display import *
 # from airsim import *
 
@@ -23,7 +23,7 @@ mobile = "_mobile"
 # executeScenarios          ("trees",  a, b, drawing, save, mobile)
 # executeScenarios          ("wall",   a, b, drawing, save, mobile)
 # executeScenarios          ("ubc",    a, b, drawing, save, mobile)
-# executeUAVScenarios       ("uav",    a, b, drawing, save, mobile)
+executeUAVScenarios       ("uav",    a, b, drawing, save, mobile)
 # executeAirSimScenarios    ("airsim", a, b, drawing, save, mobile)
 # executeDroneScenarios     ("drone",  a, b, drawing, save, mobile, reconstruct)
 
