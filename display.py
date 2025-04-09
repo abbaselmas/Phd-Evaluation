@@ -51,7 +51,7 @@ custom_html = """
             var xValues = data[i].x;
             var showTrace = false;
             if (filterFunction(traceName.toUpperCase())) {
-                const matchFunc = filterMode === "all" ? yValues.every : yValues.some;
+                const matchFunc = filterMode === "all" ? Array.prototype.every : Array.prototype.some;
                 const isValueInRange = (y, i) => {
                     const x = xValues[i];
                     return y >= minYThreshold && y <= maxYThreshold &&
@@ -230,7 +230,7 @@ def syntheticAll4():
                         traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
                         fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -314,7 +314,7 @@ def synthetic4():
                         traces.append(go.Scatter( x=xydata_Rotation,        y=xydata_Rotation,        arg=sett, marker_size=xydata_Rotation))
                         fig.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_listx = []
     button_listy = []
@@ -359,7 +359,7 @@ def synthetic():
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_listx = []
     button_listy = []
@@ -526,7 +526,7 @@ def syntheticEfficiency():
                                                     marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]), showlegend=True,
                                                     legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
                                                                     dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
@@ -588,6 +588,7 @@ def syntheticCorrelationHeatmap():
 def syntheticViolin():
     fig = go.Figure()
     traces = []
+    color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):  # Normalization Type
@@ -606,11 +607,14 @@ def syntheticViolin():
                         traces.append(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata,
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
                         fig.add_trace(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata[0],
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, axis in enumerate(dropdown_axis):
@@ -686,7 +690,7 @@ def oxfordAll9():
                         traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
                         fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -829,7 +833,7 @@ def oxford9():
                         traces.append(go.Scatter(x=Overall,            y=Overall,           arg=sett))
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_listx = []
     button_listy = []
@@ -874,7 +878,7 @@ def oxford():
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                             showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_listx = []
     button_listy = []
@@ -1041,7 +1045,7 @@ def oxfordEfficiency():
                                                     marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]), showlegend=True,
                                                     legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
                                                                     dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
@@ -1105,6 +1109,7 @@ def oxfordCorrelationHeatmap():
 def oxfordViolin():
     fig = go.Figure()
     traces = []
+    color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):  # Normalization Type
@@ -1123,11 +1128,14 @@ def oxfordViolin():
                         traces.append(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata,
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
                         fig.add_trace(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata[0],
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, axis in enumerate(dropdown_axis):
@@ -1180,7 +1188,7 @@ def singleAll(data="drone"):
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
@@ -1230,7 +1238,7 @@ def single(data="drone"):
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.2f}</b> | y: <b>%{y:.2f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."] + (["Reproj. Err", "3D-Points", "3D Time"] if data == "drone" else [])
     button_listx = []
     button_listy = []
@@ -1342,7 +1350,7 @@ def singleEfficiency(data="drone"):
                                                     marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]), showlegend=True,
                                                     legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
-        color_index = (color_index + 14) % num_combinations
+            color_index = (color_index + 14) % num_combinations
     fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
                                                                     dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
@@ -1425,6 +1433,7 @@ def violinPlot(data="drone"):
     Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
     traces = []
+    color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):  # Normalization Type
@@ -1443,11 +1452,14 @@ def violinPlot(data="drone"):
                         traces.append(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata,
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
                         fig.add_trace(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata[0],
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
+                                marker=dict(color=colors[color_index]),
                                 box_visible=True, meanline_visible=True))
+            color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
     button_list = []
     for idx, axis in enumerate(dropdown_axis):
