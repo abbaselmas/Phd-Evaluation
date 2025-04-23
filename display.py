@@ -164,7 +164,7 @@ def syntheticAll4():
     fig = make_subplots(rows=2, cols=2, subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>", "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>", "<span style='font-size: 20px;'><b>Scale changing</b></span>", "<span style='font-size: 20px;'><b>Rotation changing</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     sett_axis = dict(range=[-0.01, 1.01], autorange=False)
     fig.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                        hovermode="closest", margin=dict(l=20, r=20, t=60, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis,
+                        hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis,
                         xaxis=dict(tickmode="array", tickvals=val_b), xaxis2=dict(tickmode="array", tickvals=val_c), xaxis3=dict(tickmode="array", tickvals=scale), xaxis4=dict(tickmode="array", tickvals=rot))
     color_index = 0
     symbol_index = 0
@@ -507,7 +507,7 @@ def oxford9():
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="top"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom")])
     fig.write_html(f"./html/oxford/oxford9.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/oxford/oxford9.html", "a") as f:
@@ -568,7 +568,7 @@ def single(data="drone"):
         Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        hovermode="closest", margin=dict(l=20, r=20, t=50, b=20), xaxis=dict(range=[-0.01, 1.01], autorange=False), yaxis=dict(range=[-0.01, 1.01], autorange=False))
+                        hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), xaxis=dict(range=[-0.01, 1.01], autorange=False), yaxis=dict(range=[-0.01, 1.01], autorange=False))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -651,10 +651,10 @@ def timing(data="drone", mobile=""):
     fig = go.Figure()
     fig = make_subplots(rows=3, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b></span>",
                                                         "<span style='font-size: 22px;'>Inlier time <b>BF</b> - Inlier time <b>Flann</b></span>",
-                                                        "<span style='font-size: 22px;'>All Timings</span>"], vertical_spacing=0.2)
-    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=80, b=20), hovermode="x unified",
+                                                        "<span style='font-size: 22px;'>All Timings</span>"], vertical_spacing=0.13)
+    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20), hovermode="x unified", height=1740,
                         title=dict( text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset Timings for Average 1k</b></span>",
-                                    x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"))
+                                    x=0.5, xanchor="center", yanchor="bottom", xref="paper", yref="paper"))
     color_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -726,7 +726,7 @@ def efficiency(data="drone"):
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
         Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig = go.Figure()
-    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=80, b=20),
+    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20),
                         title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=False))
     color_index = 0
@@ -778,7 +778,7 @@ def efficiency(data="drone"):
                         eff_score = eff_score * 4 / 3
                     fig.add_trace(go.Scatter(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[eff_score], text=[f"{eff_score:.3f}"],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", mode="markers",
-                                                marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]), showlegend=True,
+                                                marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), showlegend=True,
                                                 legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
@@ -793,7 +793,7 @@ def heatmap(data="drone"):
     if not (data == "synthetic" or data == "oxford"):
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
         Rate = np.load(f"./arrays/Rate_{data}.npy")  
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.1, vertical_spacing=0.1)
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.1, vertical_spacing=0.17)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
@@ -843,7 +843,7 @@ def heatmap(data="drone"):
     for c3 in range(2):
         for m in range(2):            
             fig.add_trace(go.Heatmap(z=scores[:, :, c3, m],x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="middle"), font_size=20, margin=dict(l=20, r=20, t=50, b=20))
+    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="bottom"), font_size=20, margin=dict(l=20, r=20, t=70, b=20))
     fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def correlationHeatmap(data="drone"):
