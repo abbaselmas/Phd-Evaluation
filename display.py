@@ -37,6 +37,10 @@ custom_html = """
                 return filterWords.every(filterWord => word.includes(filterWord));
             else if (logicKeyword === "OR")
                 return filterWords.some(filterWord => word.includes(filterWord));
+            else if (logicKeyword === "NOT") {
+                if (filterWords.length === 0) return true;
+                return !filterWords.some(filterWord => word.includes(filterWord));
+            }
             else
                 return true;
         };
