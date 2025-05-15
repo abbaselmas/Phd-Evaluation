@@ -6,11 +6,11 @@ from define import *
 custom_html = """
     <div style="position: fixed; top: 2px; left: 2px;">
         <span>
-            <input type="text" id="filterInput" size="15" onchange="applyFilters()" placeholder="and/or .sift -sift bf">
-            <input type="number" id="minYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min y">
-            <input type="number" id="maxYValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max y">
-            <input type="number" id="minXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="min x">
-            <input type="number" id="maxXValueInput" min="0" max="99" step="0.05" onchange="applyFilters()" placeholder="max x">
+            <input type="text" id="filterInput" size="15" onchange="applyFilters()" placeholder="and/or/not .sift -sift bf pc">
+            <input type="number" id="minYValueInput" step="0.05" onchange="applyFilters()" placeholder="min y">
+            <input type="number" id="maxYValueInput" step="0.05" onchange="applyFilters()" placeholder="max y">
+            <input type="number" id="minXValueInput" step="0.05" onchange="applyFilters()" placeholder="min x">
+            <input type="number" id="maxXValueInput" step="0.05" onchange="applyFilters()" placeholder="max x">
             <input type="radio" name="filterMode" value="all" onchange="applyFilters()" checked>All
             <input type="radio" name="filterMode" value="any" onchange="applyFilters()" >Any
         </span>
@@ -681,7 +681,7 @@ def timing(data="drone", mobile=""):
     if not (data == "synthetic" or data == "oxford"):
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
-    fig = make_subplots(rows=5, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Detector level)</span>",
+    fig = make_subplots(rows=6, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Detector level)</span>",
                                                         "<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Descriptor level)</span>",
                                                         "<span style='font-size: 22px;'>Inlier time <b>BF</b> - Inlier time <b>Flann</b> (Detector level)</span>",
                                                         "<span style='font-size: 22px;'>Inlier time <b>BF</b> - Inlier time <b>Flann</b> (Descriptor level)</span>",
@@ -735,6 +735,25 @@ def timing(data="drone", mobile=""):
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"),  row=5, col=1 )
                 if mobile:
+                    result3diff = result3m - result3
+                    result4diff = result4m - result4
+                    if not np.isnan(result3diff):
+                        fig.add_trace(go.Bar(
+                            x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-3']], y=[result3diff],
+                            name=f"{f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}"} - Total Time Difference",
+                            text=[f"{result3m:.3f}"], marker_color=colors[color_index % len(colors)],
+                            showlegend=True,
+                            hovertemplate="<b>%{y:.3f}</b>"
+                        ), row=6, col=1)
+
+                    if not np.isnan(result4diff):
+                        fig.add_trace(go.Bar(
+                            x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-4']], y=[result4diff],
+                            name=f"{f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}"} - Inlier Time Difference",
+                            text=[f"{result4m:.3f}"], marker_color=colors[color_index % len(colors)],
+                            showlegend=True,
+                            hovertemplate="<b>%{y:.3f}</b>"
+                        ), row=6, col=1)
                     if not np.isnan(result3m):
                         fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m']], y=[result3m],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",

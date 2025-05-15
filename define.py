@@ -1,6 +1,6 @@
 import cv2, csv
-from plotly.colors import sample_colorscale
 import numpy as np
+from plotly.colors import sample_colorscale
 
 epsilon = 1e-6
 val_b    = np.array([-30, -10, 10, 30])     # b ∈ [−30 : 20 : +30]
