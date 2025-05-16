@@ -10,7 +10,7 @@ b = 100
 drawing = False
 save = True
 reconstruct = False
-mobile = "_mobile" # ""
+mobile = "_mobile2" # ""
 
 execute_scenario_rotation (a, b, drawing, save, mobile)
 execute_scenario_scale    (a, b, drawing, save, mobile)
