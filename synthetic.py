@@ -115,7 +115,7 @@ def execute_scenario_intensity (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing: # and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img, keypoints1_updated, img2, keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/intensity/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -185,7 +185,7 @@ def execute_scenario_scale     (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing: # and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img[0], keypoints1_updated, img[1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/scale/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
@@ -255,7 +255,7 @@ def execute_scenario_rotation  (a=100, b=100, drawing=False, save=True, mobile="
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing: # and Rate[k, m, c3, i, j, 9] > 500 and Rate[k, m, c3, i, j, 13] > 0.85 and Exec_time[k, m, c3, i, j, 7] < 0.5:
+                                if drawing:
                                     img_matches = draw_matches(img[0], keypoints1_updated, img[1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/rot/{selected_image}_{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
