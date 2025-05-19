@@ -261,74 +261,15 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                                     ]
                             writer.writerow(row)
 
-def normalize(value, data):
-    data = np.where(data == 0, np.nan, data)
-    valid_data = data[~np.isnan(data) & (data != 0)]
-    if len(valid_data) == 0:
-        return np.zeros_like(value)  # Return array of zeros if data is invalid
-    min_val = np.nanmin(valid_data)
-    max_val = np.nanmax(valid_data)
-    if min_val == max_val:
-        return np.ones_like(value) #If all values are the same, return array of ones.
-    return (value - min_val) / (max_val - min_val)
-
-def log_normalize(value, data):
-    data = np.where(data == 0, np.nan, data)
-    valid_data = data[~np.isnan(data) & (data != 0)]
-    if len(valid_data) == 0:
-        return np.zeros_like(value)
-    log_data = np.log1p(data)
-    log_value = np.log1p(value)
-    min_val = np.nanmin(log_data)
-    max_val = np.nanmax(log_data)
-    if min_val == max_val:
-        return np.ones_like(value)
-    return (log_value - min_val) / (max_val - min_val)
-
 def nonlinear_normalize(value, data, alpha=0.5):
-    # Create a temporary array where 0s are treated as NaNs to exclude them from min/max calculation
-    # np.where preserves the original array type and structure
-    data_for_range_calc = np.where(data == 0, np.nan, data)
-
-    # Check if there are any valid data points (non-zero, non-nan) left for range calculation
-    # This uses the temporary array where 0s are now NaNs
-    valid_data_for_check_len = data_for_range_calc[~np.isnan(data_for_range_calc)]
-
-    if len(valid_data_for_check_len) == 0:
-        # If no valid data points remain after excluding 0s and NaNs,
-        # normalization based on range is impossible. Return zeros.
-        # Ensure output type is float to be consistent with potential NaNs later.
-        return np.zeros_like(value, dtype=float)
-
-    # Calculate the minimum and maximum of the valid data points (excluding NaNs and 0s)
-    min_val = np.nanmin(data_for_range_calc)
-    max_val = np.nanmax(data_for_range_calc)
-
-    # Handle the case where all remaining valid data points are the same value
-    if min_val == max_val:
-        # In this case, the normalization range is zero.
-        # Valid input values should map to 1.0, as they are equal to the min/max.
-        # Input values that were originally 0 or NaN should still map to NaN.
-        # Create a boolean mask identifying input values that are not NaN and not 0
-        is_valid_input = ~np.isnan(value) & (value != 0)
-
-        # Use np.where to return 1.0 for valid inputs and NaN for invalid inputs
-        return np.where(is_valid_input, 1.0, np.nan)
-
-    # --- Main Normalization Calculation ---
-    # Create a boolean mask identifying input values that are not NaN and not 0.
-    # Only these values will be normalized based on the calculated range.
     is_valid_input = ~np.isnan(value) & (value != 0)
-
-    # Apply the Min-Max scaling formula: (value - min_val) / (max_val - min_val)
-    # Use np.where to perform this calculation only where is_valid_input is True.
-    # Where is_valid_input is False (input was 0 or NaN), the result is np.nan.
-    # This correctly handles division by zero scenarios if value == min_val == max_val,
-    # as those cases are already handled by the min_val == max_val check above.
-    norm_value = np.where(is_valid_input, (value - min_val) / (max_val - min_val), np.nan)
-
-    # Apply the nonlinear transformation (power alpha)
-    # np.nan raised to any power is still np.nan, correctly handling the excluded values.
-    transformed = norm_value ** alpha
-
-    return transformed
+    data_for_range = data[~np.isnan(data) & (data != 0)]
+    if len(data_for_range) == 0:
+        return np.zeros_like(value, dtype=float)
+    min_val = np.min(data_for_range)
+    max_val = np.max(data_for_range)
+    if min_val == max_val:
+        return np.where(is_valid_input, 1.0, np.nan)
+    result = np.full_like(value, np.nan, dtype=float)
+    result[is_valid_input] = ((value[is_valid_input] - min_val) / (max_val - min_val)) ** alpha
+    return result
