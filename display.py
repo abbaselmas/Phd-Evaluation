@@ -223,8 +223,9 @@ def syntheticAll4():
                         Rate_intensity[:len(val_b), m, c3, i, j, 15], 
                         Rate_intensity[:len(val_b), m, c3, i, j,  9], 
                         Rate_intensity[:len(val_b), m, c3, i, j, 10], 
-                        1 - nonlinear_normalize(Exec_time_intensity[:len(val_b), m, c3, i, j, 6], Exec_time_intensity[:len(val_b), :, :, :, :, 6]),
-                        1 - nonlinear_normalize(Exec_time_intensity[:len(val_b), m, c3, i, j, 7], Exec_time_intensity[:len(val_b), :, :, :, :, 7])])
+                        Exec_time_intensity[:len(val_b), m, c3, i, j, 6],
+                        Exec_time_intensity[:len(val_b), m, c3, i, j, 7]
+                    ])
                     Rate2_I2 = np.array([
                         Rate_intensity[len(val_c):, m, c3, i, j, 13], 
                         Rate_intensity[len(val_c):, m, c3, i, j, 12], 
@@ -232,8 +233,9 @@ def syntheticAll4():
                         Rate_intensity[len(val_c):, m, c3, i, j, 15], 
                         Rate_intensity[len(val_c):, m, c3, i, j,  9], 
                         Rate_intensity[len(val_c):, m, c3, i, j, 10],
-                        1 - nonlinear_normalize(Exec_time_intensity[len(val_c):, m, c3, i, j, 6], Exec_time_intensity[len(val_c):, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(Exec_time_intensity[len(val_c):, m, c3, i, j, 7], Exec_time_intensity[len(val_c):, :, :, :, :, 7])])
+                        Exec_time_intensity[len(val_c):, m, c3, i, j, 6],
+                        Exec_time_intensity[len(val_c):, m, c3, i, j, 7]
+                    ])
                     Rate2_S  = np.array([
                         Rate_scale[:, m, c3, i, j, 13], 
                         Rate_scale[:, m, c3, i, j, 12], 
@@ -241,8 +243,9 @@ def syntheticAll4():
                         Rate_scale[:, m, c3, i, j, 15], 
                         Rate_scale[:, m, c3, i, j,  9], 
                         Rate_scale[:, m, c3, i, j, 10],
-                        1 - nonlinear_normalize(Exec_time_scale[:, m, c3, i, j, 6], Exec_time_scale[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(Exec_time_scale[:, m, c3, i, j, 7], Exec_time_scale[:, :, :, :, :, 7])])
+                        Exec_time_scale[:, m, c3, i, j, 6],
+                        Exec_time_scale[:, m, c3, i, j, 7]
+                    ])
                     Rate2_R  = np.array([
                         Rate_rot[:, m, c3, i, j, 13], 
                         Rate_rot[:, m, c3, i, j, 12], 
@@ -250,24 +253,21 @@ def syntheticAll4():
                         Rate_rot[:, m, c3, i, j, 15], 
                         Rate_rot[:, m, c3, i, j,  9], 
                         Rate_rot[:, m, c3, i, j, 10],
-                        1 - nonlinear_normalize(Exec_time_rot[:, m, c3, i, j, 6], Exec_time_rot[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(Exec_time_rot[:, m, c3, i, j, 7], Exec_time_rot[:, :, :, :, :, 7])])
+                        Exec_time_rot[:, m, c3, i, j, 6],
+                        Exec_time_rot[:, m, c3, i, j, 7]
+                    ])
                     legend_groupfig = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not np.isnan(Rate2_I1).any():
-                        traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
-                        fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
-                    if not np.isnan(Rate2_I2).any():
-                        traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
-                        fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
-                    if not np.isnan(Rate2_S).any():
-                        traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
-                        fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
-                    if not np.isnan(Rate2_R).any():
-                        traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
-                        fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
+                    traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
+                    fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
+                    traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
+                    fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
+                    traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
+                    fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
+                    traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
+                    fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
@@ -300,67 +300,65 @@ def synthetic4():
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 15]),       # F1 Score
-                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]),       # Inliers
-                        np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]),       # Matches
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]), Exec_time_intensity[:len(val_b), :, :, :, :, 6]), # 1K Total Time
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7]), Exec_time_intensity[:len(val_b), :, :, :, :, 7])  # 1K feature Inlier Time
+                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]), Rate_intensity[:len(val_b), :, :, :, :, 9],               alpha=2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]), Rate_intensity[:len(val_b), :, :, :, :, 10],              alpha=2), # Matches
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]), Exec_time_intensity[:len(val_b), :, :, :, :, 6],  alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7]), Exec_time_intensity[:len(val_b), :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
                     xydata_Intensity2 = np.array([
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 13]),       # Precision
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 15]),       # F1 Score
-                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]),       # Inliers
-                        np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]),       # Matches
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]), Exec_time_intensity[len(val_c):, :, :, :, :, 6]), # 1K Total Time
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7]), Exec_time_intensity[len(val_c):, :, :, :, :, 7])  # 1K feature Inlier Time
+                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]), Rate_intensity[len(val_c):, :, :, :, :, 9],               alpha=2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]), Rate_intensity[len(val_c):, :, :, :, :, 10],              alpha=2), # Matches
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]), Exec_time_intensity[len(val_c):, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7]), Exec_time_intensity[len(val_c):, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
                     xydata_Scale      = np.array([
                         np.nanmean(Rate_scale[:, m, c3, i, j, 13]),       # Precision
                         np.nanmean(Rate_scale[:, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_scale[:, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_scale[:, m, c3, i, j, 15]),       # F1 Score
-                        np.nanmean(Rate_scale[:, m, c3, i, j,  9]),       # Inliers
-                        np.nanmean(Rate_scale[:, m, c3, i, j, 10]),       # Matches
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]), Exec_time_scale[:, :, :, :, :, 6]), # 1K Total Time
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 7]), Exec_time_scale[:, :, :, :, :, 7])  # 1K feature Inlier Time
+                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j,  9]), Rate_scale[:, :, :, :, :, 9],               alpha=2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j, 10]), Rate_scale[:, :, :, :, :, 10],              alpha=2), # Matches
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]), Exec_time_scale[:, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 7]), Exec_time_scale[:, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
                     xydata_Rotation   = np.array([
                         np.nanmean(Rate_rot[:, m, c3, i, j, 13]),       # Precision
                         np.nanmean(Rate_rot[:, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_rot[:, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_rot[:, m, c3, i, j, 15]),       # F1 Score
-                        np.nanmean(Rate_rot[:, m, c3, i, j,  9]),       # Inliers
-                        np.nanmean(Rate_rot[:, m, c3, i, j, 10]),       # Matches
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]), Exec_time_rot[:, :, :, :, :, 6]), # 1K Total Time
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 7]), Exec_time_rot[:, :, :, :, :, 7])  # 1K feature Inlier Time
+                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j,  9]), Rate_rot[:, :, :, :, :, 9],               alpha=2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j, 10]), Rate_rot[:, :, :, :, :, 10],              alpha=2), # Matches
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]), Exec_time_rot[:, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 7]), Exec_time_rot[:, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
                     legend_groupfig = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    if not np.isnan(xydata_Intensity1).any():
+                    if not np.isnan(xydata_Intensity1).all():
                         traces.append(go.Scatter(x=xydata_Intensity1,      y=xydata_Intensity1,      arg=sett,  marker_size=np.where(np.isnan(xydata_Intensity1), epsilon, xydata_Intensity1)))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity1[0]], y=[xydata_Intensity1[1]], arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Intensity2).any():
+                    if not np.isnan(xydata_Intensity2).all():
                         traces.append(go.Scatter(x=xydata_Intensity2,      y=xydata_Intensity2,      arg=sett,  marker_size=np.where(np.isnan(xydata_Intensity2), epsilon, xydata_Intensity2)))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity2[0]], y=[xydata_Intensity2[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Scale).any():
+                    if not np.isnan(xydata_Scale).all():
                         traces.append(go.Scatter(x=xydata_Scale,           y=xydata_Scale,           arg=sett,  marker_size=np.where(np.isnan(xydata_Scale), epsilon, xydata_Scale)))
                         fig.add_trace(go.Scatter(x=[xydata_Scale[0]],      y=[xydata_Scale[1]],      arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Rotation).any():
+                    if not np.isnan(xydata_Rotation).all():
                         traces.append(go.Scatter(x=xydata_Rotation,        y=xydata_Rotation,        arg=sett,  marker_size=np.where(np.isnan(xydata_Rotation), epsilon, xydata_Rotation)))
                         fig.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
-    button_listx = []
-    button_listy = []
-    button_listz = []
+    button_listx, button_listy, button_listz = [], [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis3.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis3.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-        button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40)%50) for trace in traces]}]))
+        button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [(trace.marker.size[idx]*50) for trace in traces]}]))
     fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
@@ -385,46 +383,37 @@ def oxfordAll9():
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2): # Normalization Type 0: L2 1: Hamming
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    Rate_Graf  = np.array([Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_graf  [:, m, c3, i, j, 6], Exec_time_graf  [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_graf  [:, m, c3, i, j, 7], Exec_time_graf  [:, :, :, :, :, 7])])
-                    Rate_Bikes = np.array([Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_bikes [:, m, c3, i, j, 6], Exec_time_bikes [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_bikes [:, m, c3, i, j, 7], Exec_time_bikes [:, :, :, :, :, 7])])
-                    Rate_Boat  = np.array([Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_boat  [:, m, c3, i, j, 6], Exec_time_boat  [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_boat  [:, m, c3, i, j, 7], Exec_time_boat  [:, :, :, :, :, 7])])
-                    Rate_Leuven= np.array([Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_leuven[:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_leuven[:, :, :, :, :, 7])])
-                    Rate_Wall  = np.array([Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_wall  [:, m, c3, i, j, 6], Exec_time_wall  [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_wall  [:, m, c3, i, j, 7], Exec_time_wall  [:, :, :, :, :, 7])])
-                    Rate_Trees = np.array([Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_trees [:, m, c3, i, j, 6], Exec_time_trees [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_trees [:, m, c3, i, j, 7], Exec_time_trees [:, :, :, :, :, 7])])
-                    Rate_Bark  = np.array([Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_bark  [:, m, c3, i, j, 6], Exec_time_bark  [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_bark  [:, m, c3, i, j, 7], Exec_time_bark  [:, :, :, :, :, 7])])
-                    Rate_Ubc   = np.array([Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10], 1 - nonlinear_normalize(Exec_time_ubc   [:, m, c3, i, j, 6], Exec_time_ubc   [:, :, :, :, :, 6]), 1 - nonlinear_normalize(Exec_time_ubc   [:, m, c3, i, j, 7], Exec_time_ubc   [:, :, :, :, :, 7])])
+                    Rate_Graf  = np.array([Rate_graf  [:, m, c3, i, j, 13], Rate_graf  [:, m, c3, i, j, 12], Rate_graf  [:, m, c3, i, j, 14], Rate_graf  [:, m, c3, i, j, 15], Rate_graf  [:, m, c3, i, j, 9], Rate_graf  [:, m, c3, i, j, 10], Exec_time_graf  [:, m, c3, i, j, 6], Exec_time_graf  [:, m, c3, i, j, 7]])
+                    Rate_Bikes = np.array([Rate_bikes [:, m, c3, i, j, 13], Rate_bikes [:, m, c3, i, j, 12], Rate_bikes [:, m, c3, i, j, 14], Rate_bikes [:, m, c3, i, j, 15], Rate_bikes [:, m, c3, i, j, 9], Rate_bikes [:, m, c3, i, j, 10], Exec_time_bikes [:, m, c3, i, j, 6], Exec_time_bikes [:, m, c3, i, j, 7]])
+                    Rate_Boat  = np.array([Rate_boat  [:, m, c3, i, j, 13], Rate_boat  [:, m, c3, i, j, 12], Rate_boat  [:, m, c3, i, j, 14], Rate_boat  [:, m, c3, i, j, 15], Rate_boat  [:, m, c3, i, j, 9], Rate_boat  [:, m, c3, i, j, 10], Exec_time_boat  [:, m, c3, i, j, 6], Exec_time_boat  [:, m, c3, i, j, 7]])
+                    Rate_Leuven= np.array([Rate_leuven[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 9], Rate_leuven[:, m, c3, i, j, 10], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 7]])
+                    Rate_Wall  = np.array([Rate_wall  [:, m, c3, i, j, 13], Rate_wall  [:, m, c3, i, j, 12], Rate_wall  [:, m, c3, i, j, 14], Rate_wall  [:, m, c3, i, j, 15], Rate_wall  [:, m, c3, i, j, 9], Rate_wall  [:, m, c3, i, j, 10], Exec_time_wall  [:, m, c3, i, j, 6], Exec_time_wall  [:, m, c3, i, j, 7]])
+                    Rate_Trees = np.array([Rate_trees [:, m, c3, i, j, 13], Rate_trees [:, m, c3, i, j, 12], Rate_trees [:, m, c3, i, j, 14], Rate_trees [:, m, c3, i, j, 15], Rate_trees [:, m, c3, i, j, 9], Rate_trees [:, m, c3, i, j, 10], Exec_time_trees [:, m, c3, i, j, 6], Exec_time_trees [:, m, c3, i, j, 7]])
+                    Rate_Bark  = np.array([Rate_bark  [:, m, c3, i, j, 13], Rate_bark  [:, m, c3, i, j, 12], Rate_bark  [:, m, c3, i, j, 14], Rate_bark  [:, m, c3, i, j, 15], Rate_bark  [:, m, c3, i, j, 9], Rate_bark  [:, m, c3, i, j, 10], Exec_time_bark  [:, m, c3, i, j, 6], Exec_time_bark  [:, m, c3, i, j, 7]])
+                    Rate_Ubc   = np.array([Rate_ubc   [:, m, c3, i, j, 13], Rate_ubc   [:, m, c3, i, j, 12], Rate_ubc   [:, m, c3, i, j, 14], Rate_ubc   [:, m, c3, i, j, 15], Rate_ubc   [:, m, c3, i, j, 9], Rate_ubc   [:, m, c3, i, j, 10], Exec_time_ubc   [:, m, c3, i, j, 6], Exec_time_ubc   [:, m, c3, i, j, 7]])
                     Overall    = np.nanmean([Rate_Graf, Rate_Bikes, Rate_Boat, Rate_Leuven, Rate_Wall, Rate_Trees, Rate_Bark, Rate_Ubc], axis=0)
                     legend_groupfig = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not np.isnan(Rate_Graf).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
-                    if not np.isnan(Rate_Bikes).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
-                    if not np.isnan(Rate_Boat).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
-                    if not np.isnan(Rate_Leuven).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
-                    if not np.isnan(Rate_Wall).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
-                    if not np.isnan(Rate_Trees).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
-                    if not np.isnan(Rate_Bark).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
-                    if not np.isnan(Rate_Ubc).any():
-                        traces.append(go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
-                    if not np.isnan(Overall).any():
-                        traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
-                        fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
+                    traces.append(go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
+                    traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
+                    fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
@@ -460,118 +449,117 @@ def oxford9():
                         np.nanmean(Rate_graf[:, m, c3, i, j, 12]),
                         np.nanmean(Rate_graf[:, m, c3, i, j, 14]),
                         np.nanmean(Rate_graf[:, m, c3, i, j, 15]),
-                        np.nanmean(Rate_graf[:, m, c3, i, j, 9]),
-                        np.nanmean(Rate_graf[:, m, c3, i, j, 10]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]), Exec_time_graf[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 7]), Exec_time_graf[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_graf[:, m, c3, i, j, 9]), Rate_graf[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_graf[:, m, c3, i, j, 10]), Rate_graf[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]), Exec_time_graf[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 7]), Exec_time_graf[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Bikes = np.array([
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 14]), 
-                        np.nanmean(Rate_bikes[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_bikes[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), Exec_time_bikes[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7]), Exec_time_bikes[:, :, :, :, :, 7])
+                        np.nanmean(Rate_bikes[:, m, c3, i, j, 15]),
+                        nonlinear_normalize(np.nanmean(Rate_bikes[:, m, c3, i, j, 9]), Rate_bikes[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), Rate_bikes[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), Exec_time_bikes[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7]), Exec_time_bikes[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Boat = np.array([
                         np.nanmean(Rate_boat[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_boat[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_boat[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), Exec_time_boat[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 7]), Exec_time_boat[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_boat[:, m, c3, i, j, 9]), Rate_boat[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_boat[:, m, c3, i, j, 10]), Rate_boat[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), Exec_time_boat[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 7]), Exec_time_boat[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Leuven = np.array([
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_leuven[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), Exec_time_leuven[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7]), Exec_time_leuven[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_leuven[:, m, c3, i, j, 9]), Rate_leuven[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), Rate_leuven[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), Exec_time_leuven[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7]), Exec_time_leuven[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Wall = np.array([
                         np.nanmean(Rate_wall[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_wall[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_wall[:, m, c3, i, j, 14]), 
-                        np.nanmean(Rate_wall[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_wall[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_wall[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), Exec_time_wall[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 7]), Exec_time_wall[:, :, :, :, :, 7])
+                        np.nanmean(Rate_wall[:, m, c3, i, j, 15]),
+                        nonlinear_normalize(np.nanmean(Rate_wall[:, m, c3, i, j, 9]), Rate_wall[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_wall[:, m, c3, i, j, 10]), Rate_wall[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), Exec_time_wall[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 7]), Exec_time_wall[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Trees = np.array([
                         np.nanmean(Rate_trees[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_trees[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_trees[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), Exec_time_trees[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 7]), Exec_time_trees[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_trees[:, m, c3, i, j, 9]), Rate_trees[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_trees[:, m, c3, i, j, 10]), Rate_trees[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), Exec_time_trees[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 7]), Exec_time_trees[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Bark = np.array([
                         np.nanmean(Rate_bark[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_bark[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_bark[:, m, c3, i, j, 10]), 
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), Exec_time_bark[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 7]), Exec_time_bark[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_bark[:, m, c3, i, j, 9]), Rate_bark[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_bark[:, m, c3, i, j, 10]), Rate_bark[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), Exec_time_bark[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 7]), Exec_time_bark[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     xydata_Ubc = np.array([
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 13]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 12]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 15]), 
-                        np.nanmean(Rate_ubc[:, m, c3, i, j, 9]), 
-                        np.nanmean(Rate_ubc[:, m, c3, i, j, 10]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), Exec_time_ubc[:, :, :, :, :, 6]),
-                        1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7]), Exec_time_ubc[:, :, :, :, :, 7])
+                        nonlinear_normalize(np.nanmean(Rate_ubc[:, m, c3, i, j, 9]), Rate_ubc[:, :, :, :, :, 9], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_ubc[:, m, c3, i, j, 10]), Rate_ubc[:, :, :, :, :, 10], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), Exec_time_ubc[:, :, :, :, :, 6], alpha=0.2),
+                        1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7]), Exec_time_ubc[:, :, :, :, :, 7], alpha=0.2)
                     ])
                     Overall = np.nanmean([xydata_Graf, xydata_Bikes, xydata_Boat, xydata_Leuven, xydata_Wall, xydata_Trees, xydata_Bark, xydata_Ubc], axis=0)
                     legend_groupfig = f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}"
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    if not np.isnan(xydata_Graf).any():
+                    if not np.isnan(xydata_Graf).all():
                         traces.append(go.Scatter(x=xydata_Graf,        y=xydata_Graf,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Graf[0]],   y=[xydata_Graf[1]],  arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Bikes).any():
+                    if not np.isnan(xydata_Bikes).all():
                         traces.append(go.Scatter(x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bikes[0]],  y=[xydata_Bikes[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Boat).any():
+                    if not np.isnan(xydata_Boat).all():
                         traces.append(go.Scatter(x=xydata_Boat,        y=xydata_Boat,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Boat[0]],   y=[xydata_Boat[1]],  arg=sett), row=1, col=3)
-                    if not np.isnan(xydata_Leuven).any():
+                    if not np.isnan(xydata_Leuven).all():
                         traces.append(go.Scatter(x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Leuven[0]], y=[xydata_Leuven[1]],arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Wall).any():
+                    if not np.isnan(xydata_Wall).all():
                         traces.append(go.Scatter(x=xydata_Wall,        y=xydata_Wall,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Wall[0]],   y=[xydata_Wall[1]],  arg=sett), row=2, col=2)
-                    if not np.isnan(xydata_Trees).any():
+                    if not np.isnan(xydata_Trees).all():
                         traces.append(go.Scatter(x=xydata_Trees,       y=xydata_Trees,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Trees[0]],  y=[xydata_Trees[1]], arg=sett), row=2, col=3)
-                    if not np.isnan(xydata_Bark).any():
+                    if not np.isnan(xydata_Bark).all():
                         traces.append(go.Scatter(x=xydata_Bark,        y=xydata_Bark,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bark[0]],   y=[xydata_Bark[1]],  arg=sett), row=3, col=1)
-                    if not np.isnan(xydata_Ubc).any():
+                    if not np.isnan(xydata_Ubc).all():
                         traces.append(go.Scatter(x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Ubc[0]],    y=[xydata_Ubc[1]],   arg=sett), row=3, col=2)
-                    if not np.isnan(Overall).any():
+                    if not np.isnan(Overall).all():
                         traces.append(go.Scatter(x=Overall,            y=Overall,           arg=sett))
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
-    button_listx = []
-    button_listy = []
+    button_listx, button_listy = [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
@@ -603,10 +591,10 @@ def singleAll(data="drone"):
                         Rate[:, m, c3, i, j, 12],       # Recall
                         Rate[:, m, c3, i, j, 14],       # Repeatibility
                         Rate[:, m, c3, i, j, 15],       # F1 Score
-                        Rate[:, m, c3, i, j,  9],       # Inliers
-                        Rate[:, m, c3, i, j, 10],       # Matches
-                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 6], Exec_time[:, :, :, :, :, 6]),# 1K Total Time
-                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 7], Exec_time[:, :, :, :, :, 7]) # 1K feature Inlier Time
+                        nonlinear_normalize(Rate[:, m, c3, i, j,  9], Rate[:, :, :, :, :, 9], alpha=0.3),              # Inliers
+                        nonlinear_normalize(Rate[:, m, c3, i, j, 10], Rate[:, :, :, :, :, 10], alpha=0.3),             # Matches
+                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 6], Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 7], Exec_time[:, :, :, :, :, 7], alpha=0.2)  # 1K feature Inlier Time
                     ])
                     if not np.isnan(y_data).any():
                         traces.append(go.Scatter(   x=xvals, y=y_data, mode="markers+lines",
@@ -652,41 +640,37 @@ def single(data="drone"):
                             np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)),                 # Recall
                             np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)),                 # Repeatibility
                             np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)),                 # F1 Score
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)),                 # Inliers
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)),                 # Matches
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0)),  # 1K Total Time
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0)) # 1K feature Inlier Time
+                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2),                               # Inliers
+                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2),                               # Matches
+                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2),   # 1K Total Time
+                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2)    # 1K feature Inlier Time
                         ])
                     elif data == "oxford":
                         xydata = np.array([
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),                                    # Precision
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),                                    # Recall
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),                                    # Repeatibility
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),                                    # F1Score
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 9],  Rate_bikes[:, m, c3, i, j, 9],  Rate_boat[:, m, c3, i, j, 9],  Rate_leuven[:, m, c3, i, j, 9],  Rate_wall[:, m, c3, i, j, 9],  Rate_trees[:, m, c3, i, j, 9],  Rate_bark[:, m, c3, i, j, 9],  Rate_ubc[:, m, c3, i, j, 9]), axis=0)),                                     # Inliers
-                        np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),                                    # Matches
-                        1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),  # Total Time
-                                                        np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0)),  # Total Time
-                        1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),  # Inlier Time
-                                                        np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0))   # Inlier Time
-                    ])
+                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),                                    # Precision
+                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),                                    # Recall
+                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),                                    # Repeatibility
+                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),                                    # F1Score
+                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 9],  Rate_bikes[:, m, c3, i, j, 9],  Rate_boat[:, m, c3, i, j, 9],  Rate_leuven[:, m, c3, i, j, 9],  Rate_wall[:, m, c3, i, j, 9],  Rate_trees[:, m, c3, i, j, 9],  Rate_bark[:, m, c3, i, j, 9],  Rate_ubc[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_graf[:, :, :, :, :, 9],  Rate_bikes[:, :, :, :, :, 9],  Rate_boat[:, :, :, :, :, 9],  Rate_leuven[:, :, :, :, :, 9],  Rate_wall[:, :, :, :, :, 9],  Rate_trees[:, :, :, :, :, 9],  Rate_bark[:, :, :, :, :, 9],  Rate_ubc[:, :, :, :, :, 9]),  axis=0), alpha=0.2),                 # Inliers
+                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0), alpha=0.2),                 # Matches
+                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2),    # Total Time
+                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2)     # Inlier Time
+                        ])
                     else:
                         xydata = np.array([
                             np.nanmean(Rate[:, m, c3, i, j, 13]),       # Precision
                             np.nanmean(Rate[:, m, c3, i, j, 12]),       # Recall
                             np.nanmean(Rate[:, m, c3, i, j, 14]),       # Repeatibility
                             np.nanmean(Rate[:, m, c3, i, j, 15]),       # F1 Score
-                            np.nanmean(Rate[:, m, c3, i, j,  9]),       # Inliers
-                            np.nanmean(Rate[:, m, c3, i, j, 10]),       # Matches
-                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6]), # 1K Total Time
-                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7]), # 1K feature Inlier Time
+                            nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9], alpha=0.2),             # Inliers
+                            nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.2),             # Matches
+                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
+                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7], alpha=0.2), # 1K feature Inlier Time
                         ])
                     if data == "drone":
                         xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11])) # Reprojection Error
-                        xydata = np.append(xydata, np.nanmean(Rate[:, m, c3, i, j, 16])) # 3D Points Count
-                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, 
-                                                               (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten())) # 1K 3D Point Reconstruction Time
-                    xydata[np.isnan(xydata)] = 0
+                        xydata = np.append(xydata, nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16], alpha=0.2)) # 3D Points Count
+                        xydata = np.append(xydata, 1 - nonlinear_normalize((np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000), (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2)) # 1K 3D Point Reconstruction Time
                     if not (np.isnan(xydata).any() or np.any(xydata == 0)):
                         traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers", 
                                                     marker=dict(color=colors[color_index], size=xydata, symbol=marker_symbols[symbol_index]),
@@ -701,9 +685,7 @@ def single(data="drone"):
     dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."] 
     if data == "drone":
         dropdown_axis += ["Reproj. Err", "3D-Points", "3D Time"]
-    button_listx = []
-    button_listy = []
-    button_listz = []
+    button_listx, button_listy, button_listz = [], [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
@@ -883,45 +865,51 @@ def efficiency(data="drone"):
                 for m in range(2):
                     if data == "synthetic":
                         eff_score = (
-                            0.12 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 13], Rate_scale[:, :, :, :, :, 13], Rate_rot[:, :, :, :, :, 13]), axis=0)) + # Precision
-                            0.05 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 12], Rate_scale[:, :, :, :, :, 12], Rate_rot[:, :, :, :, :, 12]), axis=0)) + # Recall
-                            0.05 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 14], Rate_scale[:, :, :, :, :, 14], Rate_rot[:, :, :, :, :, 14]), axis=0)) + # Repeatibility
-                            0.15 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 15], Rate_scale[:, :, :, :, :, 15], Rate_rot[:, :, :, :, :, 15]), axis=0)) + # F1 Score
-                            0.08 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0)) + # Inliers
-                            0.05 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0)) + # Matches
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0))) + # 1K Total Time
-                            0.15 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0)))   # 1K feature Inlier Time
+                            0.15 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)) + # Precision
+                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)) + # Recall
+                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
+                            0.13 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2) + # Inliers
+                            0.13 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2) + # Matches
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2)) + # 1K Total Time
+                            0.08 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2))   # 1K feature Inlier Time
                         )
                     elif data == "oxford":
                         eff_score = (
-                            0.12 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 13],  Rate_bikes[:, :, :, :, :, 13],  Rate_boat[:, :, :, :, :, 13],  Rate_leuven[:, :, :, :, :, 13],  Rate_wall[:, :, :, :, :, 13],  Rate_trees[:, :, :, :, :, 13],  Rate_bark[:, :, :, :, :, 13],  Rate_ubc[:, :, :, :, :, 13]),  axis=0))+
-                            0.05 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 12],  Rate_bikes[:, :, :, :, :, 12],  Rate_boat[:, :, :, :, :, 12],  Rate_leuven[:, :, :, :, :, 12],  Rate_wall[:, :, :, :, :, 12],  Rate_trees[:, :, :, :, :, 12],  Rate_bark[:, :, :, :, :, 12],  Rate_ubc[:, :, :, :, :, 12]),  axis=0))+
-                            0.05 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 14],  Rate_bikes[:, :, :, :, :, 14],  Rate_boat[:, :, :, :, :, 14],  Rate_leuven[:, :, :, :, :, 14],  Rate_wall[:, :, :, :, :, 14],  Rate_trees[:, :, :, :, :, 14],  Rate_bark[:, :, :, :, :, 14],  Rate_ubc[:, :, :, :, :, 14]),  axis=0))+
-                            0.15 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 15],  Rate_bikes[:, :, :, :, :, 15],  Rate_boat[:, :, :, :, :, 15],  Rate_leuven[:, :, :, :, :, 15],  Rate_wall[:, :, :, :, :, 15],  Rate_trees[:, :, :, :, :, 15],  Rate_bark[:, :, :, :, :, 15],  Rate_ubc[:, :, :, :, :, 15]),  axis=0))+
-                            0.08 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9],  Rate_bikes[:, :, :, :, :,  9],  Rate_boat[:, :, :, :, :,  9],  Rate_leuven[:, :, :, :, :,  9],  Rate_wall[:, :, :, :, :,  9],  Rate_trees[:, :, :, :, :,  9],  Rate_bark[:, :, :, :, :,  9],  Rate_ubc[:, :, :, :, :,  9]),  axis=0))+
-                            0.05 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10],  Rate_bikes[:, :, :, :, :, 10],  Rate_boat[:, :, :, :, :, 10],  Rate_leuven[:, :, :, :, :, 10],  Rate_wall[:, :, :, :, :, 10],  Rate_trees[:, :, :, :, :, 10],  Rate_bark[:, :, :, :, :, 10],  Rate_ubc[:, :, :, :, :, 10]),  axis=0))+
-                            0.10 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0)))+
-                            0.15 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0)))
+                            0.15 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)) + # Precision
+                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)) + # Recall
+                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
+                            0.13 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9],  Rate_bikes[:, :, :, :, :,  9],  Rate_boat[:, :, :, :, :,  9],  Rate_leuven[:, :, :, :, :,  9],  Rate_wall[:, :, :, :, :,  9],  Rate_trees[:, :, :, :, :,  9],  Rate_bark[:, :, :, :, :,  9],  Rate_ubc[:, :, :, :, :,  9]),  axis=0), alpha=0.2) + # Inliers
+                            0.12 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10],  Rate_bikes[:, :, :, :, :, 10],  Rate_boat[:, :, :, :, :, 10],  Rate_leuven[:, :, :, :, :, 10],  Rate_wall[:, :, :, :, :, 10],  Rate_trees[:, :, :, :, :, 10],  Rate_bark[:, :, :, :, :, 10],  Rate_ubc[:, :, :, :, :, 10]),  axis=0), alpha=0.2) +
+                            0.05 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2)) +
+                            0.08 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2))   # 1K feature Inlier Time
+                        )
+                    elif data == "drone":
+                        eff_score = (
+                            0.11 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
+                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
+                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
+                            0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
+                            0.17 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
+                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
+                            0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2)) +  # 1K Inlier Time
+                            0.04 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +                     # Reprojection Error
+                            0.18 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points Count
+                            0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2))  # 1K 3D Point Reconstruction Time
                         )
                     else:
                         eff_score = (
-                            0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) +  # Precision
-                            0.05 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) +  # Recall
-                            0.05 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) +  # Repeatability
-                            0.15 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) +  # F1 Score
-                            0.08 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten()) +  # Inliers
-                            0.05 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) +  # Matches
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten())) +    # 1K Total Time
-                            0.15 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten()))      # 1K Inlier Time
+                            0.15 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
+                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
+                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
+                            0.13 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
+                            0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
+                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
                         )
-                    if data == "drone":
-                        eff_score += (
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +  # Reprojection Error
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten()) +        # 3D Points Count
-                            0.07 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten()))  # 1K 3D Point Reconstruction Time
-                        )
-                    else:
-                        eff_score = eff_score * 4 / 3
                     if not np.isnan(eff_score):
                         fig.add_trace(go.Scatter(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[eff_score], text=[f"{eff_score:.3f}"],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", mode="markers",
@@ -948,45 +936,51 @@ def heatmap(data="drone"):
                 for m in range(2): # Matcher 0: BruteForce 1: FlannBased
                     if data == "synthetic":
                         scores[i, j, c3, m] = (
-                            0.15 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 13], Rate_scale[:, :, :, :, :, 13], Rate_rot[:, :, :, :, :, 13]), axis=0)) +
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 12], Rate_scale[:, :, :, :, :, 12], Rate_rot[:, :, :, :, :, 12]), axis=0)) +
-                            0.08 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 14], Rate_scale[:, :, :, :, :, 14], Rate_rot[:, :, :, :, :, 14]), axis=0)) +
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 15], Rate_scale[:, :, :, :, :, 15], Rate_rot[:, :, :, :, :, 15]), axis=0)) +
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0)) +
-                            0.07 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0)) +
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0))) +
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0)))
+                            0.15 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)) + # Precision
+                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)) + # Recall
+                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
+                            0.13 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2) + # Inliers
+                            0.13 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2) + # Matches
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2)) + # 1K Total Time
+                            0.08 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2))   # 1K feature Inlier Time
                         )
                     elif data == "oxford":
                         scores[i, j, c3, m] = (
-                            0.15 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 13], Rate_bikes[:, :, :, :, :, 13], Rate_boat[:, :, :, :, :, 13], Rate_leuven[:, :, :, :, :, 13], Rate_wall[:, :, :, :, :, 13], Rate_trees[:, :, :, :, :, 13], Rate_bark[:, :, :, :, :, 13], Rate_ubc[:, :, :, :, :, 13]), axis=0))+
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 12], Rate_bikes[:, :, :, :, :, 12], Rate_boat[:, :, :, :, :, 12], Rate_leuven[:, :, :, :, :, 12], Rate_wall[:, :, :, :, :, 12], Rate_trees[:, :, :, :, :, 12], Rate_bark[:, :, :, :, :, 12], Rate_ubc[:, :, :, :, :, 12]), axis=0))+
-                            0.08 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 14], Rate_bikes[:, :, :, :, :, 14], Rate_boat[:, :, :, :, :, 14], Rate_leuven[:, :, :, :, :, 14], Rate_wall[:, :, :, :, :, 14], Rate_trees[:, :, :, :, :, 14], Rate_bark[:, :, :, :, :, 14], Rate_ubc[:, :, :, :, :, 14]), axis=0))+
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 15], Rate_bikes[:, :, :, :, :, 15], Rate_boat[:, :, :, :, :, 15], Rate_leuven[:, :, :, :, :, 15], Rate_wall[:, :, :, :, :, 15], Rate_trees[:, :, :, :, :, 15], Rate_bark[:, :, :, :, :, 15], Rate_ubc[:, :, :, :, :, 15]), axis=0))+
-                            0.10 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9], Rate_bikes[:, :, :, :, :,  9], Rate_boat[:, :, :, :, :,  9], Rate_leuven[:, :, :, :, :,  9], Rate_wall[:, :, :, :, :,  9], Rate_trees[:, :, :, :, :,  9], Rate_bark[:, :, :, :, :,  9], Rate_ubc[:, :, :, :, :,  9]), axis=0))+
-                            0.07 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0))+
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0)))+
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7], Exec_time_bikes[:, :, :, :, :, 7], Exec_time_boat[:, :, :, :, :, 7], Exec_time_leuven[:, :, :, :, :, 7], Exec_time_wall[:, :, :, :, :, 7], Exec_time_trees[:, :, :, :, :, 7], Exec_time_bark[:, :, :, :, :, 7], Exec_time_ubc[:, :, :, :, :, 7]), axis=0)))
+                            0.15 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)) + # Precision
+                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)) + # Recall
+                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
+                            0.13 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9],  Rate_bikes[:, :, :, :, :,  9],  Rate_boat[:, :, :, :, :,  9],  Rate_leuven[:, :, :, :, :,  9],  Rate_wall[:, :, :, :, :,  9],  Rate_trees[:, :, :, :, :,  9],  Rate_bark[:, :, :, :, :,  9],  Rate_ubc[:, :, :, :, :,  9]),  axis=0), alpha=0.2) + # Inliers
+                            0.12 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10],  Rate_bikes[:, :, :, :, :, 10],  Rate_boat[:, :, :, :, :, 10],  Rate_leuven[:, :, :, :, :, 10],  Rate_wall[:, :, :, :, :, 10],  Rate_trees[:, :, :, :, :, 10],  Rate_bark[:, :, :, :, :, 10],  Rate_ubc[:, :, :, :, :, 10]),  axis=0), alpha=0.2) +
+                            0.05 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2)) +
+                            0.08 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2))   # 1K feature Inlier Time
+                        )
+                    elif data == "drone":
+                        scores[i, j, c3, m] = (
+                            0.11 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
+                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
+                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
+                            0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
+                            0.17 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
+                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
+                            0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2)) +  # 1K Inlier Time
+                            0.04 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +                     # Reprojection Error
+                            0.18 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points Count
+                            0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2))  # 1K 3D Point Reconstruction Time
                         )
                     else:
                         scores[i, j, c3, m] = (
-                            0.15 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 13]), Rate[:, :, :, :, :, 13].flatten()) +  # Precision
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 12]), Rate[:, :, :, :, :, 12].flatten()) +  # Recall
-                            0.08 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 14]), Rate[:, :, :, :, :, 14].flatten()) +  # Repeatability
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 15]), Rate[:, :, :, :, :, 15].flatten()) +  # F1 Score
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :, 9].flatten()) +   # Inliers
-                            0.07 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten()) +  # Matches
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten())) + # 1K Total Time
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten()))   # 1K Inlier Time
+                            0.15 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
+                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
+                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
+                            0.13 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
+                            0.22 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
+                            0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
+                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
+                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
                         )
-                    if data == "drone":
-                        scores[i, j, c3, m] += (
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +  # Reprojection Error
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten()) +        # 3D Points Count
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten()))  # 1K 3D Point Reconstruction Time
-                        )
-                    else:
-                        scores[i, j, c3, m] = scores[i, j, c3, m] * 4 / 3
     for c3 in range(2):
         for m in range(2):
             fig.add_trace(go.Heatmap(z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
@@ -1019,6 +1013,19 @@ def correlationHeatmap(data="drone"):
             "1K Total Time":        np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0).flatten(),
             "1K Inlier Time":       np.concatenate((Exec_time_graf[:, :, :, :, :, 7], Exec_time_bikes[:, :, :, :, :, 7], Exec_time_boat[:, :, :, :, :, 7], Exec_time_leuven[:, :, :, :, :, 7], Exec_time_wall[:, :, :, :, :, 7], Exec_time_trees[:, :, :, :, :, 7], Exec_time_bark[:, :, :, :, :, 7], Exec_time_ubc[:, :, :, :, :, 7]), axis=0).flatten()
         }
+    elif data == "drone":
+        metrics = {
+            "Precision":            Rate[:, :, :, :, :, 13].flatten(),
+            "Recall":               Rate[:, :, :, :, :, 12].flatten(),
+            "Repeatibility":        Rate[:, :, :, :, :, 14].flatten(),
+            "F1 Score":             Rate[:, :, :, :, :, 15].flatten(),
+            "Inliers":              Rate[:, :, :, :, :,  9].flatten(),
+            "Matches":              Rate[:, :, :, :, :, 10].flatten(),
+            "1K Total Time":   Exec_time[:, :, :, :, :,  6].flatten(),
+            "1K Inlier Time":  Exec_time[:, :, :, :, :,  7].flatten(),
+            "Reprojection Error":   Rate[:, :, :, :, :, 11].flatten(),
+            "3D Points Count":      Rate[:, :, :, :, :, 16].flatten()
+        }
     else:
         metrics = {
             "Precision":            Rate[:, :, :, :, :, 13].flatten(),
@@ -1030,11 +1037,6 @@ def correlationHeatmap(data="drone"):
             "1K Total Time":   Exec_time[:, :, :, :, :,  6].flatten(),
             "1K Inlier Time":  Exec_time[:, :, :, :, :,  7].flatten(),
         }
-    if data == "drone":
-        metrics.update({
-            "Reprojection Error": Rate[:, :, :, :, :, 11].flatten(),
-            "3D Points Count":    Rate[:, :, :, :, :, 16].flatten()
-        })
     metric_names = list(metrics.keys())
     corr_matrix = np.zeros((len(metric_names), len(metric_names)))
     for i, name1 in enumerate(metric_names):
@@ -1083,6 +1085,17 @@ def violinPlot(data="drone"):
                         np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0),
                         np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0),
                         np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)
+                        ])
+                    elif data == "drone":
+                        xydata = np.array([
+                            Rate[:, m, c3, i, j, 13], # Precision
+                            Rate[:, m, c3, i, j, 12], # Recall
+                            Rate[:, m, c3, i, j, 14], # Repeatibility
+                            Rate[:, m, c3, i, j, 15], # F1 Score
+                            Rate[:, m, c3, i, j,  9], # Inliers
+                            Rate[:, m, c3, i, j, 10], # Matches
+                            Exec_time[:, m, c3, i, j, 6],  # 1K Total Time
+                            Exec_time[:, m, c3, i, j, 7]   # 1K Inlier Time
                         ])
                     else:
                         xydata = np.array([
