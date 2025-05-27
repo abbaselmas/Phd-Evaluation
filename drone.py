@@ -77,7 +77,7 @@ def executeDroneScenarios(folder="drone", a=100, b=100, drawing=False, save=True
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing: # and Rate[k, m, c3, i, j, 13] > 0.5 and Rate[k, m, c3, i, j, 15] > 0.25 and Rate[k, m, c3, i, j, 9] > 725 and Rate[k, m, c3, i, j, 12] > 0.16 and Rate[k, m, c3, i, j, 14] > 0.17 and Exec_time[k, m, c3, i, j, 7] < 0.5 and Exec_time[k, m, c3, i, j, 6] < 0.5:
                                     img_matches = draw_matches(img[k], keypoints1_updated, img[k+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
