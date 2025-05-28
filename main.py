@@ -8,7 +8,7 @@ from display import *
 a = 100
 b = 100
 drawing = False
-save = True
+save = False
 reconstruct = False
 mobile = "" #"_mobile2"
 
@@ -32,8 +32,7 @@ mobile = "" #"_mobile2"
 # single("synthetic")
 # timing("synthetic")
 # timing("synthetic", "_mobile")
-# efficiency("synthetic")
-# heatmap("synthetic")
+# efficiencyAndHeatmap("synthetic")
 # correlationHeatmap("synthetic")
 # violinPlot("synthetic")
 
@@ -42,31 +41,27 @@ mobile = "" #"_mobile2"
 # single("oxford")
 # timing("oxford")
 # timing("oxford", "_mobile")
-# efficiency("oxford")
-# heatmap("oxford")
+# efficiencyAndHeatmap("oxford")
 # correlationHeatmap("oxford")
 # violinPlot("oxford")
-
-# singleAll("drone")
-# single("drone")
-# timing("drone")
-# efficiency("drone")
-# heatmap("drone")
-# correlationHeatmap("drone")
-# violinPlot("drone")
-
-# singleAll("uav")
-# single("uav")
-# timing("uav")
-# efficiency("uav")
-# heatmap("uav")
-# correlationHeatmap("uav")
-# violinPlot("uav")
 
 # singleAll("airsim")
 # single("airsim")
 # timing("airsim")
-# efficiency("airsim")
-# heatmap("airsim")
+# efficiencyAndHeatmap("airsim")
 # correlationHeatmap("airsim")
 # violinPlot("airsim")
+
+# singleAll("uav")
+# single("uav")
+# timing("uav")
+# efficiencyAndHeatmap("uav")
+# correlationHeatmap("uav")
+# violinPlot("uav")
+
+# singleAll("drone")
+# single("drone")
+# timing("drone")
+# efficiencyAndHeatmap("drone")
+# correlationHeatmap("drone")
+# violinPlot("drone")

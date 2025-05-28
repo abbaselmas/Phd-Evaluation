@@ -204,10 +204,15 @@ Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
 
 def syntheticAll4():
     fig = go.Figure()
-    fig = make_subplots(rows=2, cols=2, subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>", "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>", "<span style='font-size: 20px;'><b>Scale changing</b></span>", "<span style='font-size: 20px;'><b>Rotation changing</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=2, cols=2, horizontal_spacing=0.05, vertical_spacing=0.08,
+                        subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>",
+                                        "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>",
+                                        "<span style='font-size: 20px;'><b>Scale changing</b></span>",
+                                        "<span style='font-size: 20px;'><b>Rotation changing</b></span>"])
     sett_axis = dict(range=[-0.01, 1.01], autorange=False)
-    fig.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                        hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis,
+    fig.update_layout(  template="ggplot2", font_size=16, hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+                        title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+                        yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis,
                         xaxis=dict(tickmode="array", tickvals=val_b), xaxis2=dict(tickmode="array", tickvals=val_c), xaxis3=dict(tickmode="array", tickvals=scale), xaxis4=dict(tickmode="array", tickvals=rot))
     color_index = 0
     symbol_index = 0
@@ -260,17 +265,21 @@ def syntheticAll4():
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
-                    fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
-                    traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
-                    fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
-                    traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
-                    fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
-                    traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
-                    fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
+                    if not np.isnan(Rate2_I1).all():
+                        traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
+                        fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
+                    if not np.isnan(Rate2_I2).all():
+                        traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
+                        fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
+                    if not np.isnan(Rate2_S).all():
+                        traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
+                        fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
+                    if not np.isnan(Rate2_R).all():
+                        traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
+                        fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=f"y: {y}", method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis3.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))
@@ -282,10 +291,14 @@ def syntheticAll4():
 
 def synthetic4():
     fig = go.Figure()
-    fig = make_subplots(rows=2, cols=2, subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>", "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>", "<span style='font-size: 20px;'><b>Scale changing</b></span>", "<span style='font-size: 20px;'><b>Rotation changing</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=2, cols=2, horizontal_spacing=0.05, vertical_spacing=0.08,
+                        subplot_titles=["<span style='font-size: 20px;'><b>Intensity changing I+b</b></span>",
+                                        "<span style='font-size: 20px;'><b>Intensity changing Ixc</b></span>",
+                                        "<span style='font-size: 20px;'><b>Scale changing</b></span>",
+                                        "<span style='font-size: 20px;'><b>Rotation changing</b></span>"])
     sett_axis = dict(range=[-0.01, 1.01], autorange=False)
-    fig.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                        hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+    fig.update_layout(  template="ggplot2", font_size=16, hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+                        title=dict(text="<span style='font-size: 26px;'><b>Synthetic Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis,
                         yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis)
     color_index = 0
@@ -353,13 +366,13 @@ def synthetic4():
                         fig.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_listx, button_listy, button_listz = [], [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis3.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis3.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [(trace.marker.size[idx]*50) for trace in traces]}]))
-    fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+    fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=3, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
@@ -369,13 +382,15 @@ def synthetic4():
 
 def oxfordAll9():
     fig = go.Figure()
-    fig = make_subplots(rows=3, cols=3, subplot_titles=["<span style='font-size: 18px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 18px;'><b>Boat(Zoom + Rotation)</b></span>", 
-                                                        "<span style='font-size: 18px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 18px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Trees(Blur)</b></span>", 
-                                                        "<span style='font-size: 18px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 18px;'><b>UBC(JPEG)", "<span style='font-size: 18px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
+    fig = make_subplots(rows=3, cols=3, horizontal_spacing=0.05, vertical_spacing=0.08,
+                        subplot_titles=["<span style='font-size: 18px;'><b>Graf(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Bikes(Blur)</b></span>", "<span style='font-size: 18px;'><b>Boat(Zoom + Rotation)</b></span>", 
+                                        "<span style='font-size: 18px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 18px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 18px;'><b>Trees(Blur)</b></span>", 
+                                        "<span style='font-size: 18px;'><b>Bark(Zoom + Rotation)</b></span>", "<span style='font-size: 18px;'><b>UBC(JPEG)", "<span style='font-size: 18px;'><b>Overall</b></span>"])
     xvals = ["Img2", "Img3", "Img4", "Img5", "Img6"]
     sett_axis = dict(range=[-0.01, 1.01], autorange=False)
-    fig.update_layout(template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                                                hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
+    fig.update_layout(  template="ggplot2", font_size=16, hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+                        title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
+                        yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
     symbol_index = 0
     traces = []
@@ -416,7 +431,7 @@ def oxfordAll9():
                     fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=f"y: {y}", method="update", 
@@ -433,8 +448,8 @@ def oxford9():
                                                         "<span style='font-size: 20px;'><b>Leuven(Light)</b></span>", "<span style='font-size: 20px;'><b>Wall(Viewpoint)</b></span>", "<span style='font-size: 20px;'><b>Trees(Blur)</b></span>", 
                                                         "<span style='font-size: 20px;'><b>Bark(Zoom + Rotation)</b></span>","<span style='font-size: 20px;'><b>UBC(JPEG)</b></span>", "<span style='font-size: 20px;'><b>Overall</b></span>"], horizontal_spacing=0.05, vertical_spacing=0.08)
     sett_axis = dict(range=[-0.01, 1.01], autorange=False)
-    fig.update_layout( template="ggplot2", font_size=16, title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
-                        hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+    fig.update_layout(  template="ggplot2", font_size=16, hovermode="closest", margin=dict(l=20, r=20, t=70, b=20),
+                        title=dict(text="<span style='font-size: 26px;'><b>Oxford Affine Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         xaxis=sett_axis, xaxis2=sett_axis, xaxis3=sett_axis, xaxis4=sett_axis, xaxis5=sett_axis, xaxis6=sett_axis, xaxis7=sett_axis, xaxis8=sett_axis, xaxis9=sett_axis,
                         yaxis=sett_axis, yaxis2=sett_axis, yaxis3=sett_axis, yaxis4=sett_axis, yaxis5=sett_axis, yaxis6=sett_axis, yaxis7=sett_axis, yaxis8=sett_axis, yaxis9=sett_axis)
     color_index = 0
@@ -558,12 +573,12 @@ def oxford9():
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_listx, button_listy = [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis8.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis4.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-    fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+    fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="top"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom")])
     fig.write_html(f"./html/oxford/oxford9.html", include_plotlyjs="cdn", full_html=True, config=config)
@@ -577,8 +592,8 @@ def singleAll(data="drone"):
     xvals = [f"Img{i}" for i in range(153, 188)] if data == "drone" else (
         ["Bahamas", "Office", "Suburban", "Building", "Construction", "Dominica", "Cadastre", "Rivaz", "Urban", "Belleview"] if data == "uav" else 
         [f"Img{i}" for i in range(653, 774, 5)])
-    fig.update_layout( template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Data</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                        hovermode="closest", margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(range=[-0.01, 1.01], autorange=False))
+    fig.update_layout(  template="ggplot2", font_size=16, hovermode="closest", margin=dict(l=20, r=20, t=50, b=20), yaxis=dict(range=[-0.01, 1.01], autorange=False),
+                        title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Data</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"))
     color_index = 0
     symbol_index = 0
     traces = []
@@ -609,21 +624,27 @@ def singleAll(data="drone"):
                                                     showlegend=True, hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_yaxis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_yaxis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_list = []
     for idx, y in enumerate(dropdown_yaxis):
         button_list.append(dict(label=f"y: {y}", method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{y}</b></span>"}]))
     
-    fig.update_layout(updatemenus=[dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+    fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=0, xanchor="left", y=1, yanchor="bottom")]) 
     fig.write_html(f"./html/{data}/{data}All.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}All.html", "a") as f:
         f.write(custom_html)
 
 def single(data="drone"):
-    if not (data == "synthetic" or data == "oxford"):
-        Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+    if data == "synthetic":
+        Rate = np.concatenate((Rate_intensity, Rate_scale, Rate_rot), axis=0)
+        Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+    elif data == "oxford":
+        Rate = np.concatenate((Rate_graf, Rate_bikes, Rate_boat, Rate_leuven, Rate_wall, Rate_trees, Rate_bark, Rate_ubc), axis=0)
+        Exec_time = np.concatenate((Exec_time_graf, Exec_time_bikes, Exec_time_boat, Exec_time_leuven, Exec_time_wall, Exec_time_trees, Exec_time_bark, Exec_time_ubc), axis=0)
+    else:
         Rate = np.load(f"./arrays/Rate_{data}.npy")
+        Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), xaxis=dict(range=[-0.01, 1.01], autorange=False), yaxis=dict(range=[-0.01, 1.01], autorange=False))
@@ -634,72 +655,58 @@ def single(data="drone"):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):
                 for m in range(2):
-                    if data == "synthetic":
-                        xydata = np.array([
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)),                 # Precision
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)),                 # Recall
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)),                 # Repeatibility
-                            np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)),                 # F1 Score
-                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2),                               # Inliers
-                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2),                               # Matches
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2),   # 1K Total Time
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2)    # 1K feature Inlier Time
-                        ])
-                    elif data == "oxford":
-                        xydata = np.array([
-                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)),                                    # Precision
-                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)),                                    # Recall
-                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)),                                    # Repeatibility
-                            np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)),                                    # F1Score
-                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 9],  Rate_bikes[:, m, c3, i, j, 9],  Rate_boat[:, m, c3, i, j, 9],  Rate_leuven[:, m, c3, i, j, 9],  Rate_wall[:, m, c3, i, j, 9],  Rate_trees[:, m, c3, i, j, 9],  Rate_bark[:, m, c3, i, j, 9],  Rate_ubc[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_graf[:, :, :, :, :, 9],  Rate_bikes[:, :, :, :, :, 9],  Rate_boat[:, :, :, :, :, 9],  Rate_leuven[:, :, :, :, :, 9],  Rate_wall[:, :, :, :, :, 9],  Rate_trees[:, :, :, :, :, 9],  Rate_bark[:, :, :, :, :, 9],  Rate_ubc[:, :, :, :, :, 9]),  axis=0), alpha=0.2),                 # Inliers
-                            nonlinear_normalize(np.nanmean(np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0), alpha=0.2),                 # Matches
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2),    # Total Time
-                            1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2)     # Inlier Time
-                        ])
-                    else:
-                        xydata = np.array([
-                            np.nanmean(Rate[:, m, c3, i, j, 13]),       # Precision
-                            np.nanmean(Rate[:, m, c3, i, j, 12]),       # Recall
-                            np.nanmean(Rate[:, m, c3, i, j, 14]),       # Repeatibility
-                            np.nanmean(Rate[:, m, c3, i, j, 15]),       # F1 Score
-                            nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9], alpha=0.2),             # Inliers
-                            nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.2),             # Matches
-                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
-                            1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7], alpha=0.2), # 1K feature Inlier Time
-                        ])
+                    xydata = np.array([
+                        np.nanmean(Rate[:, m, c3, i, j, 13]),       # Precision
+                        np.nanmean(Rate[:, m, c3, i, j, 12]),       # Recall
+                        np.nanmean(Rate[:, m, c3, i, j, 14]),       # Repeatibility
+                        np.nanmean(Rate[:, m, c3, i, j, 15]),       # F1 Score
+                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9], alpha=0.2),             # Inliers
+                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.2),             # Matches
+                        1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
+                        1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7], alpha=0.2), # 1K Inlier Time
+                    ])
                     if data == "drone":
                         xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11])) # Reprojection Error
                         xydata = np.append(xydata, nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16], alpha=0.2)) # 3D Points Count
-                        xydata = np.append(xydata, 1 - nonlinear_normalize((np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000), (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2)) # 1K 3D Point Reconstruction Time
+                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8], alpha=0.2)) # 3D Point Reconstruction Time
+                        # xydata = np.append(xydata, 1 - nonlinear_normalize((np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000), (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2)) # 1K 3D Point Reconstruction Time
                     if not (np.isnan(xydata).any() or np.any(xydata == 0)):
                         traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers", 
                                                     marker=dict(color=colors[color_index], size=xydata, symbol=marker_symbols[symbol_index]),
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                         fig.add_trace(go.Scatter( x=[xydata[0]],  y=[xydata[1]],  mode="markers", 
-                                                    marker=dict(color=colors[color_index], size=[(xydata[4]*40+10)%50], symbol=marker_symbols[symbol_index]),
+                                                    marker=dict(color=colors[color_index], size=[xydata[3]*50], symbol=marker_symbols[symbol_index]),
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."] 
-    if data == "drone":
-        dropdown_axis += ["Reproj. Err", "3D-Points", "3D Time"]
+    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"] + (["Reprojection Error", "3D Points", "Reconstruction Time"] if data == "drone" else [])
     button_listx, button_listy, button_listz = [], [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-        button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [((trace.marker.size[idx]*40)%50) for trace in traces]}]))
+        button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [(trace.marker.size[idx]*50) for trace in traces]}]))
     fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
-                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
+                                    dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=3, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
     fig.write_html(f"./html/{data}/{data}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}.html", "a") as f:
         f.write(custom_html)
 
 def timing(data="drone", mobile=""):
-    if not (data == "synthetic" or data == "oxford"):
+    if data == "synthetic":
+        Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+        if mobile:
+            Exec_time_mobile = np.concatenate((Exec_time_intensity_mobile, Exec_time_scale_mobile, Exec_time_rot_mobile), axis=0)
+            # Exec_time_mobile2 = np.concatenate((Exec_time_intensity_mobile2, Exec_time_scale_mobile2, Exec_time_rot_mobile2), axis=0)
+    elif data == "oxford":
+        Exec_time = np.concatenate((Exec_time_graf, Exec_time_bikes, Exec_time_boat, Exec_time_leuven, Exec_time_wall, Exec_time_trees, Exec_time_bark, Exec_time_ubc), axis=0)
+        if mobile:
+            Exec_time_mobile = np.concatenate((Exec_time_graf_mobile, Exec_time_bikes_mobile, Exec_time_boat_mobile, Exec_time_leuven_mobile, Exec_time_wall_mobile, Exec_time_trees_mobile, Exec_time_bark_mobile, Exec_time_ubc_mobile), axis=0)
+            # Exec_time_mobile2 = np.concatenate((Exec_time_graf_mobile2, Exec_time_bikes_mobile2, Exec_time_boat_mobile2, Exec_time_leuven_mobile2, Exec_time_wall_mobile2, Exec_time_trees_mobile2, Exec_time_bark_mobile2, Exec_time_ubc_mobile2), axis=0)
+    else:
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
     fig = make_subplots(rows=6 if mobile else 5, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Detector level)</span>",
@@ -714,25 +721,13 @@ def timing(data="drone", mobile=""):
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for m in range(2):
-                if data == "synthetic":
-                    result3 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 6],Exec_time_scale[:, m, :, i, j, 6],Exec_time_rot[:, m, :, i, j, 6]), axis=0))
-                    result4 = np.nanmean(np.concatenate((Exec_time_intensity[:, m, :, i, j, 7],Exec_time_scale[:, m, :, i, j, 7],Exec_time_rot[:, m, :, i, j, 7]), axis=0))                
-                    if mobile:
-                        result3m1= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 6], Exec_time_scale_mobile[:, m, :, i, j, 6], Exec_time_rot_mobile[:, m, :, i, j, 6]), axis=0))
-                        result4m1= np.nanmean(np.concatenate((Exec_time_intensity_mobile[:, m, :, i, j, 7], Exec_time_scale_mobile[:, m, :, i, j, 7], Exec_time_rot_mobile[:, m, :, i, j, 7]), axis=0))
-                        # result3m2= np.nanmean(np.concatenate((Exec_time_intensity_mobile2[:, m, :, i, j, 6], Exec_time_scale_mobile2[:, m, :, i, j, 6], Exec_time_rot_mobile2[:, m, :, i, j, 6]), axis=0))
-                        # result4m2= np.nanmean(np.concatenate((Exec_time_intensity_mobile2[:, m, :, i, j, 7], Exec_time_scale_mobile2[:, m, :, i, j, 7], Exec_time_rot_mobile2[:, m, :, i, j, 7]), axis=0))
-                elif data == "oxford":
-                    result3 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 6],          Exec_time_wall[:, m, :, i, j, 6],           Exec_time_trees[:, m, :, i, j, 6],          Exec_time_bikes[:, m, :, i, j, 6],          Exec_time_bark[:, m, :, i, j, 6],           Exec_time_boat[:, m, :, i, j, 6],           Exec_time_leuven[:, m, :, i, j, 6],         Exec_time_ubc[:, m, :, i, j, 6]),           axis=0))
-                    result4 = np.nanmean(np.concatenate((Exec_time_graf[:, m, :, i, j, 7],          Exec_time_wall[:, m, :, i, j, 7],           Exec_time_trees[:, m, :, i, j, 7],          Exec_time_bikes[:, m, :, i, j, 7],          Exec_time_bark[:, m, :, i, j, 7],           Exec_time_boat[:, m, :, i, j, 7],           Exec_time_leuven[:, m, :, i, j, 7],         Exec_time_ubc[:, m, :, i, j, 7]),           axis=0))
-                    if mobile:
-                        result3m1= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 6],   Exec_time_wall_mobile[:, m, :, i, j, 6],    Exec_time_trees_mobile[:, m, :, i, j, 6],   Exec_time_bikes_mobile[:, m, :, i, j, 6],   Exec_time_bark_mobile[:, m, :, i, j, 6],    Exec_time_boat_mobile[:, m, :, i, j, 6],    Exec_time_leuven_mobile[:, m, :, i, j, 6],  Exec_time_ubc_mobile[:, m, :, i, j, 6]),    axis=0))
-                        result4m1= np.nanmean(np.concatenate((Exec_time_graf_mobile[:, m, :, i, j, 7],   Exec_time_wall_mobile[:, m, :, i, j, 7],    Exec_time_trees_mobile[:, m, :, i, j, 7],   Exec_time_bikes_mobile[:, m, :, i, j, 7],   Exec_time_bark_mobile[:, m, :, i, j, 7],    Exec_time_boat_mobile[:, m, :, i, j, 7],    Exec_time_leuven_mobile[:, m, :, i, j, 7],  Exec_time_ubc_mobile[:, m, :, i, j, 7]),    axis=0))
-                        # result3m2= np.nanmean(np.concatenate((Exec_time_graf_mobile2[:, m, :, i, j, 6],   Exec_time_wall_mobile2[:, m, :, i, j, 6],    Exec_time_trees_mobile2[:, m, :, i, j, 6],   Exec_time_bikes_mobile2[:, m, :, i, j, 6],   Exec_time_bark_mobile2[:, m, :, i, j, 6],    Exec_time_boat_mobile2[:, m, :, i, j, 6],    Exec_time_leuven_mobile2[:, m, :, i, j, 6],  Exec_time_ubc_mobile2[:, m, :, i, j, 6]),    axis=0))
-                        # result4m2= np.nanmean(np.concatenate((Exec_time_graf_mobile2[:, m, :, i, j, 7],   Exec_time_wall_mobile2[:, m, :, i, j, 7],    Exec_time_trees_mobile2[:, m, :, i, j, 7],   Exec_time_bikes_mobile2[:, m, :, i, j, 7],   Exec_time_bark_mobile2[:, m, :, i, j, 7],    Exec_time_boat_mobile2[:, m, :, i, j, 7],    Exec_time_leuven_mobile2[:, m, :, i, j, 7],  Exec_time_ubc_mobile2[:, m, :, i, j, 7]),    axis=0))
-                else:
-                    result3 = np.nanmean(Exec_time[:, m, :, i, j, 6])
-                    result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
+                result3 = np.nanmean(Exec_time[:, m, :, i, j, 6])
+                result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
+                if mobile:
+                    result3m1= np.nanmean(Exec_time_rot_mobile[:, m, :, i, j, 6])
+                    result4m1= np.nanmean(Exec_time_rot_mobile[:, m, :, i, j, 7])
+                    # result3m2= np.nanmean(Exec_time_rot_mobile2[:, m, :, i, j, 6])
+                    # result4m2= np.nanmean(Exec_time_rot_mobile2[:, m, :, i, j, 7])
                 # * 1K Total Time
                 if not np.isnan(result3):
                     fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]]], y=[result3],
@@ -842,18 +837,31 @@ def timing(data="drone", mobile=""):
             color_index = (color_index + 14) % num_combinations
     for i in range(1, 7):
         fig.update_xaxes(tickangle=90, row=i, col=1)
-    fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear", "yaxis2.type": "linear","yaxis3.type": "linear", "yaxis4.type": "linear","yaxis5.type": "linear"}]),
-                                                                    dict(label="Log",             method="relayout", args=[{"yaxis.type": "log",    "yaxis2.type": "log",   "yaxis3.type": "log",    "yaxis4.type": "log",   "yaxis5.type": "log"   }])], x=0, xanchor="left", y=1, yanchor="bottom")])
+    fig.update_layout(updatemenus=[ dict(   type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+                                    dict(   type="dropdown", x=0, xanchor="left", y=1, yanchor="bottom",
+                                            buttons=[   dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear", "yaxis2.type": "linear","yaxis3.type": "linear", "yaxis4.type": "linear","yaxis5.type": "linear"}]),
+                                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log",    "yaxis2.type": "log",   "yaxis3.type": "log",    "yaxis4.type": "log",   "yaxis5.type": "log"   }])])])
     fig.write_html(f"./html/{data}/{data}Timing{mobile}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}Timing{mobile}.html", "a") as f:
         f.write(custom_html)
 
-def efficiency(data="drone"):
-    if not (data == "synthetic" or data == "oxford"):
+def efficiencyAndHeatmap(data="drone"):
+    if data == "synthetic":
+        Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+        Rate = np.concatenate((Rate_intensity, Rate_scale, Rate_rot), axis=0)
+    elif data == "oxford":
+        Exec_time = np.concatenate((Exec_time_graf, Exec_time_wall, Exec_time_trees, Exec_time_bikes, Exec_time_bark, Exec_time_boat, Exec_time_leuven, Exec_time_ubc), axis=0)
+        Rate = np.concatenate((Rate_graf, Rate_wall, Rate_trees, Rate_bikes, Rate_bark, Rate_boat, Rate_leuven, Rate_ubc), axis=0)
+    else:
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
         Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig = go.Figure()
+    fig_heatmap = make_subplots(rows=2, cols=2, horizontal_spacing=0.1, vertical_spacing=0.17,
+                                subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>",
+                                                "<span style='font-size: 22px;'>L2-Flann</span>",
+                                                "<span style='font-size: 22px;'>Hamming-BruteForce</span>",
+                                                "<span style='font-size: 22px;'>Hamming-Flann</span>"])
+    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20),
                         title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=False))
@@ -863,55 +871,25 @@ def efficiency(data="drone"):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):
                 for m in range(2):
-                    if data == "synthetic":
-                        eff_score = (
-                            0.15 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)) + # Precision
-                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)) + # Recall
-                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
-                            0.13 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2) + # Inliers
-                            0.13 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2) + # Matches
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2)) + # 1K Total Time
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2))   # 1K feature Inlier Time
-                        )
-                    elif data == "oxford":
-                        eff_score = (
-                            0.15 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)) + # Precision
-                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)) + # Recall
-                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
-                            0.13 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9],  Rate_bikes[:, :, :, :, :,  9],  Rate_boat[:, :, :, :, :,  9],  Rate_leuven[:, :, :, :, :,  9],  Rate_wall[:, :, :, :, :,  9],  Rate_trees[:, :, :, :, :,  9],  Rate_bark[:, :, :, :, :,  9],  Rate_ubc[:, :, :, :, :,  9]),  axis=0), alpha=0.2) + # Inliers
-                            0.12 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10],  Rate_bikes[:, :, :, :, :, 10],  Rate_boat[:, :, :, :, :, 10],  Rate_leuven[:, :, :, :, :, 10],  Rate_wall[:, :, :, :, :, 10],  Rate_trees[:, :, :, :, :, 10],  Rate_bark[:, :, :, :, :, 10],  Rate_ubc[:, :, :, :, :, 10]),  axis=0), alpha=0.2) +
-                            0.05 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2)) +
-                            0.08 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2))   # 1K feature Inlier Time
-                        )
-                    elif data == "drone":
-                        eff_score = (
-                            0.11 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
-                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
-                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
-                            0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
-                            0.17 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
-                            0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2)) +  # 1K Inlier Time
-                            0.04 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +                     # Reprojection Error
-                            0.18 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points Count
-                            0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2))  # 1K 3D Point Reconstruction Time
-                        )
+                    scores[i, j, c3, m] = (
+                        0.07 * np.nanmean(Rate[:, m, c3, i, j, 13]) + # Precision
+                        0.04 * np.nanmean(Rate[:, m, c3, i, j, 12]) + # Recall
+                        0.04 * np.nanmean(Rate[:, m, c3, i, j, 14]) + # Repeatability
+                        0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) + # F1 Score
+                        0.08 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
+                        0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 9]), Rate[:, :, :, :, :, 9].flatten(), alpha=0.2) +                  # Inliers
+                        0.15 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
+                    ) # %60
+                    if data == "drone":
+                        scores[i, j, c3, m] += (
+                            0.25 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points
+                            0.07 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), alpha=0.2)) +          # Reprojection Error
+                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8].flatten(), alpha=0.2))    # Reconstruction Time
+                        ) # %40
                     else:
-                        eff_score = (
-                            0.15 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
-                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
-                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
-                            0.13 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
-                            0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
-                        )
-                    if not np.isnan(eff_score):
-                        fig.add_trace(go.Scatter(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[eff_score], text=[f"{eff_score:.3f}"],
+                        scores[i, j, c3, m] *= 10/6
+                    if not np.isnan(scores[i, j, c3, m]):
+                        fig.add_trace(go.Scatter(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[scores[i, j, c3, m]], text=[f"{scores[i, j, c3, m]:.3f}"],
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", mode="markers",
                                                     marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), showlegend=True,
                                                     legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
@@ -923,120 +901,40 @@ def efficiency(data="drone"):
     fig.write_html(f"./html/{data}/{data}_Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}_Efficiency.html", "a") as f:
         f.write(custom_html)
-
-def heatmap(data="drone"):
-    if not (data == "synthetic" or data == "oxford"):
-        Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
-        Rate = np.load(f"./arrays/Rate_{data}.npy")  
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>", "<span style='font-size: 22px;'>L2-Flann</span>", "<span style='font-size: 22px;'>Hamming-BruteForce</span>", "<span style='font-size: 22px;'>Hamming-Flann</span>"], horizontal_spacing=0.1, vertical_spacing=0.17)
-    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
-    for i in range(len(DetectorsLegend)):
-        for j in range(len(DescriptorsLegend)):
-            for c3 in range(2): # Normalization Type 0: L2 1: Hamming
-                for m in range(2): # Matcher 0: BruteForce 1: FlannBased
-                    if data == "synthetic":
-                        scores[i, j, c3, m] = (
-                            0.15 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0)) + # Precision
-                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0)) + # Recall
-                            0.12 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
-                            0.13 * np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :,  9], Rate_scale[:, :, :, :, :,  9], Rate_rot[:, :, :, :, :,  9]), axis=0), alpha=0.2) + # Inliers
-                            0.13 * nonlinear_normalize(np.nanmean(np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0)), np.concatenate((Rate_intensity[:, :, :, :, :, 10], Rate_scale[:, :, :, :, :, 10], Rate_rot[:, :, :, :, :, 10]), axis=0), alpha=0.2) + # Matches
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 6], Exec_time_scale[:, :, :, :, :, 6], Exec_time_rot[:, :, :, :, :, 6]), axis=0), alpha=0.2)) + # 1K Total Time
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)), np.concatenate((Exec_time_intensity[:, :, :, :, :, 7], Exec_time_scale[:, :, :, :, :, 7], Exec_time_rot[:, :, :, :, :, 7]), axis=0), alpha=0.2))   # 1K feature Inlier Time
-                        )
-                    elif data == "oxford":
-                        scores[i, j, c3, m] = (
-                            0.15 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0)) + # Precision
-                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0)) + # Recall
-                            0.12 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0)) + # Repeatability
-                            0.13 * np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0)) + # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :,  9],  Rate_bikes[:, :, :, :, :,  9],  Rate_boat[:, :, :, :, :,  9],  Rate_leuven[:, :, :, :, :,  9],  Rate_wall[:, :, :, :, :,  9],  Rate_trees[:, :, :, :, :,  9],  Rate_bark[:, :, :, :, :,  9],  Rate_ubc[:, :, :, :, :,  9]),  axis=0), alpha=0.2) + # Inliers
-                            0.12 * nonlinear_normalize(np.nanmean( np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0)),np.concatenate((Rate_graf[:, :, :, :, :, 10],  Rate_bikes[:, :, :, :, :, 10],  Rate_boat[:, :, :, :, :, 10],  Rate_leuven[:, :, :, :, :, 10],  Rate_wall[:, :, :, :, :, 10],  Rate_trees[:, :, :, :, :, 10],  Rate_bark[:, :, :, :, :, 10],  Rate_ubc[:, :, :, :, :, 10]),  axis=0), alpha=0.2) +
-                            0.05 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 6],  Exec_time_bikes[:, :, :, :, :, 6],  Exec_time_boat[:, :, :, :, :, 6],  Exec_time_leuven[:, :, :, :, :, 6],  Exec_time_wall[:, :, :, :, :, 6],  Exec_time_trees[:, :, :, :, :, 6],  Exec_time_bark[:, :, :, :, :, 6],  Exec_time_ubc[:, :, :, :, :, 6]),  axis=0), alpha=0.2)) +
-                            0.08 * (1-nonlinear_normalize(np.nanmean(np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)),np.concatenate((Exec_time_graf[:, :, :, :, :, 7],  Exec_time_bikes[:, :, :, :, :, 7],  Exec_time_boat[:, :, :, :, :, 7],  Exec_time_leuven[:, :, :, :, :, 7],  Exec_time_wall[:, :, :, :, :, 7],  Exec_time_trees[:, :, :, :, :, 7],  Exec_time_bark[:, :, :, :, :, 7],  Exec_time_ubc[:, :, :, :, :, 7]),  axis=0), alpha=0.2))   # 1K feature Inlier Time
-                        )
-                    elif data == "drone":
-                        scores[i, j, c3, m] = (
-                            0.11 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
-                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
-                            0.09 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
-                            0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
-                            0.17 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
-                            0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
-                            0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2)) +  # 1K Inlier Time
-                            0.04 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten())) +                     # Reprojection Error
-                            0.18 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points Count
-                            0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000, (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2))  # 1K 3D Point Reconstruction Time
-                        )
-                    else:
-                        scores[i, j, c3, m] = (
-                            0.15 * np.nanmean(Rate[:, m, c3, i, j, 13]) +  # Precision
-                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 12]) +  # Recall
-                            0.12 * np.nanmean(Rate[:, m, c3, i, j, 14]) +  # Repeatability
-                            0.13 * np.nanmean(Rate[:, m, c3, i, j, 15]) +  # F1 Score
-                            0.22 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                # Inliers
-                            0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
-                            0.05 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +  # 1K Total Time
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
-                        )
     for c3 in range(2):
         for m in range(2):
-            fig.add_trace(go.Heatmap(z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
-    fig.update_layout(template="ggplot2", title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="bottom"), font_size=20, margin=dict(l=20, r=20, t=70, b=20))
-    fig.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
+            fig_heatmap.add_trace(go.Heatmap(   z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",
+                                                hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
+    fig_heatmap.update_layout(  template="ggplot2", font_size=20, margin=dict(l=20, r=20, t=70, b=20),
+                                title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="bottom"))
+    fig_heatmap.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def correlationHeatmap(data="drone"):
-    if not (data == "synthetic" or data == "oxford"):
-        Rate = np.load(f"./arrays/Rate_{data}.npy")
-        Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     if data == "synthetic":
-        metrics = {
-            "Precision":            np.concatenate((Rate_intensity[:, :, :, :, :, 13].flatten(), Rate_scale[:, :, :, :, :, 13].flatten(), Rate_rot[:, :, :, :, :, 13].flatten())),
-            "Recall":               np.concatenate((Rate_intensity[:, :, :, :, :, 12].flatten(), Rate_scale[:, :, :, :, :, 12].flatten(), Rate_rot[:, :, :, :, :, 12].flatten())),
-            "Repeatibility":        np.concatenate((Rate_intensity[:, :, :, :, :, 14].flatten(), Rate_scale[:, :, :, :, :, 14].flatten(), Rate_rot[:, :, :, :, :, 14].flatten())),
-            "F1 Score":             np.concatenate((Rate_intensity[:, :, :, :, :, 15].flatten(), Rate_scale[:, :, :, :, :, 15].flatten(), Rate_rot[:, :, :, :, :, 15].flatten())),
-            "Inliers":              np.concatenate((Rate_intensity[:, :, :, :, :,  9].flatten(), Rate_scale[:, :, :, :, :,  9].flatten(), Rate_rot[:, :, :, :, :,  9].flatten())),
-            "Matches":              np.concatenate((Rate_intensity[:, :, :, :, :, 10].flatten(), Rate_scale[:, :, :, :, :, 10].flatten(), Rate_rot[:, :, :, :, :, 10].flatten())),
-            "1K Total Time":   np.concatenate((Exec_time_intensity[:, :, :, :, :,  6].flatten(), Exec_time_scale[:, :, :, :, :,  6].flatten(), Exec_time_rot[:, :, :, :, :,  6].flatten())),
-            "1K Inlier Time":  np.concatenate((Exec_time_intensity[:, :, :, :, :,  7].flatten(), Exec_time_scale[:, :, :, :, :,  7].flatten(), Exec_time_rot[:, :, :, :, :,  7].flatten()))
-        }
+        Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+        Rate = np.concatenate((Rate_intensity, Rate_scale, Rate_rot), axis=0)
     elif data == "oxford":
-        metrics = {
-            "Precision":            np.concatenate((Rate_graf[:, :, :, :, :, 13], Rate_bikes[:, :, :, :, :, 13], Rate_boat[:, :, :, :, :, 13], Rate_leuven[:, :, :, :, :, 13], Rate_wall[:, :, :, :, :, 13], Rate_trees[:, :, :, :, :, 13], Rate_bark[:, :, :, :, :, 13], Rate_ubc[:, :, :, :, :, 13]), axis=0).flatten(),
-            "Recall":               np.concatenate((Rate_graf[:, :, :, :, :, 12], Rate_bikes[:, :, :, :, :, 12], Rate_boat[:, :, :, :, :, 12], Rate_leuven[:, :, :, :, :, 12], Rate_wall[:, :, :, :, :, 12], Rate_trees[:, :, :, :, :, 12], Rate_bark[:, :, :, :, :, 12], Rate_ubc[:, :, :, :, :, 12]), axis=0).flatten(),
-            "Repeatibility":        np.concatenate((Rate_graf[:, :, :, :, :, 14], Rate_bikes[:, :, :, :, :, 14], Rate_boat[:, :, :, :, :, 14], Rate_leuven[:, :, :, :, :, 14], Rate_wall[:, :, :, :, :, 14], Rate_trees[:, :, :, :, :, 14], Rate_bark[:, :, :, :, :, 14], Rate_ubc[:, :, :, :, :, 14]), axis=0).flatten(),
-            "F1 Score":             np.concatenate((Rate_graf[:, :, :, :, :, 15], Rate_bikes[:, :, :, :, :, 15], Rate_boat[:, :, :, :, :, 15], Rate_leuven[:, :, :, :, :, 15], Rate_wall[:, :, :, :, :, 15], Rate_trees[:, :, :, :, :, 15], Rate_bark[:, :, :, :, :, 15], Rate_ubc[:, :, :, :, :, 15]), axis=0).flatten(),
-            "Inliers":              np.concatenate((Rate_graf[:, :, :, :, :,  9], Rate_bikes[:, :, :, :, :,  9], Rate_boat[:, :, :, :, :,  9], Rate_leuven[:, :, :, :, :,  9], Rate_wall[:, :, :, :, :,  9], Rate_trees[:, :, :, :, :,  9], Rate_bark[:, :, :, :, :,  9], Rate_ubc[:, :, :, :, :,  9]), axis=0).flatten(),
-            "Matches":              np.concatenate((Rate_graf[:, :, :, :, :, 10], Rate_bikes[:, :, :, :, :, 10], Rate_boat[:, :, :, :, :, 10], Rate_leuven[:, :, :, :, :, 10], Rate_wall[:, :, :, :, :, 10], Rate_trees[:, :, :, :, :, 10], Rate_bark[:, :, :, :, :, 10], Rate_ubc[:, :, :, :, :, 10]), axis=0).flatten(),
-            "1K Total Time":        np.concatenate((Exec_time_graf[:, :, :, :, :, 6], Exec_time_bikes[:, :, :, :, :, 6], Exec_time_boat[:, :, :, :, :, 6], Exec_time_leuven[:, :, :, :, :, 6], Exec_time_wall[:, :, :, :, :, 6], Exec_time_trees[:, :, :, :, :, 6], Exec_time_bark[:, :, :, :, :, 6], Exec_time_ubc[:, :, :, :, :, 6]), axis=0).flatten(),
-            "1K Inlier Time":       np.concatenate((Exec_time_graf[:, :, :, :, :, 7], Exec_time_bikes[:, :, :, :, :, 7], Exec_time_boat[:, :, :, :, :, 7], Exec_time_leuven[:, :, :, :, :, 7], Exec_time_wall[:, :, :, :, :, 7], Exec_time_trees[:, :, :, :, :, 7], Exec_time_bark[:, :, :, :, :, 7], Exec_time_ubc[:, :, :, :, :, 7]), axis=0).flatten()
-        }
-    elif data == "drone":
-        metrics = {
-            "Precision":            Rate[:, :, :, :, :, 13].flatten(),
-            "Recall":               Rate[:, :, :, :, :, 12].flatten(),
-            "Repeatibility":        Rate[:, :, :, :, :, 14].flatten(),
-            "F1 Score":             Rate[:, :, :, :, :, 15].flatten(),
-            "Inliers":              Rate[:, :, :, :, :,  9].flatten(),
-            "Matches":              Rate[:, :, :, :, :, 10].flatten(),
-            "1K Total Time":   Exec_time[:, :, :, :, :,  6].flatten(),
-            "1K Inlier Time":  Exec_time[:, :, :, :, :,  7].flatten(),
-            "Reprojection Error":   Rate[:, :, :, :, :, 11].flatten(),
-            "3D Points Count":      Rate[:, :, :, :, :, 16].flatten()
-        }
+        Exec_time = np.concatenate((Exec_time_graf, Exec_time_wall, Exec_time_trees, Exec_time_bikes, Exec_time_bark, Exec_time_boat, Exec_time_leuven, Exec_time_ubc), axis=0)
+        Rate = np.concatenate((Rate_graf, Rate_wall, Rate_trees, Rate_bikes, Rate_bark, Rate_boat, Rate_leuven, Rate_ubc), axis=0)
     else:
-        metrics = {
-            "Precision":            Rate[:, :, :, :, :, 13].flatten(),
-            "Recall":               Rate[:, :, :, :, :, 12].flatten(),
-            "Repeatibility":        Rate[:, :, :, :, :, 14].flatten(),
-            "F1 Score":             Rate[:, :, :, :, :, 15].flatten(),
-            "Inliers":              Rate[:, :, :, :, :,  9].flatten(),
-            "Matches":              Rate[:, :, :, :, :, 10].flatten(),
-            "1K Total Time":   Exec_time[:, :, :, :, :,  6].flatten(),
-            "1K Inlier Time":  Exec_time[:, :, :, :, :,  7].flatten(),
-        }
+        Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+        Rate = np.load(f"./arrays/Rate_{data}.npy")
+    metrics = {
+        "Precision":            Rate[:, :, :, :, :, 13].flatten(),
+        "Recall":               Rate[:, :, :, :, :, 12].flatten(),
+        "Repeatibility":        Rate[:, :, :, :, :, 14].flatten(),
+        "F1 Score":             Rate[:, :, :, :, :, 15].flatten(),
+        "Inliers":              Rate[:, :, :, :, :,  9].flatten(),
+        "Matches":              Rate[:, :, :, :, :, 10].flatten(),
+        "1K Total Time":        Exec_time[:, :, :, :, :,  6].flatten(),
+        "1K Inlier Time":       Exec_time[:, :, :, :, :,  7].flatten()
+    }
+    if data == "drone":
+        metrics.update({
+            "Reprojection Error":   Rate[:, :, :, :, :, 11].flatten(),
+            "3D Points Count":      Rate[:, :, :, :, :, 16].flatten(),
+            "Reconstruction Time":  Exec_time[:, :, :, :, :,  8].flatten(),
+        })
     metric_names = list(metrics.keys())
     corr_matrix = np.zeros((len(metric_names), len(metric_names)))
     for i, name1 in enumerate(metric_names):
@@ -1049,12 +947,20 @@ def correlationHeatmap(data="drone"):
             else:
                 corr_matrix[i,j] = 0
     fig = go.Figure()
-    fig.add_trace(go.Heatmap(z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3), texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
-    fig.update_layout(template="ggplot2", font_size=20, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20))
+    fig.add_trace(go.Heatmap(   z=corr_matrix, x=metric_names, y=metric_names, colorscale='RdBu', zmid=0, text=np.round(corr_matrix, 3),
+                                texttemplate='%{text}', hoverongaps=False, hovertemplate='%{x} vs %{y}<br>Correlation: %{z:.3f}<extra></extra>'))
+    fig.update_layout(  template="ggplot2", font_size=20, margin=dict(l=20, r=20, t=50, b=20),
+                        title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Metric Correlations</b></span>", x=0.5, xanchor="center", yanchor="middle"))
     fig.write_html(f"./html/{data}/{data}_Correlation.html", include_plotlyjs="cdn", full_html=True, config=config)
 
 def violinPlot(data="drone"):
-    if not (data == "synthetic" or data == "oxford"):
+    if data == "synthetic":
+        Rate = np.concatenate((Rate_intensity, Rate_scale, Rate_rot), axis=0)
+        Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+    elif data == "oxford":
+        Rate = np.concatenate((Rate_graf, Rate_wall, Rate_trees, Rate_bikes, Rate_bark, Rate_boat, Rate_leuven, Rate_ubc), axis=0)
+        Exec_time = np.concatenate((Exec_time_graf, Exec_time_wall, Exec_time_trees, Exec_time_bikes, Exec_time_bark, Exec_time_boat, Exec_time_leuven, Exec_time_ubc), axis=0)
+    else:
         Rate = np.load(f"./arrays/Rate_{data}.npy")
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
@@ -1064,50 +970,16 @@ def violinPlot(data="drone"):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):  # Normalization Type
                 for m in range(2):  # Matcher Type
-                    if data == "synthetic":
-                        xydata = np.array([
-                        np.concatenate((Rate_intensity[:, m, c3, i, j, 13], Rate_scale[:, m, c3, i, j, 13], Rate_rot[:, m, c3, i, j, 13]), axis=0),  # Precision
-                        np.concatenate((Rate_intensity[:, m, c3, i, j, 12], Rate_scale[:, m, c3, i, j, 12], Rate_rot[:, m, c3, i, j, 12]), axis=0),  # Recall
-                        np.concatenate((Rate_intensity[:, m, c3, i, j, 14], Rate_scale[:, m, c3, i, j, 14], Rate_rot[:, m, c3, i, j, 14]), axis=0),  # Repeatibility
-                        np.concatenate((Rate_intensity[:, m, c3, i, j, 15], Rate_scale[:, m, c3, i, j, 15], Rate_rot[:, m, c3, i, j, 15]), axis=0),  # F1 Score
-                        np.concatenate((Rate_intensity[:, m, c3, i, j,  9], Rate_scale[:, m, c3, i, j,  9], Rate_rot[:, m, c3, i, j,  9]), axis=0),  # Inliers
-                        np.concatenate((Rate_intensity[:, m, c3, i, j, 10], Rate_scale[:, m, c3, i, j, 10], Rate_rot[:, m, c3, i, j, 10]), axis=0),  # Matches
-                        np.concatenate((Exec_time_intensity[:, m, c3, i, j, 6], Exec_time_scale[:, m, c3, i, j, 6], Exec_time_rot[:, m, c3, i, j, 6]), axis=0),  # 1K Total Time
-                        np.concatenate((Exec_time_intensity[:, m, c3, i, j, 7], Exec_time_scale[:, m, c3, i, j, 7], Exec_time_rot[:, m, c3, i, j, 7]), axis=0)   # 1K Inlier Time
-                        ])
-                    elif data == "oxford":
-                        xydata = np.array([
-                        np.concatenate((Rate_graf[:, m, c3, i, j, 13], Rate_bikes[:, m, c3, i, j, 13], Rate_boat[:, m, c3, i, j, 13], Rate_leuven[:, m, c3, i, j, 13], Rate_wall[:, m, c3, i, j, 13], Rate_trees[:, m, c3, i, j, 13], Rate_bark[:, m, c3, i, j, 13], Rate_ubc[:, m, c3, i, j, 13]), axis=0),
-                        np.concatenate((Rate_graf[:, m, c3, i, j, 12], Rate_bikes[:, m, c3, i, j, 12], Rate_boat[:, m, c3, i, j, 12], Rate_leuven[:, m, c3, i, j, 12], Rate_wall[:, m, c3, i, j, 12], Rate_trees[:, m, c3, i, j, 12], Rate_bark[:, m, c3, i, j, 12], Rate_ubc[:, m, c3, i, j, 12]), axis=0),
-                        np.concatenate((Rate_graf[:, m, c3, i, j, 14], Rate_bikes[:, m, c3, i, j, 14], Rate_boat[:, m, c3, i, j, 14], Rate_leuven[:, m, c3, i, j, 14], Rate_wall[:, m, c3, i, j, 14], Rate_trees[:, m, c3, i, j, 14], Rate_bark[:, m, c3, i, j, 14], Rate_ubc[:, m, c3, i, j, 14]), axis=0),
-                        np.concatenate((Rate_graf[:, m, c3, i, j, 15], Rate_bikes[:, m, c3, i, j, 15], Rate_boat[:, m, c3, i, j, 15], Rate_leuven[:, m, c3, i, j, 15], Rate_wall[:, m, c3, i, j, 15], Rate_trees[:, m, c3, i, j, 15], Rate_bark[:, m, c3, i, j, 15], Rate_ubc[:, m, c3, i, j, 15]), axis=0),
-                        np.concatenate((Rate_graf[:, m, c3, i, j,  9], Rate_bikes[:, m, c3, i, j,  9], Rate_boat[:, m, c3, i, j,  9], Rate_leuven[:, m, c3, i, j,  9], Rate_wall[:, m, c3, i, j,  9], Rate_trees[:, m, c3, i, j,  9], Rate_bark[:, m, c3, i, j,  9], Rate_ubc[:, m, c3, i, j,  9]), axis=0),
-                        np.concatenate((Rate_graf[:, m, c3, i, j, 10], Rate_bikes[:, m, c3, i, j, 10], Rate_boat[:, m, c3, i, j, 10], Rate_leuven[:, m, c3, i, j, 10], Rate_wall[:, m, c3, i, j, 10], Rate_trees[:, m, c3, i, j, 10], Rate_bark[:, m, c3, i, j, 10], Rate_ubc[:, m, c3, i, j, 10]), axis=0),
-                        np.concatenate((Exec_time_graf[:, m, c3, i, j, 6], Exec_time_bikes[:, m, c3, i, j, 6], Exec_time_boat[:, m, c3, i, j, 6], Exec_time_leuven[:, m, c3, i, j, 6], Exec_time_wall[:, m, c3, i, j, 6], Exec_time_trees[:, m, c3, i, j, 6], Exec_time_bark[:, m, c3, i, j, 6], Exec_time_ubc[:, m, c3, i, j, 6]), axis=0),
-                        np.concatenate((Exec_time_graf[:, m, c3, i, j, 7], Exec_time_bikes[:, m, c3, i, j, 7], Exec_time_boat[:, m, c3, i, j, 7], Exec_time_leuven[:, m, c3, i, j, 7], Exec_time_wall[:, m, c3, i, j, 7], Exec_time_trees[:, m, c3, i, j, 7], Exec_time_bark[:, m, c3, i, j, 7], Exec_time_ubc[:, m, c3, i, j, 7]), axis=0)
-                        ])
-                    elif data == "drone":
-                        xydata = np.array([
-                            Rate[:, m, c3, i, j, 13], # Precision
-                            Rate[:, m, c3, i, j, 12], # Recall
-                            Rate[:, m, c3, i, j, 14], # Repeatibility
-                            Rate[:, m, c3, i, j, 15], # F1 Score
-                            Rate[:, m, c3, i, j,  9], # Inliers
-                            Rate[:, m, c3, i, j, 10], # Matches
-                            Exec_time[:, m, c3, i, j, 6],  # 1K Total Time
-                            Exec_time[:, m, c3, i, j, 7]   # 1K Inlier Time
-                        ])
-                    else:
-                        xydata = np.array([
-                            Rate[:, m, c3, i, j, 13], # Precision
-                            Rate[:, m, c3, i, j, 12], # Recall
-                            Rate[:, m, c3, i, j, 14], # Repeatibility
-                            Rate[:, m, c3, i, j, 15], # F1 Score
-                            Rate[:, m, c3, i, j,  9], # Inliers
-                            Rate[:, m, c3, i, j, 10], # Matches
-                            Exec_time[:, m, c3, i, j, 6],  # 1K Total Time
-                            Exec_time[:, m, c3, i, j, 7]   # 1K Inlier Time
-                        ])
+                    xydata = np.array([
+                        Rate[:, m, c3, i, j, 13], # Precision
+                        Rate[:, m, c3, i, j, 12], # Recall
+                        Rate[:, m, c3, i, j, 14], # Repeatibility
+                        Rate[:, m, c3, i, j, 15], # F1 Score
+                        Rate[:, m, c3, i, j,  9], # Inliers
+                        Rate[:, m, c3, i, j, 10], # Matches
+                        Exec_time[:, m, c3, i, j, 6],  # 1K Total Time
+                        Exec_time[:, m, c3, i, j, 7]   # 1K Inlier Time
+                    ])
                     if not np.all(np.isnan(xydata)):
                         traces.append(go.Violin(
                                 x=[[DetectorsLegend[i]+'-'+DescriptorsLegend[j]]*len(xydata[0]), [Norm[c3]]*len(xydata[0])], y=xydata,
@@ -1118,11 +990,12 @@ def violinPlot(data="drone"):
                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                 marker=dict(color=colors[color_index]), box_visible=True, meanline_visible=True))
             color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeat.", "F1Score", "Inliers", "Matches", "Time", "Inlier T."]
+    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
     button_list = []
     for idx, axis in enumerate(dropdown_axis):
         button_list.append(dict(label=f"y: {axis}", method="update", args=[{"y": [trace.y[idx] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
-    fig.update_layout(  template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Violin Plots</b></span>", x=0.5, xanchor="center", yanchor="middle"), margin=dict(l=20, r=20, t=50, b=20), hovermode="x unified", 
+    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=50, b=20), hovermode="x unified",
+                        title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Violin Plots</b></span>", x=0.5, xanchor="center", yanchor="middle"), 
                         updatemenus=[   dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                         dict(type="dropdown", showactive=True, active=0, buttons=button_list, direction="down", x=0, xanchor="left", y=1, yanchor="bottom")])
     fig.write_html(f"./html/{data}/{data}_Violin.html", include_plotlyjs="cdn", full_html=True, config=config)
