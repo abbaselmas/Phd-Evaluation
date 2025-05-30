@@ -872,19 +872,22 @@ def efficiencyAndHeatmap(data="drone"):
             for c3 in range(2):
                 for m in range(2):
                     scores[i, j, c3, m] = (
-                        0.07 * np.nanmean(Rate[:, m, c3, i, j, 13]) + # Precision
+                        0.09 * np.nanmean(Rate[:, m, c3, i, j, 13]) + # Precision
                         0.04 * np.nanmean(Rate[:, m, c3, i, j, 12]) + # Recall
                         0.04 * np.nanmean(Rate[:, m, c3, i, j, 14]) + # Repeatability
                         0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) + # F1 Score
-                        0.08 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                # Matches
-                        0.12 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 9]), Rate[:, :, :, :, :, 9].flatten(), alpha=0.2) +                  # Inliers
-                        0.15 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))    # 1K Inlier Time
+                        0.03 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                 # Matches
+                        0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                 # Inliers
+                        0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 4]), Exec_time[:, :, :, :, :, 4].flatten(), alpha=0.2)) +   # Detect Time per 1K keypoints
+                        0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 5]), Exec_time[:, :, :, :, :, 5].flatten(), alpha=0.2)) +   # Descript Time per 1K keypoints
+                        0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +   # 1K Total Time
+                        0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))     # 1K Inlier Time
                     ) # %60
                     if data == "drone":
                         scores[i, j, c3, m] += (
-                            0.25 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +                # 3D Points
-                            0.07 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), alpha=0.2)) +          # Reprojection Error
-                            0.08 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8].flatten(), alpha=0.2))    # Reconstruction Time
+                            0.20 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +             # 3D Points
+                            0.10 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), alpha=0.2)) +       # Reprojection Error
+                            0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8].flatten(), alpha=0.2)) # Reconstruction Time
                         ) # %40
                     else:
                         scores[i, j, c3, m] *= 10/6

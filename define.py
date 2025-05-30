@@ -3,11 +3,11 @@ import numpy as np
 from plotly.colors import sample_colorscale
 
 epsilon = 1e-6
-val_b    = np.array([-30, -10, 10, 30])     # b ∈ [−30 : 20 : +30]
+val_b    = np.array([-30, -10, 10, 30])     # b ∈ [−30 : 20  : +30]
 val_c    = np.array([0.7, 0.9, 1.1, 1.3])   # c ∈ [0.7 : 0.2 : 1.3]
 nbre_img = len(val_b) + len(val_c)          # number of intensity change values ==> number of test images
-scale    = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5]   # s ∈]1.1 : 0.2 : 2.3]
-rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15 : 15 : 90
+scale    = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5]   # s ∈ [1.1 : 0.2 : 2.3]
+rot      = [15, 30, 45, 60, 75, 90]         # r ∈ [15  : 15  : 90 ]
 
 DetectorsLegend   = ["sift", "akaze", "orb", "brisk", "kaze", "fast", "mser", "agast", "gftt", "gftt_h", "star", "hl", "msd", "tbmr"]
 DescriptorsLegend = ["sift", "akaze", "orb", "brisk", "kaze", "daisy", "freak", "brief", "lucid", "latch", "vgg", "beblid", "teblid", "boost"]
