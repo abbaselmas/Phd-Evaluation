@@ -145,9 +145,9 @@ Exec_time_rot_mobile        = np.load("./arrays/Exec_time_rot_mobile.npy")
 # Rate_intensity_mobile2      = np.load("./arrays/Rate_intensity_mobile2.npy")
 # Rate_scale_mobile2          = np.load("./arrays/Rate_scale_mobile2.npy")
 # Rate_rot_mobile2            = np.load("./arrays/Rate_rot_mobile2.npy")
-# Exec_time_intensity_mobile2 = np.load("./arrays/Exec_time_intensity_mobile2.npy")
-# Exec_time_scale_mobile2     = np.load("./arrays/Exec_time_scale_mobile2.npy")
-# Exec_time_rot_mobile2       = np.load("./arrays/Exec_time_rot_mobile2.npy")
+Exec_time_intensity_mobile2 = np.load("./arrays/Exec_time_intensity_mobile2.npy")
+Exec_time_scale_mobile2     = np.load("./arrays/Exec_time_scale_mobile2.npy")
+Exec_time_rot_mobile2       = np.load("./arrays/Exec_time_rot_mobile2.npy")
 
 # *Oxford Dataset
 Rate_graf                   = np.load("./arrays/Rate_graf.npy")
@@ -192,14 +192,14 @@ Exec_time_ubc_mobile        = np.load("./arrays/Exec_time_ubc_mobile.npy")
 # Rate_trees_mobile2          = np.load("./arrays/Rate_trees_mobile2.npy")
 # Rate_bark_mobile2           = np.load("./arrays/Rate_bark_mobile2.npy")
 # Rate_ubc_mobile2            = np.load("./arrays/Rate_ubc_mobile2.npy")
-# Exec_time_graf_mobile2      = np.load("./arrays/Exec_time_graf_mobile2.npy")
-# Exec_time_bikes_mobile2     = np.load("./arrays/Exec_time_bikes_mobile2.npy")
-# Exec_time_boat_mobile2      = np.load("./arrays/Exec_time_boat_mobile2.npy")
-# Exec_time_leuven_mobile2    = np.load("./arrays/Exec_time_leuven_mobile2.npy")
-# Exec_time_wall_mobile2      = np.load("./arrays/Exec_time_wall_mobile2.npy")
-# Exec_time_trees_mobile2     = np.load("./arrays/Exec_time_trees_mobile2.npy")
-# Exec_time_bark_mobile2      = np.load("./arrays/Exec_time_bark_mobile2.npy")
-# Exec_time_ubc_mobile2       = np.load("./arrays/Exec_time_ubc_mobile2.npy")
+Exec_time_graf_mobile2      = np.load("./arrays/Exec_time_graf_mobile2.npy")
+Exec_time_bikes_mobile2     = np.load("./arrays/Exec_time_bikes_mobile2.npy")
+Exec_time_boat_mobile2      = np.load("./arrays/Exec_time_boat_mobile2.npy")
+Exec_time_leuven_mobile2    = np.load("./arrays/Exec_time_leuven_mobile2.npy")
+Exec_time_wall_mobile2      = np.load("./arrays/Exec_time_wall_mobile2.npy")
+Exec_time_trees_mobile2     = np.load("./arrays/Exec_time_trees_mobile2.npy")
+Exec_time_bark_mobile2      = np.load("./arrays/Exec_time_bark_mobile2.npy")
+Exec_time_ubc_mobile2       = np.load("./arrays/Exec_time_ubc_mobile2.npy")
 
 
 def syntheticAll4():
@@ -700,12 +700,14 @@ def timing(data="drone", mobile=""):
         Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
         if mobile:
             Exec_time_mobile = np.concatenate((Exec_time_intensity_mobile, Exec_time_scale_mobile, Exec_time_rot_mobile), axis=0)
-            # Exec_time_mobile2 = np.concatenate((Exec_time_intensity_mobile2, Exec_time_scale_mobile2, Exec_time_rot_mobile2), axis=0)
+        if mobile == "_mobile2":
+            Exec_time_mobile2 = np.concatenate((Exec_time_intensity_mobile2, Exec_time_scale_mobile2, Exec_time_rot_mobile2), axis=0)
     elif data == "oxford":
         Exec_time = np.concatenate((Exec_time_graf, Exec_time_bikes, Exec_time_boat, Exec_time_leuven, Exec_time_wall, Exec_time_trees, Exec_time_bark, Exec_time_ubc), axis=0)
         if mobile:
             Exec_time_mobile = np.concatenate((Exec_time_graf_mobile, Exec_time_bikes_mobile, Exec_time_boat_mobile, Exec_time_leuven_mobile, Exec_time_wall_mobile, Exec_time_trees_mobile, Exec_time_bark_mobile, Exec_time_ubc_mobile), axis=0)
-            # Exec_time_mobile2 = np.concatenate((Exec_time_graf_mobile2, Exec_time_bikes_mobile2, Exec_time_boat_mobile2, Exec_time_leuven_mobile2, Exec_time_wall_mobile2, Exec_time_trees_mobile2, Exec_time_bark_mobile2, Exec_time_ubc_mobile2), axis=0)
+        if mobile == "_mobile2":
+            Exec_time_mobile2 = np.concatenate((Exec_time_graf_mobile2, Exec_time_bikes_mobile2, Exec_time_boat_mobile2, Exec_time_leuven_mobile2, Exec_time_wall_mobile2, Exec_time_trees_mobile2, Exec_time_bark_mobile2, Exec_time_ubc_mobile2), axis=0)
     else:
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
@@ -724,10 +726,11 @@ def timing(data="drone", mobile=""):
                 result3 = np.nanmean(Exec_time[:, m, :, i, j, 6])
                 result4 = np.nanmean(Exec_time[:, m, :, i, j, 7])
                 if mobile:
-                    result3m1= np.nanmean(Exec_time_rot_mobile[:, m, :, i, j, 6])
-                    result4m1= np.nanmean(Exec_time_rot_mobile[:, m, :, i, j, 7])
-                    # result3m2= np.nanmean(Exec_time_rot_mobile2[:, m, :, i, j, 6])
-                    # result4m2= np.nanmean(Exec_time_rot_mobile2[:, m, :, i, j, 7])
+                    result3m1= np.nanmean(Exec_time_mobile [:, m, :, i, j, 6])
+                    result4m1= np.nanmean(Exec_time_mobile [:, m, :, i, j, 7])
+                if mobile == "_mobile2":
+                    result3m2= np.nanmean(Exec_time_mobile2[:, m, :, i, j, 6])
+                    result4m2= np.nanmean(Exec_time_mobile2[:, m, :, i, j, 7])
                 # * 1K Total Time
                 if not np.isnan(result3):
                     fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]]], y=[result3],
@@ -757,6 +760,7 @@ def timing(data="drone", mobile=""):
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
                                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
                 if mobile:
+                    # * 1K Total Time
                     if not np.isnan(result3m1):
                         fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m1']], y=[result3m1],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m1",
@@ -770,19 +774,7 @@ def timing(data="drone", mobile=""):
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m1",
                                                 text=[f"{result3m1:.3f}"], marker_color=colors[color_index],
                                                 showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
-                    # if not np.isnan(result3m2):
-                    #     fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m2']], y=[result3m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
-                    #                             text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=1, col=1)
-                    #     fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-m2']], y=[result3m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
-                    #                             text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=2, col=1)
-                    #     fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-tot.-m2'], y=[result3m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
-                    #                             text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
+                    # * Inlier Time
                     if not np.isnan(result4m1):
                         fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m1']], y=[result4m1],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m1",
@@ -796,24 +788,8 @@ def timing(data="drone", mobile=""):
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m1",
                                                 text=[f"{result4m1:.3f}"], marker_color=colors[color_index],
                                                 showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
-                    # if not np.isnan(result4m2):
-                    #     fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m2']], y=[result4m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
-                    #                             text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=3, col=1)
-                    #     fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-m2']], y=[result4m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
-                    #                             text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=4, col=1)
-                    #     fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-inl.-m2'], y=[result4m2],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
-                    #                             text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
-                    #                             showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
-                    # * Mobile Difference
                     result3m1diff = result3m1 - result3
                     result4m1diff = result4m1 - result4
-                    # result3m2diff = result3m2 - result3
-                    # result4m2diff = result4m2 - result4
                     if not np.isnan(result3m1diff):
                         fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-total-m1']], y=[result3m1diff],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m1",
@@ -824,16 +800,48 @@ def timing(data="drone", mobile=""):
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m1",
                                                 text=[f"{result4m1diff:.3f}"], marker_color=colors[color_index % len(colors)],
                                                 showlegend=True,hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
-                    # if not np.isnan(result3m2diff):
-                    #     fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-total-m2']], y=[result3m2diff],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
-                    #                             text=[f"{result3m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
-                    #                             showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
-                    # if not np.isnan(result4m2diff):
-                    #     fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-inlier-m2']], y=[result4m2diff],
-                    #                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
-                    #                             text=[f"{result4m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
-                    #                             showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                if mobile == "_mobile2":
+                    # * 1K Total Time
+                    if not np.isnan(result3m2):
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m2']], y=[result3m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
+                                                text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=1, col=1)
+                        fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-m2']], y=[result3m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
+                                                text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=2, col=1)
+                        fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-tot.-m2'], y=[result3m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
+                                                text=[f"{result3m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
+                    # * Inlier Time
+                    if not np.isnan(result4m2):
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-m2']], y=[result4m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
+                                                text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=3, col=1)
+                        fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-m2']], y=[result4m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
+                                                text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=4, col=1)
+                        fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-inl.-m2'], y=[result4m2],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
+                                                text=[f"{result4m2:.3f}"], marker_color=colors[color_index],
+                                                showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
+                    # * Mobile Difference
+                    result3m2diff = result3m2 - result3
+                    result4m2diff = result4m2 - result4
+                    if not np.isnan(result3m2diff):
+                        fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-total-m2']], y=[result3m2diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
+                                                text=[f"{result3m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                    if not np.isnan(result4m2diff):
+                        fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-inlier-m2']], y=[result4m2diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
+                                                text=[f"{result4m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
             color_index = (color_index + 14) % num_combinations
     for i in range(1, 7):
         fig.update_xaxes(tickangle=90, row=i, col=1)
