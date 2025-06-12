@@ -711,12 +711,14 @@ def timing(data="drone", mobile=""):
     else:
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
     fig = go.Figure()
-    fig = make_subplots(rows=6 if mobile else 5, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Detector level)</span>",
+    fig = make_subplots(rows=7 if mobile else 5, cols=1, subplot_titles=["<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Detector level)</span>",
                                                         "<span style='font-size: 22px;'>Total time <b>BF</b> - Total time <b>Flann</b> (Descriptor level)</span>",
                                                         "<span style='font-size: 22px;'>Inlier time <b>BF</b> - Inlier time <b>Flann</b> (Detector level)</span>",
                                                         "<span style='font-size: 22px;'>Inlier time <b>BF</b> - Inlier time <b>Flann</b> (Descriptor level)</span>",
-                                                        "<span style='font-size: 22px;'>All Timings</span>"], vertical_spacing=0.08)
-    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20), hovermode="x unified", height=3300 if mobile else 2900,
+                                                        "<span style='font-size: 22px;'>All Timings</span>",
+                                                        "<span style='font-size: 22px;'>Deltas Detector Level</span>",
+                                                        "<span style='font-size: 22px;'>Deltas Descriptor Level</span>"], vertical_spacing=0.075)
+    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20), hovermode="x unified", height=3700 if mobile else 2900,
                         title=dict( text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset Timings for Average 1k</b></span>",
                                     x=0.5, xanchor="center", yanchor="bottom", xref="paper", yref="paper"))
     color_index = 0
@@ -744,7 +746,7 @@ def timing(data="drone", mobile=""):
                     fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-tot.-p'], y=[result3],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-pc",
                                             text=[f"{result3:.3f}"], marker_color=colors[color_index],
-                                            showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
+                                            showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1)
                 # * Inlier Time
                 if not np.isnan(result4):
                     fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]]], y=[result4],
@@ -758,7 +760,7 @@ def timing(data="drone", mobile=""):
                     fig.add_trace(go.Bar(   x=['.'+DetectorsLegend[i]+'-'+DescriptorsLegend[j] + '-' + Matcher[m] + '-inl.-p'], y=[result4],
                                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-pc",
                                             text=[f"{result4:.3f}"], marker_color=colors[color_index],
-                                            showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1 )
+                                            showlegend=True, legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"), row=5, col=1)
                 if mobile:
                     # * 1K Total Time
                     if not np.isnan(result3m1):
@@ -794,12 +796,24 @@ def timing(data="drone", mobile=""):
                         fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-total-m1']], y=[result3m1diff],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m1",
                                                 text=[f"{result3m1diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                 showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-total-m1']], y=[result3m1diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m1",
+                                                text=[f"{result3m1diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=7, col=1)
                     if not np.isnan(result4m1diff):
                         fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-inlier-m1']], y=[result4m1diff],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m1",
                                                 text=[f"{result4m1diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                 showlegend=True,hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-inlier-m1']], y=[result4m1diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m1",
+                                                text=[f"{result4m1diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=7, col=1)
                 if mobile == "_mobile2":
                     # * 1K Total Time
                     if not np.isnan(result3m2):
@@ -836,19 +850,31 @@ def timing(data="drone", mobile=""):
                         fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-total-m2']], y=[result3m2diff],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
                                                 text=[f"{result3m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
                                                 showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-total-m2']], y=[result3m2diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total-m2",
+                                                text=[f"{result3m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-total",
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=7, col=1)
                     if not np.isnan(result4m2diff):
                         fig.add_trace(go.Bar(   x=[['-'+DescriptorsLegend[j]], ['.'+DetectorsLegend[i]+'-'+Matcher[m]+'-inlier-m2']], y=[result4m2diff],
                                                 name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
                                                 text=[f"{result4m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
                                                 showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=6, col=1)
+                        fig.add_trace(go.Bar(   x=[['.'+DetectorsLegend[i]], ['-'+DescriptorsLegend[j]+'-'+Matcher[m]+'-inlier-m2']], y=[result4m2diff],
+                                                name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier-m2",
+                                                text=[f"{result4m2diff:.3f}"], marker_color=colors[color_index % len(colors)],
+                                                legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Matcher[m]}-inlier",
+                                                showlegend=True, hovertemplate="<b>%{y:.3f}</b>"), row=7, col=1)
             color_index = (color_index + 14) % num_combinations
-    for i in range(1, 7):
+    for i in range(1, 8):
         fig.update_xaxes(tickangle=90, row=i, col=1)
     fig.update_layout(updatemenus=[ dict(   type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(   type="dropdown", x=0, xanchor="left", y=1, yanchor="bottom",
-                                            buttons=[   dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear", "yaxis2.type": "linear","yaxis3.type": "linear", "yaxis4.type": "linear","yaxis5.type": "linear"}]),
-                                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log",    "yaxis2.type": "log",   "yaxis3.type": "log",    "yaxis4.type": "log",   "yaxis5.type": "log"   }])])])
+                                            buttons=[   dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear", "yaxis2.type": "linear","yaxis3.type": "linear", "yaxis4.type": "linear","yaxis5.type": "linear","yaxis6.type": "linear","yaxis7.type": "linear"}]),
+                                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log",    "yaxis2.type": "log",   "yaxis3.type": "log",    "yaxis4.type": "log",   "yaxis5.type": "log",   "yaxis6.type": "log",   "yaxis7.type": "log"}])])])
     fig.write_html(f"./html/{data}/{data}Timing{mobile}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}Timing{mobile}.html", "a") as f:
         f.write(custom_html)
