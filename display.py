@@ -871,10 +871,17 @@ def timing(data="drone", mobile=""):
             color_index = (color_index + 14) % num_combinations
     for i in range(1, 8):
         fig.update_xaxes(tickangle=90, row=i, col=1)
+    args_linear = {"yaxis.type": "linear",  "yaxis2.type": "linear",    "yaxis3.type": "linear",    "yaxis4.type": "linear",    "yaxis5.type": "linear"}
+    args_log    = {"yaxis.type": "log",     "yaxis2.type": "log",       "yaxis3.type": "log",       "yaxis4.type": "log",       "yaxis5.type": "log"}
+    
+    if mobile:
+        args_linear.update( {"yaxis6.type": "linear",   "yaxis7.type": "linear"})
+        args_log.update(    {"yaxis6.type": "log",      "yaxis7.type": "log"})
+    
     fig.update_layout(updatemenus=[ dict(   type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(   type="dropdown", x=0, xanchor="left", y=1, yanchor="bottom",
-                                            buttons=[   dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear", "yaxis2.type": "linear","yaxis3.type": "linear", "yaxis4.type": "linear","yaxis5.type": "linear","yaxis6.type": "linear","yaxis7.type": "linear"}]),
-                                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log",    "yaxis2.type": "log",   "yaxis3.type": "log",    "yaxis4.type": "log",   "yaxis5.type": "log",   "yaxis6.type": "log",   "yaxis7.type": "log"}])])])
+                                            buttons=[   dict(label="Linear", method="relayout", args=[args_linear]),
+                                                        dict(label="Log", method="relayout", args=[args_log])])])
     fig.write_html(f"./html/{data}/{data}Timing{mobile}.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}Timing{mobile}.html", "a") as f:
         f.write(custom_html)
