@@ -181,11 +181,12 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
     return combined_img
 
 def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
+    scores = np.load(f"./arrays/Scores_{scenario}.npy")
     headers = [ "Detector", "Keypoint1", "Keypoint2", "1K Detect Time",
                 "Descriptor", "Descriptor1", "Descriptor2", "1K Descript Time",
                 "Norm.", "Matcher", "Inliers", "All Matches",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
-                "Recall", "Precision", "Repeatibility", "F1-Score", "Reprojection Error", "3DPoints", "Reconstruction Time"]
+                "Recall", "Precision", "Repeatibility", "F1-Score", "Reprojection Error", "3DPoints", "Reconstruction Time", "Efficiency"]
     with open(f"./csv/{scenario}_analysis{mobile}.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
@@ -214,8 +215,9 @@ def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
                                 np.nanmean(Rate[:, m, c3, i, j, 15]),         # F1-Score
                                 np.nanmean(Rate[:, m, c3, i, j, 11]),         # Reprojection Error
                                 np.nanmean(Rate[:, m, c3, i, j, 16]),         # 3D Points Count
-                                np.nanmean(Exec_time[:, m, c3, i, j, 8])      # Reconstruction Time
-                                ]         
+                                np.nanmean(Exec_time[:, m, c3, i, j, 8]),     # Reconstruction Time
+                                scores[i, j, c3, m]                           # Efficiency
+                                ]
                         writer.writerow(row)
                     
 def saveAllCSV(Rate, Exec_time, scenario, mobile=""):

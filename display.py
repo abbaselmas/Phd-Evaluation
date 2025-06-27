@@ -939,6 +939,7 @@ def efficiencyAndHeatmap(data="drone"):
                                                     legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
+    np.save(f"./arrays/Scores_{data}.npy", scores)
     fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
                                     dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
                                                                     dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
