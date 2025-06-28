@@ -606,10 +606,10 @@ def singleAll(data="drone"):
                         Rate[:, m, c3, i, j, 12],       # Recall
                         Rate[:, m, c3, i, j, 14],       # Repeatibility
                         Rate[:, m, c3, i, j, 15],       # F1 Score
-                        nonlinear_normalize(Rate[:, m, c3, i, j,  9], Rate[:, :, :, :, :, 9], alpha=0.3),              # Inliers
-                        nonlinear_normalize(Rate[:, m, c3, i, j, 10], Rate[:, :, :, :, :, 10], alpha=0.3),             # Matches
-                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 6], Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
-                        1 - nonlinear_normalize(Exec_time[:, m, c3, i, j, 7], Exec_time[:, :, :, :, :, 7], alpha=0.2)  # 1K feature Inlier Time
+                        Rate[:, m, c3, i, j,  9],       # Inliers
+                        Rate[:, m, c3, i, j, 10],       # Matches
+                        Exec_time[:, m, c3, i, j, 6],   # 1K Total Time
+                        Exec_time[:, m, c3, i, j, 7]    # 1K feature Inlier Time
                     ])
                     if not np.isnan(y_data).any():
                         traces.append(go.Scatter(   x=xvals, y=y_data, mode="markers+lines",
