@@ -465,7 +465,7 @@ def oxford9():
                         np.nanmean(Rate_graf[:, m, c3, i, j, 14]),
                         np.nanmean(Rate_graf[:, m, c3, i, j, 15]),
                         nonlinear_normalize(np.nanmean(Rate_graf[:, m, c3, i, j, 9]), Rate_graf[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_graf[:, m, c3, i, j, 10]), Rate_graf[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_graf[:, m, c3, i, j, 10]), Rate_graf[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 6]), Exec_time_graf[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_graf[:, m, c3, i, j, 7]), Exec_time_graf[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -475,7 +475,7 @@ def oxford9():
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_bikes[:, m, c3, i, j, 15]),
                         nonlinear_normalize(np.nanmean(Rate_bikes[:, m, c3, i, j, 9]), Rate_bikes[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), Rate_bikes[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_bikes[:, m, c3, i, j, 10]), Rate_bikes[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 6]), Exec_time_bikes[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_bikes[:, m, c3, i, j, 7]), Exec_time_bikes[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -485,7 +485,7 @@ def oxford9():
                         np.nanmean(Rate_boat[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_boat[:, m, c3, i, j, 15]), 
                         nonlinear_normalize(np.nanmean(Rate_boat[:, m, c3, i, j, 9]), Rate_boat[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_boat[:, m, c3, i, j, 10]), Rate_boat[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_boat[:, m, c3, i, j, 10]), Rate_boat[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 6]), Exec_time_boat[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_boat[:, m, c3, i, j, 7]), Exec_time_boat[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -495,7 +495,7 @@ def oxford9():
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_leuven[:, m, c3, i, j, 15]), 
                         nonlinear_normalize(np.nanmean(Rate_leuven[:, m, c3, i, j, 9]), Rate_leuven[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), Rate_leuven[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_leuven[:, m, c3, i, j, 10]), Rate_leuven[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 6]), Exec_time_leuven[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_leuven[:, m, c3, i, j, 7]), Exec_time_leuven[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -505,7 +505,7 @@ def oxford9():
                         np.nanmean(Rate_wall[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_wall[:, m, c3, i, j, 15]),
                         nonlinear_normalize(np.nanmean(Rate_wall[:, m, c3, i, j, 9]), Rate_wall[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_wall[:, m, c3, i, j, 10]), Rate_wall[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_wall[:, m, c3, i, j, 10]), Rate_wall[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 6]), Exec_time_wall[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_wall[:, m, c3, i, j, 7]), Exec_time_wall[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -515,7 +515,7 @@ def oxford9():
                         np.nanmean(Rate_trees[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_trees[:, m, c3, i, j, 15]), 
                         nonlinear_normalize(np.nanmean(Rate_trees[:, m, c3, i, j, 9]), Rate_trees[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_trees[:, m, c3, i, j, 10]), Rate_trees[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_trees[:, m, c3, i, j, 10]), Rate_trees[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 6]), Exec_time_trees[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_trees[:, m, c3, i, j, 7]), Exec_time_trees[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -525,7 +525,7 @@ def oxford9():
                         np.nanmean(Rate_bark[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_bark[:, m, c3, i, j, 15]), 
                         nonlinear_normalize(np.nanmean(Rate_bark[:, m, c3, i, j, 9]), Rate_bark[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_bark[:, m, c3, i, j, 10]), Rate_bark[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_bark[:, m, c3, i, j, 10]), Rate_bark[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 6]), Exec_time_bark[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_bark[:, m, c3, i, j, 7]), Exec_time_bark[:, :, :, :, :, 7], alpha=0.2)
                     ])
@@ -535,7 +535,7 @@ def oxford9():
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 14]), 
                         np.nanmean(Rate_ubc[:, m, c3, i, j, 15]), 
                         nonlinear_normalize(np.nanmean(Rate_ubc[:, m, c3, i, j, 9]), Rate_ubc[:, :, :, :, :, 9], alpha=0.2),
-                        nonlinear_normalize(np.nanmean(Rate_ubc[:, m, c3, i, j, 10]), Rate_ubc[:, :, :, :, :, 10], alpha=0.2),
+                        nonlinear_normalize(np.nanmean(Rate_ubc[:, m, c3, i, j, 10]), Rate_ubc[:, :, :, :, :, 10], alpha=0.3),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 6]), Exec_time_ubc[:, :, :, :, :, 6], alpha=0.2),
                         1 - nonlinear_normalize(np.nanmean(Exec_time_ubc[:, m, c3, i, j, 7]), Exec_time_ubc[:, :, :, :, :, 7], alpha=0.2)
                     ])
