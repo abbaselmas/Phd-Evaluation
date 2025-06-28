@@ -718,7 +718,7 @@ def timing(data="drone", mobile=""):
                                                         "<span style='font-size: 22px;'>All Timings</span>",
                                                         "<span style='font-size: 22px;'>Deltas Detector Level</span>",
                                                         "<span style='font-size: 22px;'>Deltas Descriptor Level</span>"], vertical_spacing=0.075)
-    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20), hovermode="x unified", height=3700 if mobile else 2900,
+    fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=75, b=20), hovermode="x unified", height=3700 if mobile else 2900,
                         title=dict( text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset Timings for Average 1k</b></span>",
                                     x=0.5, xanchor="center", yanchor="bottom", xref="paper", yref="paper"))
     color_index = 0
