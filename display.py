@@ -902,57 +902,124 @@ def efficiencyAndHeatmap(data="drone"):
                                                 "<span style='font-size: 22px;'>L2-Flann</span>",
                                                 "<span style='font-size: 22px;'>Hamming-BruteForce</span>",
                                                 "<span style='font-size: 22px;'>Hamming-Flann</span>"])
-    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20),
                         title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=False))
+    # Collect and normalize metrics
+    def collect_metrics():
+        """Collect all metrics for CRITIC calculation"""
+        metrics_data = []
+        combinations = []
+        for i in range(len(DetectorsLegend)):
+            for j in range(len(DescriptorsLegend)):
+                for c3 in range(2):  # Normalization
+                    for m in range(2):  # Matcher
+                        metrics_row = [
+                            np.nanmean(Rate[:, m, c3, i, j, 13]),      # Precision
+                            np.nanmean(Rate[:, m, c3, i, j, 12]),      # Recall
+                            np.nanmean(Rate[:, m, c3, i, j, 14]),      # Repeatability
+                            np.nanmean(Rate[:, m, c3, i, j, 15]),      # F1 Score
+                            np.nanmean(Rate[:, m, c3, i, j, 10]),      # Matches
+                            np.nanmean(Rate[:, m, c3, i, j, 9]),       # Inliers
+                            np.nanmean(Exec_time[:, m, c3, i, j, 6]),  # 1K Total Time
+                            np.nanmean(Exec_time[:, m, c3, i, j, 7])   # 1K Inlier Time
+                        ]
+                        
+                        if data == "drone":
+                            metrics_row.extend([
+                                np.nanmean(Rate[:, m, c3, i, j, 11]),      # Reprojection Error
+                                np.nanmean(Rate[:, m, c3, i, j, 16]),      # 3D Points
+                                np.nanmean(Exec_time[:, m, c3, i, j, 8])   # Reconstruction Time
+                            ])
+                        
+                        if not np.any(np.isnan(metrics_row)):
+                            metrics_data.append(metrics_row)
+                            combinations.append((i, j, c3, m))
+        
+        return np.array(metrics_data), combinations
+    
+    def normalize_metrics(metrics_data):
+        """Normalize metrics for CRITIC calculation"""
+        normalized = np.zeros_like(metrics_data)
+        normalized[:, 0] =      nonlinear_normalize(metrics_data[:, 0], metrics_data[:, 0], alpha=0.2)  # Precision
+        normalized[:, 1] =      nonlinear_normalize(metrics_data[:, 1], metrics_data[:, 1], alpha=0.2)  # Recall
+        normalized[:, 2] =      nonlinear_normalize(metrics_data[:, 2], metrics_data[:, 2], alpha=0.2)  # Repeatability
+        normalized[:, 3] =      nonlinear_normalize(metrics_data[:, 3], metrics_data[:, 3], alpha=0.2)  # F1 Score
+        normalized[:, 4] =      nonlinear_normalize(metrics_data[:, 4], metrics_data[:, 4], alpha=0.3)  # Matches
+        normalized[:, 5] =      nonlinear_normalize(metrics_data[:, 5], metrics_data[:, 5], alpha=0.2)  # Inliers
+        normalized[:, 6] = 1 -  nonlinear_normalize(metrics_data[:, 6], metrics_data[:, 6], alpha=0.2)  # 1K Total Time (inverse)
+        normalized[:, 7] = 1 -  nonlinear_normalize(metrics_data[:, 7], metrics_data[:, 7], alpha=0.2)  # 1K Inlier Time (inverse)
+        if data == "drone":
+            normalized[:,  8] = 1 -  nonlinear_normalize(metrics_data[:,  8], metrics_data[:,  8], alpha=0.4) # Reprojection Error (inverse)
+            normalized[:,  9] =      nonlinear_normalize(metrics_data[:,  9], metrics_data[:,  9], alpha=0.2) # 3D Points
+            normalized[:, 10] = 1 -  nonlinear_normalize(metrics_data[:, 10], metrics_data[:, 10], alpha=0.2) # Reconstruction Time (inverse)
+        return normalized
+    
+    def calculate_critic_weights(normalized_metrics):
+        num_metrics = normalized_metrics.shape[1]
+        weights = np.zeros(num_metrics)        
+        for j in range(num_metrics):
+            # Standard deviation (contrast)
+            std_j = np.std(normalized_metrics[:, j])
+            if std_j == 0:
+                std_j = 1e-8
+            # Average conflict with other metrics
+            conflicts = []
+            for k in range(num_metrics):
+                if j != k:
+                    corr = np.corrcoef(normalized_metrics[:, j], normalized_metrics[:, k])[0, 1]
+                    if not np.isnan(corr):
+                        conflicts.append(1 - abs(corr))
+            conflict_j = np.mean(conflicts) if conflicts else 1.0
+            weights[j] = std_j * conflict_j
+        # Normalize weights
+        weight_sum = np.sum(weights)
+        return weights / weight_sum if weight_sum > 0 else np.ones(num_metrics) / num_metrics
+    
+    # Main processing
+    metrics_data, combinations = collect_metrics()
+    if len(metrics_data) == 0:
+        print(f"No valid data found for {data}")
+        return
+    normalized_metrics = normalize_metrics(metrics_data)
+    critic_weights = calculate_critic_weights(normalized_metrics)
+    # Calculate efficiency scores
+    scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
+    for idx, (i, j, c3, m) in enumerate(combinations):
+        critic_score = np.sum(normalized_metrics[idx] * critic_weights)
+        scores[i, j, c3, m] = critic_score
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
             for c3 in range(2):
                 for m in range(2):
-                    scores[i, j, c3, m] = (
-                        0.09 * np.nanmean(Rate[:, m, c3, i, j, 13]) + # Precision
-                        0.04 * np.nanmean(Rate[:, m, c3, i, j, 12]) + # Recall
-                        0.04 * np.nanmean(Rate[:, m, c3, i, j, 14]) + # Repeatability
-                        0.10 * np.nanmean(Rate[:, m, c3, i, j, 15]) + # F1 Score
-                        0.03 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10].flatten(), alpha=0.2) +                 # Matches
-                        0.10 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9].flatten(), alpha=0.2) +                 # Inliers
-                        0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 4]), Exec_time[:, :, :, :, :, 4].flatten(), alpha=0.2)) +   # Detect Time per 1K keypoints
-                        0.04 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 5]), Exec_time[:, :, :, :, :, 5].flatten(), alpha=0.2)) +   # Descript Time per 1K keypoints
-                        0.03 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6].flatten(), alpha=0.2)) +   # 1K Total Time
-                        0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7].flatten(), alpha=0.2))     # 1K Inlier Time
-                    ) # %60
-                    if data == "drone":
-                        scores[i, j, c3, m] += (
-                            0.20 * nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16].flatten(), alpha=0.2) +             # 3D Points
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11].flatten(), alpha=0.2)) +       # Reprojection Error
-                            0.10 * (1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8].flatten(), alpha=0.2)) # Reconstruction Time
-                        ) # %40
-                    else:
-                        scores[i, j, c3, m] *= 10/6
                     if not np.isnan(scores[i, j, c3, m]):
-                        fig.add_trace(go.Scatter(   x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], y=[scores[i, j, c3, m]], text=[f"{scores[i, j, c3, m]:.3f}"],
-                                                    name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", mode="markers",
-                                                    marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), showlegend=True,
-                                                    legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", hovertemplate="<b>%{y:.3f}</b>"))
+                        fig.add_trace(go.Scatter(
+                            x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], 
+                            y=[scores[i, j, c3, m]], 
+                            text=[f"{scores[i, j, c3, m]:.3f}"],
+                            name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", 
+                            mode="markers",
+                            marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), 
+                            showlegend=True,
+                            legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", 
+                            hovertemplate="<b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    np.save(f"./arrays/Scores_{data}.npy", scores)
-    fig.update_layout(updatemenus=[ dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-                                    dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
-                                                                    dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
+    fig.update_layout(updatemenus=[
+        dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+        dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
+                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
     fig.write_html(f"./html/{data}/{data}_Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}_Efficiency.html", "a") as f:
         f.write(custom_html)
     for c3 in range(2):
         for m in range(2):
-            fig_heatmap.add_trace(go.Heatmap(   z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter",
-                                                hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)
-    fig_heatmap.update_layout(  template="ggplot2", font_size=20, margin=dict(l=20, r=20, t=70, b=20),
-                                title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="bottom"))
-    fig_heatmap.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)
+            fig_heatmap.add_trace(go.Heatmap(z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)    
+    fig_heatmap.update_layout(template="ggplot2", font_size=20, margin=dict(l=20, r=20, t=70, b=20), title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency Heatmaps</b></span>", x=0.5, xanchor="center", yanchor="bottom"))
+    fig_heatmap.write_html(f"./html/{data}/{data}_Heatmap.html", include_plotlyjs="cdn", full_html=True, config=config)    
+    np.save(f"./arrays/Scores_{data}.npy", scores)
 
 def correlationHeatmap(data="drone"):
     if data == "synthetic":
