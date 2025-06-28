@@ -313,8 +313,8 @@ def synthetic4():
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 15]),       # F1 Score
-                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]), Rate_intensity[:len(val_b), :, :, :, :, 9],               alpha=2), # Inliers
-                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]), Rate_intensity[:len(val_b), :, :, :, :, 10],              alpha=2), # Matches
+                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j,  9]), Rate_intensity[:len(val_b), :, :, :, :, 9],               alpha=0.2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_intensity[:len(val_b), m, c3, i, j, 10]), Rate_intensity[:len(val_b), :, :, :, :, 10],              alpha=0.3), # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 6]), Exec_time_intensity[:len(val_b), :, :, :, :, 6],  alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[:len(val_b), m, c3, i, j, 7]), Exec_time_intensity[:len(val_b), :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
@@ -323,8 +323,8 @@ def synthetic4():
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 15]),       # F1 Score
-                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]), Rate_intensity[len(val_c):, :, :, :, :, 9],               alpha=2), # Inliers
-                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]), Rate_intensity[len(val_c):, :, :, :, :, 10],              alpha=2), # Matches
+                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j,  9]), Rate_intensity[len(val_c):, :, :, :, :, 9],               alpha=0.2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_intensity[len(val_c):, m, c3, i, j, 10]), Rate_intensity[len(val_c):, :, :, :, :, 10],              alpha=0.3), # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 6]), Exec_time_intensity[len(val_c):, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time_intensity[len(val_c):, m, c3, i, j, 7]), Exec_time_intensity[len(val_c):, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
@@ -333,8 +333,8 @@ def synthetic4():
                         np.nanmean(Rate_scale[:, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_scale[:, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_scale[:, m, c3, i, j, 15]),       # F1 Score
-                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j,  9]), Rate_scale[:, :, :, :, :, 9],               alpha=2), # Inliers
-                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j, 10]), Rate_scale[:, :, :, :, :, 10],              alpha=2), # Matches
+                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j,  9]), Rate_scale[:, :, :, :, :, 9],               alpha=0.2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_scale[:, m, c3, i, j, 10]), Rate_scale[:, :, :, :, :, 10],              alpha=0.3), # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 6]), Exec_time_scale[:, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time_scale[:, m, c3, i, j, 7]), Exec_time_scale[:, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
@@ -343,8 +343,8 @@ def synthetic4():
                         np.nanmean(Rate_rot[:, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate_rot[:, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate_rot[:, m, c3, i, j, 15]),       # F1 Score
-                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j,  9]), Rate_rot[:, :, :, :, :, 9],               alpha=2), # Inliers
-                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j, 10]), Rate_rot[:, :, :, :, :, 10],              alpha=2), # Matches
+                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j,  9]), Rate_rot[:, :, :, :, :, 9],               alpha=0.2), # Inliers
+                        nonlinear_normalize(np.nanmean(Rate_rot[:, m, c3, i, j, 10]), Rate_rot[:, :, :, :, :, 10],              alpha=0.3), # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 6]), Exec_time_rot[:, :, :, :, :, 6],  alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time_rot[:, m, c3, i, j, 7]), Exec_time_rot[:, :, :, :, :, 7],  alpha=0.2)  # 1K feature Inlier Time
                     ])
