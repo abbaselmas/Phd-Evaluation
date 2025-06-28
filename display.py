@@ -660,15 +660,15 @@ def single(data="drone"):
                         np.nanmean(Rate[:, m, c3, i, j, 12]),       # Recall
                         np.nanmean(Rate[:, m, c3, i, j, 14]),       # Repeatibility
                         np.nanmean(Rate[:, m, c3, i, j, 15]),       # F1 Score
-                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9], alpha=0.2),             # Inliers
-                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.2),             # Matches
+                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j,  9]), Rate[:, :, :, :, :,  9], alpha=0.3),             # Inliers
+                        nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.3),             # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7], alpha=0.2), # 1K Inlier Time
                     ])
                     if data == "drone":
-                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 11]), Rate[:, :, :, :, :, 11])) # Reprojection Error
-                        xydata = np.append(xydata, nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 16]), Rate[:, :, :, :, :, 16], alpha=0.2)) # 3D Points Count
-                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 8]), Exec_time[:, :, :, :, :, 8], alpha=0.2)) # 3D Point Reconstruction Time
+                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Rate      [:, m, c3, i, j, 11]), Rate      [:, :, :, :, :, 11], alpha=0.4)) # Reprojection Error
+                        xydata = np.append(xydata,     nonlinear_normalize(np.nanmean(Rate      [:, m, c3, i, j, 16]), Rate      [:, :, :, :, :, 16], alpha=0.2)) # 3D Points Count
+                        xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Exec_time [:, m, c3, i, j,  8]), Exec_time [:, :, :, :, :,  8], alpha=0.2)) # 3D Point Reconstruction Time
                         # xydata = np.append(xydata, 1 - nonlinear_normalize((np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000), (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2)) # 1K 3D Point Reconstruction Time
                     if not (np.isnan(xydata).any() or np.any(xydata == 0)):
                         traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers", 
