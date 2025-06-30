@@ -905,9 +905,8 @@ def efficiencyAndHeatmap(data="drone"):
     fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20),
                         title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
                         xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=False))
-    # Collect and normalize metrics
+    
     def collect_metrics():
-        """Collect all metrics for CRITIC calculation"""
         metrics_data = []
         combinations = []
         for i in range(len(DetectorsLegend)):
@@ -924,22 +923,18 @@ def efficiencyAndHeatmap(data="drone"):
                             np.nanmean(Exec_time[:, m, c3, i, j, 6]),  # 1K Total Time
                             np.nanmean(Exec_time[:, m, c3, i, j, 7])   # 1K Inlier Time
                         ]
-                        
                         if data == "drone":
                             metrics_row.extend([
                                 np.nanmean(Rate[:, m, c3, i, j, 11]),      # Reprojection Error
                                 np.nanmean(Rate[:, m, c3, i, j, 16]),      # 3D Points
                                 np.nanmean(Exec_time[:, m, c3, i, j, 8])   # Reconstruction Time
                             ])
-                        
                         if not np.any(np.isnan(metrics_row)):
                             metrics_data.append(metrics_row)
                             combinations.append((i, j, c3, m))
-        
         return np.array(metrics_data), combinations
     
     def normalize_metrics(metrics_data):
-        """Normalize metrics for CRITIC calculation"""
         normalized = np.zeros_like(metrics_data)
         normalized[:, 0] =      nonlinear_normalize(metrics_data[:, 0], metrics_data[:, 0], alpha=0.2)  # Precision
         normalized[:, 1] =      nonlinear_normalize(metrics_data[:, 1], metrics_data[:, 1], alpha=0.2)  # Recall

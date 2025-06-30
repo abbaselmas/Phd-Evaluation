@@ -51,6 +51,7 @@ mobile = "" #"_mobile2"
 # single("airsim")
 # timing("airsim")
 # efficiencyAndHeatmap("airsim")
+# update_csv_with_efficiency_scores("airsim")
 # correlationHeatmap("airsim")
 # violinPlot("airsim")
 
@@ -58,6 +59,7 @@ mobile = "" #"_mobile2"
 # single("uav")
 # timing("uav")
 # efficiencyAndHeatmap("uav")
+# update_csv_with_efficiency_scores("uav")
 # correlationHeatmap("uav")
 # violinPlot("uav")
 
@@ -65,5 +67,6 @@ mobile = "" #"_mobile2"
 # single("drone")
 # timing("drone")
 # efficiencyAndHeatmap("drone")
+# update_csv_with_efficiency_scores("drone")
 # correlationHeatmap("drone")
 # violinPlot("drone")
