@@ -275,3 +275,33 @@ def nonlinear_normalize(value, data, alpha=0.5):
     result = np.full_like(value, np.nan, dtype=float)
     result[is_valid_input] = ((value[is_valid_input] - min_val) / (max_val - min_val)) ** alpha
     return result
+
+def update_csv_with_efficiency_scores(scenario="drone"):
+    try:
+        scores = np.load(f"./arrays/Scores_{scenario}.npy")
+        csv_path = f"./csv/{scenario}_analysis.csv"
+        with open(csv_path, 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter=';')
+            rows = list(reader)
+        for row_idx in range(1, len(rows)):  # Skip header row
+            for m in range(len(Matcher)):
+                for c3 in range(len(Norm)):
+                    for i in range(len(DetectorsLegend)):
+                        for j in range(len(DescriptorsLegend)):
+                            # Check if current row matches the combination
+                            if (rows[row_idx][0] == DetectorsLegend[i] and  # Detector
+                                rows[row_idx][4] == DescriptorsLegend[j] and  # Descriptor
+                                rows[row_idx][8] == Norm[c3] and  # Norm
+                                rows[row_idx][9] == Matcher[m]):  # Matcher
+                                
+                                score = scores[i, j, c3, m]
+                                rows[row_idx][-1] = str(score)  # Update last column (Efficiency)
+        
+        with open(csv_path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';')
+            writer.writerows(rows)
+        print(f"Efficiency scores updated in {csv_path}")
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+    except Exception as e:
+        print(f"Error updating efficiency scores: {e}")
