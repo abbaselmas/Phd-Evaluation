@@ -312,7 +312,18 @@ def update_csv_with_efficiency_scores(scenario="drone"):
                                 rows[row_idx][9] == Matcher[m]):  # Matcher
                                 
                                 score = scores[i, j, c3, m]
-                                rows[row_idx][-1] = str(score)  # Update last column (Efficiency)
+                                # Check if 'Efficiency' column exists in header
+                                if len(rows[0]) > 0 and 'Efficiency' not in rows[0]:
+                                    # Add 'Efficiency' to header
+                                    rows[0].append('Efficiency')
+
+                                # Ensure row has enough columns for efficiency score
+                                while len(rows[row_idx]) < len(rows[0]):
+                                    rows[row_idx].append('')
+
+                                # Add or update efficiency score in the last column
+                                rows[row_idx][-1] = f"{score:.6f}"
+                                break
         
         with open(csv_path, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=';')
