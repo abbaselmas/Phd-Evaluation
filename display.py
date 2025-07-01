@@ -2,6 +2,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import numpy as np
 from define import *
+from sklearn.decomposition import PCA
 
 custom_html = """
     <div style="position: fixed; top: 2px; left: 2px;">
@@ -914,14 +915,14 @@ def efficiencyAndHeatmap(data="drone"):
                 for c3 in range(2):  # Normalization
                     for m in range(2):  # Matcher
                         metrics_row = [
-                            np.nanmean(Rate[:, m, c3, i, j, 13]),      # Precision
-                            np.nanmean(Rate[:, m, c3, i, j, 12]),      # Recall
-                            np.nanmean(Rate[:, m, c3, i, j, 14]),      # Repeatability
-                            np.nanmean(Rate[:, m, c3, i, j, 15]),      # F1 Score
-                            np.nanmean(Rate[:, m, c3, i, j, 10]),      # Matches
-                            np.nanmean(Rate[:, m, c3, i, j, 9]),       # Inliers
                             np.nanmean(Exec_time[:, m, c3, i, j, 6]),  # 1K Total Time
-                            np.nanmean(Exec_time[:, m, c3, i, j, 7])   # 1K Inlier Time
+                            np.nanmean(Exec_time[:, m, c3, i, j, 7]),  # 1K Inlier Time
+                            np.nanmean(Rate[:, m, c3, i, j, 9]),       # Inliers
+                            np.nanmean(Rate[:, m, c3, i, j, 10]),      # Matches
+                            np.nanmean(Rate[:, m, c3, i, j, 12]),      # Recall
+                            np.nanmean(Rate[:, m, c3, i, j, 13]),      # Precision
+                            np.nanmean(Rate[:, m, c3, i, j, 14]),      # Repeatability
+                            np.nanmean(Rate[:, m, c3, i, j, 15])       # F1 Score
                         ]
                         if data == "drone":
                             metrics_row.extend([
@@ -936,53 +937,63 @@ def efficiencyAndHeatmap(data="drone"):
     
     def normalize_metrics(metrics_data):
         normalized = np.zeros_like(metrics_data)
-        normalized[:, 0] =      nonlinear_normalize(metrics_data[:, 0], metrics_data[:, 0], alpha=0.2)  # Precision
-        normalized[:, 1] =      nonlinear_normalize(metrics_data[:, 1], metrics_data[:, 1], alpha=0.2)  # Recall
-        normalized[:, 2] =      nonlinear_normalize(metrics_data[:, 2], metrics_data[:, 2], alpha=0.2)  # Repeatability
-        normalized[:, 3] =      nonlinear_normalize(metrics_data[:, 3], metrics_data[:, 3], alpha=0.2)  # F1 Score
-        normalized[:, 4] =      nonlinear_normalize(metrics_data[:, 4], metrics_data[:, 4], alpha=0.3)  # Matches
-        normalized[:, 5] =      nonlinear_normalize(metrics_data[:, 5], metrics_data[:, 5], alpha=0.2)  # Inliers
-        normalized[:, 6] = 1 -  nonlinear_normalize(metrics_data[:, 6], metrics_data[:, 6], alpha=0.2)  # 1K Total Time (inverse)
-        normalized[:, 7] = 1 -  nonlinear_normalize(metrics_data[:, 7], metrics_data[:, 7], alpha=0.2)  # 1K Inlier Time (inverse)
+        normalized[:, 0] = 1 -  nonlinear_normalize(metrics_data[:, 0], metrics_data[:, 0], alpha=0.2)  # 1K Total Time (inverse)
+        normalized[:, 1] = 1 -  nonlinear_normalize(metrics_data[:, 1], metrics_data[:, 1], alpha=0.2)  # 1K Inlier Time (inverse)
+        normalized[:, 2] =      nonlinear_normalize(metrics_data[:, 2], metrics_data[:, 2], alpha=0.3)  # Inliers
+        normalized[:, 3] =      nonlinear_normalize(metrics_data[:, 3], metrics_data[:, 3], alpha=0.3)  # Matches
+        normalized[:, 4] =      nonlinear_normalize(metrics_data[:, 4], metrics_data[:, 4], alpha=0.2)  # Recall
+        normalized[:, 5] =      nonlinear_normalize(metrics_data[:, 5], metrics_data[:, 5], alpha=0.2)  # Precision
+        normalized[:, 6] =      nonlinear_normalize(metrics_data[:, 6], metrics_data[:, 6], alpha=0.2)  # Repeatability
+        normalized[:, 7] =      nonlinear_normalize(metrics_data[:, 7], metrics_data[:, 7], alpha=0.2)  # F1 Score
         if data == "drone":
-            normalized[:,  8] = 1 -  nonlinear_normalize(metrics_data[:,  8], metrics_data[:,  8], alpha=0.4) # Reprojection Error (inverse)
-            normalized[:,  9] =      nonlinear_normalize(metrics_data[:,  9], metrics_data[:,  9], alpha=0.2) # 3D Points
-            normalized[:, 10] = 1 -  nonlinear_normalize(metrics_data[:, 10], metrics_data[:, 10], alpha=0.2) # Reconstruction Time (inverse)
+            normalized[:, 8] = 1 - nonlinear_normalize(metrics_data[:, 8], metrics_data[:, 8], alpha=0.4)  # Reprojection Error (inverse)
+            normalized[:, 9] =     nonlinear_normalize(metrics_data[:, 9], metrics_data[:, 9], alpha=0.2)  # 3D Points
+            normalized[:,10] = 1 - nonlinear_normalize(metrics_data[:,10], metrics_data[:,10], alpha=0.2)  # Reconstruction Time (inverse)
         return normalized
-    
-    def calculate_critic_weights(normalized_metrics):
-        num_metrics = normalized_metrics.shape[1]
-        weights = np.zeros(num_metrics)        
-        for j in range(num_metrics):
-            # Standard deviation (contrast)
-            std_j = np.std(normalized_metrics[:, j])
-            if std_j == 0:
-                std_j = 1e-8
-            # Average conflict with other metrics
-            conflicts = []
-            for k in range(num_metrics):
-                if j != k:
-                    corr = np.corrcoef(normalized_metrics[:, j], normalized_metrics[:, k])[0, 1]
-                    if not np.isnan(corr):
-                        conflicts.append(1 - abs(corr))
-            conflict_j = np.mean(conflicts) if conflicts else 1.0
-            weights[j] = std_j * conflict_j
-        # Normalize weights
-        weight_sum = np.sum(weights)
-        return weights / weight_sum if weight_sum > 0 else np.ones(num_metrics) / num_metrics
     
     # Main processing
     metrics_data, combinations = collect_metrics()
-    if len(metrics_data) == 0:
-        print(f"No valid data found for {data}")
-        return
     normalized_metrics = normalize_metrics(metrics_data)
-    critic_weights = calculate_critic_weights(normalized_metrics)
-    # Calculate efficiency scores
+    
+    def calculate_composite_scores(data_norm):
+        # Handle NaN values by masking them out
+        mask = np.isfinite(data_norm).all(axis=1)
+        data_norm = data_norm[mask]
+        
+        # 1. Entropy weights
+        p = data_norm / (np.sum(data_norm, axis=0))
+        p = np.where(p == 0, 1e-10, p)
+        entropy = -np.sum(p * np.log(p), axis=0) / np.log(data_norm.shape[0])
+        w_entropy = (1 - entropy) / np.sum(1 - entropy)
+        # round to 3 decimal places for better readability
+        print(f"Entropy Weights: {w_entropy.round(3)}")
+
+        # 2. PCA weights
+        pca = PCA()
+        pca.fit(data_norm)
+        w_pca = pca.explained_variance_ratio_[:data_norm.shape[1]]
+        w_pca = w_pca / np.sum(w_pca)
+        print(f"PCA Weights: {w_pca.round(3)}")
+
+        # 3. CRITIC weights
+        corr_matrix = np.corrcoef(data_norm.T)
+        np.fill_diagonal(corr_matrix, 0)
+        std_dev = np.std(data_norm, axis=0)
+        conflict = np.sum(1 - np.abs(corr_matrix), axis=1)
+        w_critic = std_dev * conflict
+        w_critic = w_critic / np.sum(w_critic)
+        print(f"CRITIC Weights: {w_critic.round(3)}")
+
+        # Combine weights and calculate scores
+        weights = (w_entropy + w_pca + w_critic) / 3
+        return np.sum(data_norm * weights, axis=1)
+
+    composite_scores = calculate_composite_scores(normalized_metrics)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
     for idx, (i, j, c3, m) in enumerate(combinations):
-        critic_score = np.sum(normalized_metrics[idx] * critic_weights)
-        scores[i, j, c3, m] = critic_score
+        if idx < len(composite_scores):
+            scores[i, j, c3, m] = composite_scores[idx]
+        
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
@@ -993,9 +1004,11 @@ def efficiencyAndHeatmap(data="drone"):
                         fig.add_trace(go.Scatter(
                             x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], 
                             y=[scores[i, j, c3, m]], 
-                            text=[f"{scores[i, j, c3, m]:.3f}"],
+                            text=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}<br>{Norm[c3]}-{Matcher[m]}",
+                            textposition='top center',
+                            textfont=dict(size=11),
                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", 
-                            mode="markers",
+                            mode="markers+text",
                             marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), 
                             showlegend=True,
                             legendgroup=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}", 

@@ -189,12 +189,13 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
     return combined_img
 
 def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
-    scores = np.load(f"./arrays/Scores_{scenario}.npy")
     headers = [ "Detector", "Keypoint1", "Keypoint2", "1K Detect Time",
                 "Descriptor", "Descriptor1", "Descriptor2", "1K Descript Time",
                 "Norm.", "Matcher", "Inliers", "All Matches",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
-                "Recall", "Precision", "Repeatibility", "F1-Score", "Reprojection Error", "3DPoints", "Reconstruction Time", "Efficiency"]
+                "Recall", "Precision", "Repeatibility", "F1-Score"]
+    if scenario == "drone":
+        headers.extend(["Reprojection Error", "3DPoints", "Reconstruction Time"])
     with open(f"./csv/{scenario}_analysis{mobile}.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
@@ -220,12 +221,14 @@ def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
                                 np.nanmean(Rate[:, m, c3, i, j, 12]),         # Recall
                                 np.nanmean(Rate[:, m, c3, i, j, 13]),         # Precision
                                 np.nanmean(Rate[:, m, c3, i, j, 14]),         # Repeatibility
-                                np.nanmean(Rate[:, m, c3, i, j, 15]),         # F1-Score
+                                np.nanmean(Rate[:, m, c3, i, j, 15])         # F1-Score
+                                ]
+                        if scenario == "drone":
+                            row.extend([
                                 np.nanmean(Rate[:, m, c3, i, j, 11]),         # Reprojection Error
                                 np.nanmean(Rate[:, m, c3, i, j, 16]),         # 3D Points Count
-                                np.nanmean(Exec_time[:, m, c3, i, j, 8]),     # Reconstruction Time
-                                scores[i, j, c3, m]                           # Efficiency
-                                ]
+                                np.nanmean(Exec_time[:, m, c3, i, j, 8])      # Reconstruction Time
+                            ])
                         writer.writerow(row)
                     
 def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
@@ -233,7 +236,10 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                 "Descriptor", "Descriptor1-GT", "Descriptor2", "Descript Time", "1K Descript Time",
                 "Norm.", "Matcher", "Inliers", "All Matches", "Match Time",
                 "Total Time", "1K Match Tot. Time", "1K Inliers Time",
-                "Recall", "Precision", "Repeatibility", "F1-Score", "Reprojection Error", "3D Points", "Reconstruction Time"]
+                "Recall", "Precision", "Repeatibility", "F1-Score"]
+    if scenario == "drone":
+        headers.extend(["Reprojection Error", "3D Points", "Reconstruction Time"])
+    
     with open(f"./csv/{scenario}_analysis_all{mobile}.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(headers)
@@ -264,11 +270,14 @@ def saveAllCSV(Rate, Exec_time, scenario, mobile=""):
                                     Rate[k, m, c3, i, j, 12],               # Recall
                                     Rate[k, m, c3, i, j, 13],               # Precision
                                     Rate[k, m, c3, i, j, 14],               # Repeatibility
-                                    Rate[k, m, c3, i, j, 15],               # F1-Score
+                                    Rate[k, m, c3, i, j, 15]                # F1-Score
+                                    ]
+                            if scenario == "drone":
+                                row.extend([
                                     Rate[k, m, c3, i, j, 11],               # Reprojection Error
                                     Rate[k, m, c3, i, j, 16],               # 3D Points Count
                                     Exec_time[k, m, c3, i, j, 8]            # Reconstruction Time
-                                    ]
+                                ])
                             writer.writerow(row)
 
 def nonlinear_normalize(value, data, alpha=0.5):
