@@ -935,6 +935,8 @@ def efficiencyAndHeatmap(data="drone"):
                             combinations.append((i, j, c3, m))
         return np.array(metrics_data), combinations
     
+    metrics_data, combinations = collect_metrics()
+    
     def normalize_metrics(metrics_data):
         normalized = np.zeros_like(metrics_data)
         normalized[:, 0] = 1 -  nonlinear_normalize(metrics_data[:, 0], metrics_data[:, 0], alpha=0.2)  # 1K Total Time (inverse)
@@ -951,8 +953,6 @@ def efficiencyAndHeatmap(data="drone"):
             normalized[:,10] = 1 - nonlinear_normalize(metrics_data[:,10], metrics_data[:,10], alpha=0.2)  # Reconstruction Time (inverse)
         return normalized
     
-    # Main processing
-    metrics_data, combinations = collect_metrics()
     normalized_metrics = normalize_metrics(metrics_data)
 
     def calculate_composite_scores(data_norm):
@@ -965,8 +965,7 @@ def efficiencyAndHeatmap(data="drone"):
         p = np.where(p == 0, 1e-10, p)
         entropy = -np.sum(p * np.log(p), axis=0) / np.log(data_norm.shape[0])
         w_entropy = (1 - entropy) / np.sum(1 - entropy)
-        print(f"Entropy Weights: {w_entropy.round(3)}")
-
+        
         # 2. PCA weights
         pca = PCA()
         pca.fit(data_norm)
@@ -976,8 +975,7 @@ def efficiencyAndHeatmap(data="drone"):
         for i in range(len(explained_var)):
             weighted_loadings += explained_var[i] * np.abs(loadings[i, :])
         w_pca = weighted_loadings / np.sum(weighted_loadings)
-        print(f"PCA Weights: {w_pca.round(3)}")
-
+        
         # 3. CRITIC weights
         corr_matrix = np.corrcoef(data_norm.T)
         np.fill_diagonal(corr_matrix, 0)
@@ -985,19 +983,28 @@ def efficiencyAndHeatmap(data="drone"):
         conflict = np.sum(1 - np.abs(corr_matrix), axis=1)
         w_critic = std_dev * conflict
         w_critic = w_critic / np.sum(w_critic)
-        print(f"CRITIC Weights: {w_critic.round(3)}")
         
         # 4. Simple variance weighting
         w_variance = np.var(data_norm, axis=0)
         w_variance = w_variance / np.sum(w_variance)
-        print(f"Variance Weights: {w_variance.round(3)}")
-
+        
         weight_matrix = np.array([w_entropy, w_critic, w_variance])
         weight_dispersion = np.std(weight_matrix, axis=0) / np.mean(weight_matrix, axis=0)
-        print(f"Weight Dispersion (lower = more consensus): {weight_dispersion.round(3)}")
-
+        
         # Combine weights and calculate scores
         weights = (w_entropy + w_pca + w_critic + w_variance) / 4
+        
+        # Print weights in table format
+        metrics = ["1k Total", "1k Inlier", "Inliers", "Matches", "Recall", "Precision", "Repeatability", "F1 Score"]
+        if data == "drone":
+            metrics.extend(["Reproj Error", "3D Points", "Reconst Time"])
+        print(f"\n{data.capitalize()} Dataset Weights")
+        print("=" * 75)
+        print(f"{'Metric':<15} {'Entropy':<8} {'PCA':<8} {'CRITIC':<8} {'Variance':<10} {'Dispersion':<10} {'Combined':<8}")
+        print("-" * 75)
+        for i, metric in enumerate(metrics):
+            print(f"{metric:<15} {w_entropy[i]:<8.3f} {w_pca[i]:<8.3f} {w_critic[i]:<8.3f} {w_variance[i]:<10.3f} {weight_dispersion[i]:<10.3f} {weights[i]:<8.3f}")
+        print("-" * 75)
         return np.sum(data_norm * weights, axis=1)
 
     composite_scores = calculate_composite_scores(normalized_metrics)
