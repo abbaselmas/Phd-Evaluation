@@ -954,7 +954,7 @@ def efficiencyAndHeatmap(data="drone"):
     # Main processing
     metrics_data, combinations = collect_metrics()
     normalized_metrics = normalize_metrics(metrics_data)
-    
+
     def calculate_composite_scores(data_norm):
         # Handle NaN values by masking them out
         mask = np.isfinite(data_norm).all(axis=1)
@@ -965,14 +965,17 @@ def efficiencyAndHeatmap(data="drone"):
         p = np.where(p == 0, 1e-10, p)
         entropy = -np.sum(p * np.log(p), axis=0) / np.log(data_norm.shape[0])
         w_entropy = (1 - entropy) / np.sum(1 - entropy)
-        # round to 3 decimal places for better readability
         print(f"Entropy Weights: {w_entropy.round(3)}")
 
         # 2. PCA weights
         pca = PCA()
         pca.fit(data_norm)
-        w_pca = pca.explained_variance_ratio_[:data_norm.shape[1]]
-        w_pca = w_pca / np.sum(w_pca)
+        loadings = pca.components_
+        explained_var = pca.explained_variance_ratio_
+        weighted_loadings = np.zeros(data_norm.shape[1])
+        for i in range(len(explained_var)):
+            weighted_loadings += explained_var[i] * np.abs(loadings[i, :])
+        w_pca = weighted_loadings / np.sum(weighted_loadings)
         print(f"PCA Weights: {w_pca.round(3)}")
 
         # 3. CRITIC weights
@@ -983,9 +986,18 @@ def efficiencyAndHeatmap(data="drone"):
         w_critic = std_dev * conflict
         w_critic = w_critic / np.sum(w_critic)
         print(f"CRITIC Weights: {w_critic.round(3)}")
+        
+        # 4. Simple variance weighting
+        w_variance = np.var(data_norm, axis=0)
+        w_variance = w_variance / np.sum(w_variance)
+        print(f"Variance Weights: {w_variance.round(3)}")
+
+        weight_matrix = np.array([w_entropy, w_critic, w_variance])
+        weight_dispersion = np.std(weight_matrix, axis=0) / np.mean(weight_matrix, axis=0)
+        print(f"Weight Dispersion (lower = more consensus): {weight_dispersion.round(3)}")
 
         # Combine weights and calculate scores
-        weights = (w_entropy + w_pca + w_critic) / 3
+        weights = (w_entropy + w_pca + w_critic + w_variance) / 4
         return np.sum(data_norm * weights, axis=1)
 
     composite_scores = calculate_composite_scores(normalized_metrics)
