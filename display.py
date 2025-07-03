@@ -912,14 +912,9 @@ def efficiencyAndHeatmap(data="drone"):
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
         Rate = np.load(f"./arrays/Rate_{data}.npy")
     fig = go.Figure()
-    fig_heatmap = make_subplots(rows=2, cols=2, horizontal_spacing=0.1, vertical_spacing=0.17,
-                                subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>",
-                                                "<span style='font-size: 22px;'>L2-Flann</span>",
-                                                "<span style='font-size: 22px;'>Hamming-BruteForce</span>",
-                                                "<span style='font-size: 22px;'>Hamming-Flann</span>"])
     fig.update_layout(  template="ggplot2", font_size=16, margin=dict(l=20, r=20, t=70, b=20),
                         title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Efficiency</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"), 
-                        xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=False))
+                        xaxis_tickangle=90, yaxis=dict(range=[-0.01, 1.01], autorange=True))
     
     def collect_metrics():
         metrics_data = []
@@ -1053,6 +1048,12 @@ def efficiencyAndHeatmap(data="drone"):
     fig.write_html(f"./html/{data}/{data}_Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}_Efficiency.html", "a") as f:
         f.write(custom_html)
+    # Heatmap
+    fig_heatmap = make_subplots(rows=2, cols=2, horizontal_spacing=0.1, vertical_spacing=0.17,
+                                subplot_titles=[f"<span style='font-size: 22px;'>L2-BruteForce</span>",
+                                                "<span style='font-size: 22px;'>L2-Flann</span>",
+                                                "<span style='font-size: 22px;'>Hamming-BruteForce</span>",
+                                                "<span style='font-size: 22px;'>Hamming-Flann</span>"])
     for c3 in range(2):
         for m in range(2):
             fig_heatmap.add_trace(go.Heatmap(z=scores[:, :, c3, m], x=DescriptorsLegend, y=DetectorsLegend, colorscale="matter", hovertemplate='Detector: %{y}<br>Descriptor: %{x}<br>Score: %{z:.3f}'), row=c3+1, col=m+1)    
