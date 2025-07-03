@@ -648,12 +648,15 @@ def single(data="drone"):
     if data == "synthetic":
         Rate = np.concatenate((Rate_intensity, Rate_scale, Rate_rot), axis=0)
         Exec_time = np.concatenate((Exec_time_intensity, Exec_time_scale, Exec_time_rot), axis=0)
+        scores = np.load(f"./arrays/Scores_{data}.npy")
     elif data == "oxford":
         Rate = np.concatenate((Rate_graf, Rate_bikes, Rate_boat, Rate_leuven, Rate_wall, Rate_trees, Rate_bark, Rate_ubc), axis=0)
         Exec_time = np.concatenate((Exec_time_graf, Exec_time_bikes, Exec_time_boat, Exec_time_leuven, Exec_time_wall, Exec_time_trees, Exec_time_bark, Exec_time_ubc), axis=0)
+        scores = np.load(f"./arrays/Scores_{data}.npy")
     else:
         Rate = np.load(f"./arrays/Rate_{data}.npy")
         Exec_time = np.load(f"./arrays/Exec_time_{data}.npy")
+        scores = np.load(f"./arrays/Scores_{data}.npy")
     fig = go.Figure()
     fig.update_layout(template="ggplot2", font_size=16, title=dict(text=f"<span style='font-size: 26px;'><b>{data.capitalize()} Dataset</b></span>", x=0.5, xanchor="center", yanchor="middle", xref="paper", yref="paper"),
                         hovermode="closest", margin=dict(l=20, r=20, t=70, b=20), xaxis=dict(range=[-0.01, 1.01], autorange=False), yaxis=dict(range=[-0.01, 1.01], autorange=False))
@@ -673,6 +676,7 @@ def single(data="drone"):
                         nonlinear_normalize(np.nanmean(Rate[:, m, c3, i, j, 10]), Rate[:, :, :, :, :, 10], alpha=0.3),             # Matches
                         1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 6]), Exec_time[:, :, :, :, :, 6], alpha=0.2), # 1K Total Time
                         1 - nonlinear_normalize(np.nanmean(Exec_time[:, m, c3, i, j, 7]), Exec_time[:, :, :, :, :, 7], alpha=0.2), # 1K Inlier Time
+                        scores[i, j, c3, m] # Efficiency Score
                     ])
                     if data == "drone":
                         xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Rate      [:, m, c3, i, j, 11]), Rate      [:, :, :, :, :, 11], alpha=0.4)) # Reprojection Error
@@ -694,7 +698,7 @@ def single(data="drone"):
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
-    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"] + (["Reprojection Error", "3D Points", "Reconstruction Time"] if data == "drone" else [])
+    dropdown_axis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time", "Efficiency Score"] + (["Reprojection Error", "3D Points", "Reconstruction Time"] if data == "drone" else [])
     button_listx, button_listy, button_listz = [], [], []
     for idx, axis in enumerate(dropdown_axis):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
