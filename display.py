@@ -202,7 +202,6 @@ Exec_time_trees_mobile2     = np.load("./arrays/Exec_time_trees_mobile2.npy")
 Exec_time_bark_mobile2      = np.load("./arrays/Exec_time_bark_mobile2.npy")
 Exec_time_ubc_mobile2       = np.load("./arrays/Exec_time_ubc_mobile2.npy")
 
-
 def syntheticAll4():
     fig = go.Figure()
     fig = make_subplots(rows=2, cols=2, horizontal_spacing=0.05, vertical_spacing=0.08,
@@ -266,16 +265,16 @@ def syntheticAll4():
                     sett = dict(mode="markers+lines", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    if not np.isnan(Rate2_I1).all():
+                    if not np.isnan(Rate2_I1).any():
                         traces.append(go.Scatter(x=val_b, y=Rate2_I1,    arg=sett))
                         fig.add_trace(go.Scatter(x=val_b, y=Rate2_I1[0], arg=sett), row=1, col=1)
-                    if not np.isnan(Rate2_I2).all():
+                    if not np.isnan(Rate2_I2).any():
                         traces.append(go.Scatter(x=val_c, y=Rate2_I2,    arg=sett))
                         fig.add_trace(go.Scatter(x=val_c, y=Rate2_I2[0], arg=sett), row=1, col=2)
-                    if not np.isnan(Rate2_S).all():
+                    if not np.isnan(Rate2_S).any():
                         traces.append(go.Scatter(x=scale, y=Rate2_S,     arg=sett))
                         fig.add_trace(go.Scatter(x=scale, y=Rate2_S[0],  arg=sett), row=2, col=1)
-                    if not np.isnan(Rate2_R).all():
+                    if not np.isnan(Rate2_R).any():
                         traces.append(go.Scatter(x=rot,   y=Rate2_R,     arg=sett))
                         fig.add_trace(go.Scatter(x=rot,   y=Rate2_R[0],  arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -353,16 +352,16 @@ def synthetic4():
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    if not np.isnan(xydata_Intensity1).all():
+                    if not np.isnan(xydata_Intensity1).any():
                         traces.append(go.Scatter(x=xydata_Intensity1,      y=xydata_Intensity1,      arg=sett,  marker_size=np.where(np.isnan(xydata_Intensity1), epsilon, xydata_Intensity1)))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity1[0]], y=[xydata_Intensity1[1]], arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Intensity2).all():
+                    if not np.isnan(xydata_Intensity2).any():
                         traces.append(go.Scatter(x=xydata_Intensity2,      y=xydata_Intensity2,      arg=sett,  marker_size=np.where(np.isnan(xydata_Intensity2), epsilon, xydata_Intensity2)))
                         fig.add_trace(go.Scatter(x=[xydata_Intensity2[0]], y=[xydata_Intensity2[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Scale).all():
+                    if not np.isnan(xydata_Scale).any():
                         traces.append(go.Scatter(x=xydata_Scale,           y=xydata_Scale,           arg=sett,  marker_size=np.where(np.isnan(xydata_Scale), epsilon, xydata_Scale)))
                         fig.add_trace(go.Scatter(x=[xydata_Scale[0]],      y=[xydata_Scale[1]],      arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Rotation).all():
+                    if not np.isnan(xydata_Rotation).any():
                         traces.append(go.Scatter(x=xydata_Rotation,        y=xydata_Rotation,        arg=sett,  marker_size=np.where(np.isnan(xydata_Rotation), epsilon, xydata_Rotation)))
                         fig.add_trace(go.Scatter(x=[xydata_Rotation[0]],   y=[xydata_Rotation[1]],   arg=sett), row=2, col=2)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -412,24 +411,33 @@ def oxfordAll9():
                     sett = dict(mode="markers+lines", marker=dict(color=colors[color_index], size=16, symbol=marker_symbols[symbol_index]),
                                 line=dict(color=colors[color_index], dash=line_styles[(i+j) % len(line_styles)], width=3),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True, hovertemplate="<b>%{y:.3f}</b>")
-                    traces.append(go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
-                    traces.append(go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
-                    traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
-                    fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
+                    if not np.isnan(Rate_Graf).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Graf,       arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Graf[0],    arg=sett), row=1, col=1)
+                    if not np.isnan(Rate_Bikes).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Bikes,      arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Bikes[0],   arg=sett), row=1, col=2)
+                    if not np.isnan(Rate_Boat).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Boat,       arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Boat[0],    arg=sett), row=1, col=3)
+                    if not np.isnan(Rate_Leuven).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Leuven,     arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Leuven[0],  arg=sett), row=2, col=1)
+                    if not np.isnan(Rate_Wall).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Wall,       arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Wall[0],    arg=sett), row=2, col=2)
+                    if not np.isnan(Rate_Trees).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Trees,      arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Trees[0],   arg=sett), row=2, col=3)
+                    if not np.isnan(Rate_Bark).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Bark,       arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Bark[0],    arg=sett), row=3, col=1)
+                    if not np.isnan(Rate_Ubc).any():
+                        traces.append(go.Scatter(x = xvals, y=Rate_Ubc,        arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Rate_Ubc[0],     arg=sett), row=3, col=2)
+                    if not np.isnan(Overall).any():
+                        traces.append(go.Scatter(x = xvals, y=Overall,         arg=sett))
+                        fig.add_trace(go.Scatter(x = xvals, y=Overall[0],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     dropdown_yaxis = ["Precision", "Recall", "Repeatability", "F1-Score", "Inliers", "Matches", "1k Match Time", "1k Inlier Time"]
@@ -545,31 +553,31 @@ def oxford9():
                     sett = dict(mode="markers", marker=dict(symbol=marker_symbols[symbol_index], size=16, color=colors[color_index]),
                                 name=legend_groupfig, legendgroup=legend_groupfig, showlegend=True,
                                 hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>")
-                    if not np.isnan(xydata_Graf).all():
+                    if not np.isnan(xydata_Graf).any():
                         traces.append(go.Scatter(x=xydata_Graf,        y=xydata_Graf,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Graf[0]],   y=[xydata_Graf[1]],  arg=sett), row=1, col=1)
-                    if not np.isnan(xydata_Bikes).all():
+                    if not np.isnan(xydata_Bikes).any():
                         traces.append(go.Scatter(x=xydata_Bikes,       y=xydata_Bikes,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bikes[0]],  y=[xydata_Bikes[1]], arg=sett), row=1, col=2)
-                    if not np.isnan(xydata_Boat).all():
+                    if not np.isnan(xydata_Boat).any():
                         traces.append(go.Scatter(x=xydata_Boat,        y=xydata_Boat,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Boat[0]],   y=[xydata_Boat[1]],  arg=sett), row=1, col=3)
-                    if not np.isnan(xydata_Leuven).all():
+                    if not np.isnan(xydata_Leuven).any():
                         traces.append(go.Scatter(x=xydata_Leuven,      y=xydata_Leuven,     arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Leuven[0]], y=[xydata_Leuven[1]],arg=sett), row=2, col=1)
-                    if not np.isnan(xydata_Wall).all():
+                    if not np.isnan(xydata_Wall).any():
                         traces.append(go.Scatter(x=xydata_Wall,        y=xydata_Wall,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Wall[0]],   y=[xydata_Wall[1]],  arg=sett), row=2, col=2)
-                    if not np.isnan(xydata_Trees).all():
+                    if not np.isnan(xydata_Trees).any():
                         traces.append(go.Scatter(x=xydata_Trees,       y=xydata_Trees,      arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Trees[0]],  y=[xydata_Trees[1]], arg=sett), row=2, col=3)
-                    if not np.isnan(xydata_Bark).all():
+                    if not np.isnan(xydata_Bark).any():
                         traces.append(go.Scatter(x=xydata_Bark,        y=xydata_Bark,       arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Bark[0]],   y=[xydata_Bark[1]],  arg=sett), row=3, col=1)
-                    if not np.isnan(xydata_Ubc).all():
+                    if not np.isnan(xydata_Ubc).any():
                         traces.append(go.Scatter(x=xydata_Ubc,         y=xydata_Ubc,        arg=sett))
                         fig.add_trace(go.Scatter(x=[xydata_Ubc[0]],    y=[xydata_Ubc[1]],   arg=sett), row=3, col=2)
-                    if not np.isnan(Overall).all():
+                    if not np.isnan(Overall).any():
                         traces.append(go.Scatter(x=Overall,            y=Overall,           arg=sett))
                         fig.add_trace(go.Scatter(x=[Overall[0]],       y=[Overall[1]],      arg=sett), row=3, col=3)
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
