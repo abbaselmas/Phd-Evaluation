@@ -964,45 +964,39 @@ def efficiencyAndHeatmap(data="drone"):
     
     normalized_metrics = normalize_metrics(metrics_data)
 
-    def calculate_composite_scores(data_norm):
-        # Handle NaN values by masking them out
-        mask = np.isfinite(data_norm).all(axis=1)
-        data_norm = data_norm[mask]
-        
+    def calculate_composite_scores(data_all):
+        # Mask rows which has any NaN values
+        nan_mask = ~np.isnan(data_all).any(axis=1)
+        data_masked = data_all[nan_mask]
         # 1. Entropy weights
-        p = data_norm / (np.sum(data_norm, axis=0))
+        p = data_masked / (np.sum(data_masked, axis=0))
         p = np.where(p == 0, 1e-10, p)
-        entropy = -np.sum(p * np.log(p), axis=0) / np.log(data_norm.shape[0])
+        entropy = -np.sum(p * np.log(p), axis=0) / np.log(data_masked.shape[0])
         w_entropy = (1 - entropy) / np.sum(1 - entropy)
-        
         # 2. PCA weights
         pca = PCA()
-        pca.fit(data_norm)
+        pca.fit(data_masked)
         loadings = pca.components_
         explained_var = pca.explained_variance_ratio_
-        weighted_loadings = np.zeros(data_norm.shape[1])
+        weighted_loadings = np.zeros(data_masked.shape[1])
         for i in range(len(explained_var)):
             weighted_loadings += explained_var[i] * np.abs(loadings[i, :])
         w_pca = weighted_loadings / np.sum(weighted_loadings)
-        
         # 3. CRITIC weights
-        corr_matrix = np.corrcoef(data_norm.T)
+        corr_matrix = np.corrcoef(data_masked.T)
         np.fill_diagonal(corr_matrix, 0)
-        std_dev = np.std(data_norm, axis=0)
+        std_dev = np.std(data_masked, axis=0)
         conflict = np.sum(1 - np.abs(corr_matrix), axis=1)
         w_critic = std_dev * conflict
         w_critic = w_critic / np.sum(w_critic)
-        
-        # 4. Simple variance weighting
-        w_variance = np.var(data_norm, axis=0)
+        # 4. Simple variance weights
+        w_variance = np.var(data_masked, axis=0)
         w_variance = w_variance / np.sum(w_variance)
-        
+        # Calculate dispersion of weights for info only
         weight_matrix = np.array([w_entropy, w_critic, w_variance])
         weight_dispersion = np.std(weight_matrix, axis=0) / np.mean(weight_matrix, axis=0)
-        
         # Combine weights and calculate scores
         weights = (w_entropy + w_pca + w_critic + w_variance) / 4
-        
         # Print weights in table format
         metrics = ["1k Total", "1k Inlier", "Inliers", "Matches", "Recall", "Precision", "Repeatability", "F1 Score"]
         if data == "drone":
@@ -1014,26 +1008,29 @@ def efficiencyAndHeatmap(data="drone"):
         for i, metric in enumerate(metrics):
             print(f"{metric:<15} {w_entropy[i]:<8.3f} {w_pca[i]:<8.3f} {w_critic[i]:<8.3f} {w_variance[i]:<10.3f} {weight_dispersion[i]:<10.3f} {weights[i]:<8.3f}")
         print("-" * 75)
-        return np.sum(data_norm * weights, axis=1)
+        return np.sum(data_all * weights, axis=1) # multiply weights with unfiltered data
 
     composite_scores = calculate_composite_scores(normalized_metrics)
     scores = np.full((len(DetectorsLegend), len(DescriptorsLegend), 2, 2), np.nan)
-    for idx, (i, j, c3, m) in enumerate(combinations):
-        if idx < len(composite_scores):
-            scores[i, j, c3, m] = composite_scores[idx]
-        
+    
+    score_index = 0
     color_index = 0
     symbol_index = 0
     for i in range(len(DetectorsLegend)):
         for j in range(len(DescriptorsLegend)):
-            for c3 in range(2):
-                for m in range(2):
+            for c3 in range(2): # Normalization 0: L2, 1: Hamming
+                for m in range(2): # Matcher 0: BruteForce, 1: Flann
+                    if score_index < len(composite_scores) and (i, j, c3, m) in combinations:
+                        scores[i, j, c3, m] = composite_scores[combinations.index((i, j, c3, m))]
+                    else:
+                        scores[i, j, c3, m] = np.nan
+                    # Add trace if score is valid
                     if not np.isnan(scores[i, j, c3, m]):
                         fig.add_trace(go.Scatter(
                             x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], 
                             y=[scores[i, j, c3, m]], 
                             text=[f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}"],
-                            textfont=dict(size=9, color=colors[color_index]), textposition="top center",
+                            textfont=dict(size=11, color=colors[color_index]), textposition="top center",
                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", 
                             mode="markers+text",
                             marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), 
