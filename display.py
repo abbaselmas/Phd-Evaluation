@@ -672,12 +672,16 @@ def single(data="drone"):
                         xydata = np.append(xydata, 1 - nonlinear_normalize(np.nanmean(Exec_time [:, m, c3, i, j,  8]), Exec_time [:, :, :, :, :,  8], alpha=0.2)) # 3D Point Reconstruction Time
                         # xydata = np.append(xydata, 1 - nonlinear_normalize((np.nanmean(Exec_time[:, m, c3, i, j, 8]) / np.nanmean(Rate[:, m, c3, i, j, 16]) * 1000), (Exec_time[:, :, :, :, :, 8] / Rate[:, :, :, :, :, 16] * 1000).flatten(), alpha=0.2)) # 1K 3D Point Reconstruction Time
                     if not (np.isnan(xydata).any() or np.any(xydata == 0)):
-                        traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers", 
+                        traces.append(  go.Scatter( x=xydata,       y=xydata,       mode="markers+text", 
                                                     marker=dict(color=colors[color_index], size=xydata, symbol=marker_symbols[symbol_index]),
+                                                    text=[f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}"],
+                                                    textfont=dict(size=9, color=colors[color_index]), textposition="top center",
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
-                        fig.add_trace(go.Scatter( x=[xydata[0]],  y=[xydata[1]],  mode="markers", 
+                        fig.add_trace(go.Scatter( x=[xydata[0]],  y=[xydata[1]],  mode="markers+text", 
                                                     marker=dict(color=colors[color_index], size=[xydata[3]*50], symbol=marker_symbols[symbol_index]),
+                                                    text=[f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}"],
+                                                    textfont=dict(size=9, color=colors[color_index]), textposition="top center",
                                                     name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}",
                                                     showlegend=True, hovertemplate="x: <b>%{x:.3f}</b> | y: <b>%{y:.3f}</b>"))
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
@@ -688,7 +692,9 @@ def single(data="drone"):
         button_listx.append(dict(label=f"x: {axis}", method="update", args=[{"x": [[trace.x[idx]] for trace in traces]}, {"xaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listy.append(dict(label=f"y: {axis}", method="update", args=[{"y": [[trace.y[idx]] for trace in traces]}, {"yaxis.title": f"<span style='font-size: 22px;'><b>{axis}</b></span>"}]))
         button_listz.append(dict(label=f"z: {axis}", method="update", args=[{"marker.size": [(trace.marker.size[idx]*50) for trace in traces]}]))
+    
     fig.update_layout(updatemenus=[ dict(type="buttons", buttons=[dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+                                    dict(type="buttons", buttons=[dict(label="Labels",  method="restyle", args=[{"mode": "markers+text"}], args2=[{"mode": "markers"}])], direction="down", x=0, xanchor="left", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=1, buttons=button_listy, direction="down", x=0,  xanchor="left",  y=1, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=0, buttons=button_listx, direction="up",   x=1,  xanchor="right", y=0, yanchor="bottom"),
                                     dict(type="dropdown", showactive=True, active=3, buttons=button_listz, direction="down", x=0,  xanchor="left",  y=1)])
@@ -1023,9 +1029,8 @@ def efficiencyAndHeatmap(data="drone"):
                         fig.add_trace(go.Scatter(
                             x=[[DetectorsLegend[i]], [DescriptorsLegend[j]]], 
                             y=[scores[i, j, c3, m]], 
-                            text=f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}<br>{Norm[c3]}-{Matcher[m]}",
-                            textposition='top center',
-                            textfont=dict(size=11),
+                            text=[f"{DetectorsLegend[i]}-{DescriptorsLegend[j]}"],
+                            textfont=dict(size=9, color=colors[color_index]), textposition="top center",
                             name=f".{DetectorsLegend[i]}-{DescriptorsLegend[j]}-{Norm[c3]}-{Matcher[m]}", 
                             mode="markers+text",
                             marker=dict(color=colors[color_index], size=20, symbol=marker_symbols[symbol_index]), 
@@ -1035,9 +1040,8 @@ def efficiencyAndHeatmap(data="drone"):
                     symbol_index = (symbol_index + 1) % len(marker_symbols)
             color_index = (color_index + 14) % num_combinations
     fig.update_layout(updatemenus=[
-        dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True], args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
-        dict(type="dropdown", buttons=[ dict(label="Linear",          method="relayout", args=[{"yaxis.type": "linear"}]),
-                                        dict(label="Log",             method="relayout", args=[{"yaxis.type": "log"}])], x=0, xanchor="left", y=1, yanchor="bottom")])
+        dict(type="buttons",  buttons=[ dict(label="<b>≡ Legend</b>", method="relayout", args=["showlegend", True],       args2=["showlegend", False])], x=1, y=1, yanchor="bottom"),
+        dict(type="buttons",  buttons=[ dict(label="Labels",          method="restyle",  args=[{"mode": "markers+text"}], args2=[{"mode": "markers"}])], direction="down", x=0, xanchor="left", y=1, yanchor="bottom")])
     fig.write_html(f"./html/{data}/{data}_Efficiency.html", include_plotlyjs="cdn", full_html=True, config=config)
     with open(f"./html/{data}/{data}_Efficiency.html", "a") as f:
         f.write(custom_html)
