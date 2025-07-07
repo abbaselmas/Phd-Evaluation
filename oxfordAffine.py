@@ -12,9 +12,9 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for k in range(len(img)-1):
-        if drawing:
-            if k != 3:
-                continue
+        # if drawing:
+        #     if k != 2:
+        #         continue
         for i in range(len(Detectors)):
             if (i == a or a == 100):
                 method_dtect = Detectors[i]
@@ -58,7 +58,7 @@ def executeScenarios(folder, a=100, b=100, drawing=False, save=True, mobile=""):
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing:
+                                if drawing and Rate[k, m, c3, i, j, 13] > 0.5 and Rate[k, m, c3, i, j, 15] > 0.25 and Rate[k, m, c3, i, j, 9] > 725 and Rate[k, m, c3, i, j, 12] > 0.16 and Rate[k, m, c3, i, j, 14] > 0.17 and Exec_time[k, m, c3, i, j, 7] < 0.5 and Exec_time[k, m, c3, i, j, 6] < 0.5:
                                     img_matches = draw_matches(img[0], keypoints1_updated, img[k+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)

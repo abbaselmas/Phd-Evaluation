@@ -1,6 +1,7 @@
 __pycache__/
 .vscode/
 workspace/
+draws/
 Datasets/AirSimNH/*
 !Datasets/AirSimNH/Layer3/
 Datasets/AirSimNH/Layer3/*
