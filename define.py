@@ -1,6 +1,12 @@
 import cv2, csv
 import numpy as np
 from plotly.colors import sample_colorscale
+import plotly.graph_objs as go
+
+import base64
+from PIL import Image
+import io
+import math
 
 epsilon = 1e-6
 val_b    = np.array([-30, -10, 10, 30])     # b ∈ [−30 : 20  : +30]
@@ -333,3 +339,158 @@ def update_csv_with_efficiency_scores(scenario="drone"):
         print(f"File not found: {e}")
     except Exception as e:
         print(f"Error updating efficiency scores: {e}")
+
+def get_step_from_target_display(total_matches, target_visible=400):
+    """
+    Display approx `target_visible` matches.
+    """
+    return max(1, total_matches // target_visible)
+
+def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers, 
+                                top_n_list=[50, 100, 500, 1000],
+                                Rate=None, Exec_time=None, method_dtect=None, method_dscrpt=None,
+                                c3=0, matcher_index=0, scenario=""):
+    
+    def cv2_to_base64(img):
+        pil_img = Image.fromarray(img)
+        buff = io.BytesIO()
+        pil_img.save(buff, format="PNG")
+        return base64.b64encode(buff.getvalue()).decode("utf-8")
+
+    def get_log_step_size(num_matches, base=500, min_step=1, max_step=50):
+        if num_matches <= base:
+            return min_step
+        step = int(math.log2(num_matches / base) * 5 + min_step)
+        return min(max(step, min_step), max_step)
+
+    img1_rgb = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+    img2_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+    h1, w1 = img1.shape[:2]
+    h2, w2 = img2.shape[:2]
+    h = max(h1, h2)
+    combined = np.zeros((h, w1 + w2, 3), dtype=np.uint8)
+    combined[:h1, :w1] = img1_rgb
+    combined[:h2, w1:] = img2_rgb
+    img_base64 = 'data:image/png;base64,' + cv2_to_base64(combined)
+
+    all_traces = []
+    visibility = []
+    inliers_set = set(inliers)
+    trace_labels = []
+
+    modes = ["All", "Inliers", "Outliers"]
+    for mode in modes:
+        if mode == "All":
+            subset = matches
+        elif mode == "Inliers":
+            subset = [m for m in matches if m in inliers_set]
+        elif mode == "Outliers":
+            subset = [m for m in matches if m not in inliers_set]
+
+        x_pts, y_pts, colors, hovers, traces = [], [], [], [], []
+        for match in subset:
+            pt1 = kp1[match.queryIdx].pt
+            pt2 = kp2[match.trainIdx].pt
+            pt2 = (pt2[0] + w1, pt2[1])
+            color = 'green' if match in inliers_set else 'red'
+
+            traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
+            x_pts += [pt1[0], pt2[0]]
+            y_pts += [pt1[1], pt2[1]]
+            colors += [color, color]
+            hovers += [f"Q:{match.queryIdx}<br>D:{match.distance:.2f}", f"T:{match.trainIdx}<br>D:{match.distance:.2f}"]
+        traces.append(go.Scatter(x=x_pts, y=y_pts, mode='markers', marker=dict(size=4, color=colors), text=hovers, hoverinfo='text', showlegend=False))
+        all_traces.extend(traces)
+        visibility.append([True]*len(traces))
+        trace_labels.append(mode)
+
+    for n in top_n_list:
+        subset = sorted(matches, key=lambda m: m.distance)[:n]
+        x_pts, y_pts, colors, hovers, traces = [], [], [], [], []
+        for match in subset:
+            pt1 = kp1[match.queryIdx].pt
+            pt2 = kp2[match.trainIdx].pt
+            pt2 = (pt2[0] + w1, pt2[1])
+            color = 'green' if match in inliers_set else 'red'
+
+            traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
+            x_pts += [pt1[0], pt2[0]]
+            y_pts += [pt1[1], pt2[1]]
+            colors += [color, color]
+            hovers += [f"Q:{match.queryIdx}<br>D:{match.distance:.2f}", f"T:{match.trainIdx}<br>D:{match.distance:.2f}"]
+        traces.append(go.Scatter(x=x_pts, y=y_pts, mode='markers', marker=dict(size=4, color=colors), text=hovers, hoverinfo='text', showlegend=False))
+        all_traces.extend(traces)
+        visibility.append([True]*len(traces))
+        trace_labels.append(f"Top {n}")
+
+    step = get_log_step_size(len(matches))
+    subset = matches[::step]
+    x_pts, y_pts, colors, hovers, traces = [], [], [], [], []
+    for match in subset:
+        pt1 = kp1[match.queryIdx].pt
+        pt2 = kp2[match.trainIdx].pt
+        pt2 = (pt2[0] + w1, pt2[1])
+        color = 'green' if match in inliers_set else 'red'
+        traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
+        x_pts += [pt1[0], pt2[0]]
+        y_pts += [pt1[1], pt2[1]]
+        colors += [color, color]
+        hovers += [f"Q:{match.queryIdx}<br>D:{match.distance:.2f}", f"T:{match.trainIdx}<br>D:{match.distance:.2f}"]
+    traces.append(go.Scatter(x=x_pts, y=y_pts, mode='markers', marker=dict(size=4, color=colors), text=hovers, hoverinfo='text', showlegend=False))
+    all_traces.extend(traces)
+    visibility.append([True]*len(traces))
+    trace_labels.append("Auto Sampled (log-step)")
+
+    all_visibilities = []
+    for i in range(len(trace_labels)):
+        vis = []
+        for j in range(len(trace_labels)):
+            vis += [i == j] * len(visibility[j])
+        all_visibilities.append(vis)
+
+    dropdown_buttons = []
+    for i, label in enumerate(trace_labels):
+        dropdown_buttons.append(dict(
+            label=label,
+            method='update',
+            args=[{'visible': all_visibilities[i]}, {'title': f'Match Mode: {label}'}]
+        ))
+
+    annotations = []
+    if Rate is not None and Exec_time is not None and method_dtect is not None and method_dscrpt is not None:
+        text1 = [ "Combination:", "Keypoints:", "Descriptors:", "Inliers:", "All Matches:", "",
+                  "1K Match time:", "1K Inliers time:", "",
+                  "Recall:", "Precision:", "Repeatibility:", "F1-Score:" ]
+        text2 = [ f"{method_dtect.getDefaultName().split('.')[-1]} {method_dscrpt.getDefaultName().split('.')[-1]} {Norm[c3]} {Matcher[matcher_index]}",
+                  f"{Rate[5]} {Rate[6]}", f"{Rate[7]} {Rate[8]}", f"{Rate[9]}", f"{Rate[10]}", "",
+                  f"{Exec_time[6]:.4f}", f"{Exec_time[7]:.4f}", "",
+                  f"{Rate[12]:.4f}", f"{Rate[13]:.4f}", f"{Rate[14]:.4f}", f"{Rate[15]:.4f}"]
+        if scenario == "drone":
+            text1 += ["", "Reconstruction time:", "Reprojection Error:", "3D Points:"]
+            text2 += ["", f"{Exec_time[8]:.4f}", f"{Rate[11]:.4f}", f"{Rate[16]}"]
+        for i, (t1, t2) in enumerate(zip(text1, text2)):
+            if t1.strip() == "" and t2.strip() == "":
+                continue
+            annotations.append(dict(
+                xref="paper", yref="paper",
+                x=0.01, y=1 - i * 0.035,
+                text=f"<b>{t1}</b> {t2}",
+                showarrow=False, align="left",
+                font=dict(size=12, color="white", family="monospace"),
+                bgcolor="rgba(0,0,0,0.4)", bordercolor="rgba(255,255,255,0.3)",
+                borderpad=4, borderwidth=1, opacity=0.9
+            ))
+
+    fig = go.Figure(data=all_traces, layout=go.Layout(
+        images=[dict(source=img_base64, xref="x", yref="y", x=0, y=0, sizex=combined.shape[1], sizey=combined.shape[0], sizing="stretch", layer="below")],
+        xaxis=dict(range=[0, combined.shape[1]], visible=False),
+        yaxis=dict(range=[combined.shape[0], 0], visible=False),
+        margin=dict(l=0, r=0, t=30, b=0),
+        title="Match Mode: All",
+        updatemenus=[dict(buttons=dropdown_buttons, direction="down", showactive=True, x=0, y=1, xanchor="left", yanchor="bottom")],
+        width=combined.shape[1],
+        height=combined.shape[0],
+        annotations=annotations
+    ))
+
+    fig.show()
