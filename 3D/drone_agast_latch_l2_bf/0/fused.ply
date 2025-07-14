@@ -1,15 +1,0 @@
-ply
-format binary_little_endian 1.0
-element vertex 6
-property float x
-property float y
-property float z
-property float nx
-property float ny
-property float nz
-property uchar red
-property uchar green
-property uchar blue
-end_header
-gWÂ@@W@¨ºÖ@6Ùp¾ˆN¿aÃ
-¿&)%4ŞÂ@É@dñÖ@À­¾âG¿’…¿}A4¨=@®ÓA#_Ë½1›®¾¢No¿r~Œ (‚@€¾[Ò@ƒN¾œ¤š¾°äq¿²±¤£n†@ÄÓ`?Öh@§d¿ÅÅ¾Ïás¾J,">ê@€F~¾Nôi@ØÔd¿ƒÖ¾1t#¾pfe
