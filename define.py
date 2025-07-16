@@ -152,18 +152,18 @@ def draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3
                 f"{Rate[15]:.4f}"]      # F1-Score
     
     if scenario == "drone":
-        text1.extend(["", "Reconstruction time: ", "Reprojection Error: ", "3D Points: "])
+        text1.extend(["", "Reconst. time: ", "Reproject. Err.: ", "3D Points: "])
         text2.extend([  f"",
                         f"{Exec_time[8]:.4f}",  # Reconstruction Time
                         f"{Rate[11]:.4f}",      # Reprojection Error
                         f"{Rate[16]}"])         # 3D Points Count
     
     for idx, txt in enumerate(text1):
-        cv2.putText(combined_img, txt, (  30, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 5, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, (  30, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (  0,   0,   0), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (  30, 40+idx*35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 5, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, (  30, 40+idx*35), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
     for idx, txt in enumerate(text2):
-        cv2.putText(combined_img, txt, ( 300, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 5, cv2.LINE_AA)
-        cv2.putText(combined_img, txt, ( 300, 40+idx*30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (  0,   0,   0), 2, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, ( 300, 40+idx*35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 5, cv2.LINE_AA)
+        cv2.putText(combined_img, txt, ( 300, 40+idx*35), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
     return combined_img
 
 def draw_keypoints(img1, kp1, img2, kp2, method_dtect):
@@ -176,7 +176,7 @@ def draw_keypoints(img1, kp1, img2, kp2, method_dtect):
     cv2.putText(combined_image, f"Keypoints2: {len(kp2)}", (30, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (  0,   0,   0), 2, cv2.LINE_AA)
     return combined_image
 
-def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, method_dtect, method_dscrpt, c3, m):
+def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, method_dtect, method_dscrpt, c3, m, scenario=""):
     inliers_set = set(inliers)
     outliers = [match for match in total_matches if match not in inliers_set]
     # inliers = sorted(inliers, key = lambda x:x.distance)
@@ -191,7 +191,7 @@ def draw_matches(img1, kp1, img2, kp2, total_matches, inliers, Rate, Exec_time, 
     draw_params2 = dict( matchColor = (39, 0, 255), flags = 1|2)
     cv2.drawMatches(img1, kp1, img2, kp2, outliers[::step], combined_img, **draw_params2)
 
-    combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m)
+    combined_img = draw_metadata(combined_img, Rate, Exec_time, method_dtect, method_dscrpt, c3, m, scenario)
     return combined_img
 
 def saveAverageCSV(Rate, Exec_time, scenario, mobile=""):
@@ -340,16 +340,11 @@ def update_csv_with_efficiency_scores(scenario="drone"):
     except Exception as e:
         print(f"Error updating efficiency scores: {e}")
 
-def get_step_from_target_display(total_matches, target_visible=400):
-    """
-    Display approx `target_visible` matches.
-    """
-    return max(1, total_matches // target_visible)
-
-def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers, 
-                                top_n_list=[50, 100, 500, 1000],
+def plotly_static_match_viewer( img1, kp1, img2, kp2, matches, inliers,
                                 Rate=None, Exec_time=None, method_dtect=None, method_dscrpt=None,
-                                c3=0, matcher_index=0, scenario=""):
+                                c3=0, matcher_index=0, scenario="",
+                                detector_index=None, descriptor_index=None, image_index=None,
+                                top_n_list=[50, 100, 500, 1000]):
     
     def cv2_to_base64(img):
         pil_img = Image.fromarray(img)
@@ -392,7 +387,7 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
             pt1 = kp1[match.queryIdx].pt
             pt2 = kp2[match.trainIdx].pt
             pt2 = (pt2[0] + w1, pt2[1])
-            color = 'green' if match in inliers_set else 'red'
+            color = 'rgb(28, 252, 66)' if match in inliers_set else 'rgb(255, 0, 39)'
 
             traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
             x_pts += [pt1[0], pt2[0]]
@@ -411,7 +406,7 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
             pt1 = kp1[match.queryIdx].pt
             pt2 = kp2[match.trainIdx].pt
             pt2 = (pt2[0] + w1, pt2[1])
-            color = 'green' if match in inliers_set else 'red'
+            color = 'rgb(28, 252, 66)' if match in inliers_set else 'rgb(255, 0, 39)'
 
             traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
             x_pts += [pt1[0], pt2[0]]
@@ -430,7 +425,7 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
         pt1 = kp1[match.queryIdx].pt
         pt2 = kp2[match.trainIdx].pt
         pt2 = (pt2[0] + w1, pt2[1])
-        color = 'green' if match in inliers_set else 'red'
+        color = 'rgb(28, 252, 66)' if match in inliers_set else 'rgb(255, 0, 39)'
         traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
         x_pts += [pt1[0], pt2[0]]
         y_pts += [pt1[1], pt2[1]]
@@ -450,11 +445,7 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
 
     dropdown_buttons = []
     for i, label in enumerate(trace_labels):
-        dropdown_buttons.append(dict(
-            label=label,
-            method='update',
-            args=[{'visible': all_visibilities[i]}, {'title': f'Match Mode: {label}'}]
-        ))
+        dropdown_buttons.append(dict(label=label, method='update', args=[{'visible': all_visibilities[i]}]))
 
     annotations = []
     if Rate is not None and Exec_time is not None and method_dtect is not None and method_dscrpt is not None:
@@ -473,10 +464,10 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
                 continue
             annotations.append(dict(
                 xref="paper", yref="paper",
-                x=0.01, y=1 - i * 0.035,
+                x=0.01, xanchor="left", y=0.97 - i * 0.055, yanchor="top",
                 text=f"<b>{t1}</b> {t2}",
                 showarrow=False, align="left",
-                font=dict(size=12, color="white", family="monospace"),
+                font=dict(size=22, color="white", family="monospace"),
                 bgcolor="rgba(0,0,0,0.4)", bordercolor="rgba(255,255,255,0.3)",
                 borderpad=4, borderwidth=1, opacity=0.9
             ))
@@ -486,11 +477,17 @@ def plotly_static_match_viewer(img1, kp1, img2, kp2, matches, inliers,
         xaxis=dict(range=[0, combined.shape[1]], visible=False),
         yaxis=dict(range=[combined.shape[0], 0], visible=False),
         margin=dict(l=0, r=0, t=30, b=0),
-        title="Match Mode: All",
-        updatemenus=[dict(buttons=dropdown_buttons, direction="down", showactive=True, x=0, y=1, xanchor="left", yanchor="bottom")],
+        updatemenus=[dict(buttons=dropdown_buttons, direction="down", x=0, y=1, xanchor="left", yanchor="bottom")],
         width=combined.shape[1],
         height=combined.shape[0],
         annotations=annotations
     ))
 
-    fig.show()
+    # Save as static HTML file
+    if method_dtect is not None and method_dscrpt is not None and detector_index is not None and descriptor_index is not None:
+        # Generate filename similar to the PNG version but for HTML
+        if image_index is not None:
+            html_filename = f"./draws/{scenario}/{image_index}_{detector_index}{method_dtect.getDefaultName().split('.')[-1]}_{descriptor_index}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[matcher_index]}.html"
+        else:
+            html_filename = f"./draws/{scenario}/match_viewer_{detector_index}{method_dtect.getDefaultName().split('.')[-1]}_{descriptor_index}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[matcher_index]}.html"
+        fig.write_html(html_filename, include_plotlyjs="cdn", full_html=True)
