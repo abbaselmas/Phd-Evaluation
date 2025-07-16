@@ -63,6 +63,7 @@ def executeUAVScenarios(folder="uav", a=100, b=100, drawing=False, save=True, mo
                                     img_matches = draw_matches(img[n], keypoints1_updated, img[n+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m, folder)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
+                                    plotly_static_match_viewer(img[k], keypoints1_updated, img[k+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m, folder, i, j, k)
                     else:
                         continue
             else:
