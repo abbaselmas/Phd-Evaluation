@@ -344,7 +344,7 @@ def plotly_static_match_viewer( img1, kp1, img2, kp2, matches, inliers,
                                 Rate=None, Exec_time=None, method_dtect=None, method_dscrpt=None,
                                 c3=0, matcher_index=0, scenario="",
                                 detector_index=None, descriptor_index=None, image_index=None,
-                                top_n_list=[50, 100, 500, 1000]):
+                                top_n_list=[100, 500, 1000]):
     
     def cv2_to_base64(img):
         pil_img = Image.fromarray(img)
@@ -418,6 +418,7 @@ def plotly_static_match_viewer( img1, kp1, img2, kp2, matches, inliers,
         visibility.append([True]*len(traces))
         trace_labels.append(f"Top {n}")
 
+    # Auto sampled log-step
     step = get_log_step_size(len(matches))
     subset = matches[::step]
     x_pts, y_pts, colors, hovers, traces = [], [], [], [], []
@@ -434,7 +435,27 @@ def plotly_static_match_viewer( img1, kp1, img2, kp2, matches, inliers,
     traces.append(go.Scatter(x=x_pts, y=y_pts, mode='markers', marker=dict(size=4, color=colors), text=hovers, hoverinfo='text', showlegend=False))
     all_traces.extend(traces)
     visibility.append([True]*len(traces))
-    trace_labels.append("Auto Sampled (log-step)")
+    trace_labels.append("Auto sampled log-step")
+
+    # Auto sampled fixed count options
+    for target_count in [500, 1000]:
+        step = max(1, len(matches) // target_count)  # Calculate step to get approximately target_count matches
+        subset = matches[::step]
+        x_pts, y_pts, colors, hovers, traces = [], [], [], [], []
+        for match in subset:
+            pt1 = kp1[match.queryIdx].pt
+            pt2 = kp2[match.trainIdx].pt
+            pt2 = (pt2[0] + w1, pt2[1])
+            color = 'rgb(28, 252, 66)' if match in inliers_set else 'rgb(255, 0, 39)'
+            traces.append(go.Scatter(x=[pt1[0], pt2[0]], y=[pt1[1], pt2[1]], mode='lines', line=dict(color=color, width=1), hoverinfo='skip', showlegend=False))
+            x_pts += [pt1[0], pt2[0]]
+            y_pts += [pt1[1], pt2[1]]
+            colors += [color, color]
+            hovers += [f"Q:{match.queryIdx}<br>D:{match.distance:.2f}", f"T:{match.trainIdx}<br>D:{match.distance:.2f}"]
+        traces.append(go.Scatter(x=x_pts, y=y_pts, mode='markers', marker=dict(size=4, color=colors), text=hovers, hoverinfo='text', showlegend=False))
+        all_traces.extend(traces)
+        visibility.append([True]*len(traces))
+        trace_labels.append(f"Auto sampled fixed-{target_count}")
 
     all_visibilities = []
     for i in range(len(trace_labels)):

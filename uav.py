@@ -9,11 +9,12 @@ def executeUAVScenarios(folder="uav", a=100, b=100, drawing=False, save=True, mo
     img = [cv2.imread(f"./Datasets/UAV/{i}.JPG") for i in range(20)]
     Rate      = np.load(f"./arrays/Rate_{folder}{mobile}.npy")      if os.path.exists(f"./arrays/Rate_{folder}{mobile}.npy")      else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
     Exec_time = np.load(f"./arrays/Exec_time_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Exec_time_{folder}{mobile}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 9), np.nan)
+    scores = np.load(f"./arrays/Scores_{folder}{mobile}.npy") if os.path.exists(f"./arrays/Scores_{folder}{mobile}.npy") else np.full((int(len(img)/2), 2, len(Normalization), len(Detectors), len(Descriptors), 17), np.nan)
     keypoints_cache   = np.empty((len(img), len(Detectors), 2), dtype=object)
     descriptors_cache = np.empty((len(img), len(Detectors), len(Descriptors), 2), dtype=object)
     for n in range(0,len(img), 2): # 0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         if drawing:
-            if n != 8:
+            if n != 16:
                 continue
         k = int(n/2) # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         for i in range(len(Detectors)):
@@ -59,7 +60,7 @@ def executeUAVScenarios(folder="uav", a=100, b=100, drawing=False, save=True, mo
                                     Exec_time[k, m, c3, i, j, :] = None
                                     Rate[k, m, c3, i, j, 5:16] = None
                                     continue
-                                if drawing and Rate[k, m, c3, i, j, 13] > 0.5 and Rate[k, m, c3, i, j, 15] > 0.25 and Rate[k, m, c3, i, j, 9] > 725 and Rate[k, m, c3, i, j, 12] > 0.16 and Rate[k, m, c3, i, j, 14] > 0.17 and Exec_time[k, m, c3, i, j, 7] < 0.5 and Exec_time[k, m, c3, i, j, 6] < 0.5:
+                                if drawing and scores[i, j, c3, m] > 0.856: # Top 30
                                     img_matches = draw_matches(img[n], keypoints1_updated, img[n+1], keypoints2_updated, matches, inliers, Rate[k, m, c3, i, j, :], Exec_time[k, m, c3, i, j, :], method_dtect, method_dscrpt, c3, m, folder)
                                     filename = f"./draws/{folder}/{k}_{i}{method_dtect.getDefaultName().split('.')[-1]}_{j}{method_dscrpt.getDefaultName().split('.')[-1]}_{Norm[c3]}_{Matcher[m]}.png"
                                     cv2.imwrite(filename, img_matches)
