@@ -1,4 +1,87 @@
-# Results
+## Overview
+
+This repository contains the experimental framework, datasets links, evaluation outputs and visual analytics used in the PhD thesis:
+
+Towards Efficient 3D Reconstruction from UAV Imagery: Evaluation of OpenCV Feature Detection, Description and Matching Combinations.
+
+The work systematically benchmarks (nearly) all feasible OpenCV detector–descriptor–matcher combinations across synthetic, benchmark (Oxford), curated UAV, AirSim (multi‑layer simulated), and full real UAV image sets (Pix4D Small Building) and integrates them into a COLMAP / pycolmap sparse reconstruction pipeline. A composite, objectively weighted Efficiency Score balances quality and computational cost (multi‑platform: server vs mobile CPUs) to recommend practical pipelines.
+
+## Key Objectives
+
+- Exhaustive evaluation of OpenCV feature pipelines (detector + descriptor + matcher / distance metric) under UAV constraints.
+- Cross-platform timing (mobile vs server) and decoupled detector vs descriptor timing analysis.
+- Unified evaluation procedure across datasets without relying on external homographies (fundamental matrix with MAGSAC++).
+- Programmatic sparse reconstruction via pycolmap for geometric quality metrics.
+- Objective composite Efficiency Score for multi-criteria ranking.
+- Open, reproducible research assets (data transformations, plots, arrays, HTML dashboards).
+
+## Main Contributions (Condensed)
+
+1. Largest systematic benchmark of OpenCV feature combinations for UAV reconstruction.
+2. Cross-platform timing and inlier-normalized (per 1K inliers) efficiency comparison.
+3. Objective multi-weight fusion Efficiency Score (Entropy / PCA / CRITIC / Variance).
+4. Integration of alternative OpenCV pipelines into COLMAP workflow via pycolmap.
+5. Multi-layer AirSim synthetic acquisition design (grid densities + angle schema).
+6. Single‑image controlled synthetic transformation dataset (intensity, scale, rotation).
+7. Curated real UAV pair dataset plus full Pix4D sequence benchmark.
+8. Interactive Plotly dashboards (timing, correlations, efficiency heatmaps, violin, sparse model visuals).
+9. Parameter optimization strategy for fair detector/descriptor comparison.
+10. Public release enabling replication and extension.
+
+## Datasets (Links / Roles)
+
+| Dataset | Role | Notes |
+|---------|------|-------|
+| Synthetic (single-image transforms) | Controlled robustness tests | Intensity / scale / rotation variations with known transform params |
+| Oxford Affine | Standard benchmark | Viewpoint / scale / blur / illumination / JPEG sequences |
+| AirSim (Multi-layer & Natural) | Controlled simulated UAV | Varying altitude, overlap, multi-angle & traversal capture |
+| UAV (curated pairs) | Real-world variability | Diverse scenes; two images per scenario |
+| Drone (Pix4D Small Building) | Full sequence benchmark | Primary reconstruction & efficiency reference |
+
+## Methodology Summary
+
+1. Feature Extraction: All detector–descriptor combinations (including joint methods like SIFT, ORB, BRISK, KAZE, AKAZE) plus separated detectors (FAST, AGAST, GFTT, STAR, MSD, TBMR, MSER, Harris-Laplace) with descriptors (SIFT, DAISY, BRIEF, FREAK, LATCH, LUCID, BOOST, VGG, BEBLID, TEBLID).
+2. Matching: BF (Hamming / L2) & FLANN where applicable; cross-check + ratio test (if configured); geometric verification via MAGSAC++ fundamental matrix; inlier mask extraction.
+3. Metrics: Keypoint count, matches, inliers, repeatability, precision, recall, F1, execution timings (total, detector, descriptor, matching, inlier-normalized), reprojection error, 3D sparse points.
+4. Reconstruction: pycolmap incremental SfM per combination for selected datasets.
+5. Weighting & Efficiency Score: Normalize metrics, compute unsupervised weights (Entropy, PCA, CRITIC, Variance), aggregate with fusion strategy to produce composite ranking.
+6. Visualization: Plotly interactive HTML (correlation matrices, timing bars, heatmaps, violin, efficiency tables, sparse model comparisons).
+
+## Repository Structure (Simplified)
+
+- `main.py` / pipeline orchestration
+- `drone.py`, `uav.py`, `airsim.py`, `synthetic.py`, `oxfordAffine.py` dataset handlers
+- `display.py` visualization generation (Plotly / HTML)
+- `database.py` COLMAP / SQLite interactions
+- `define.py` configuration & enums
+- `draws/` per-dataset match visualizations (PNG/HTML)
+- `arrays/` cached NumPy metric arrays (timings, rates, scores)
+- `html/` published dashboards
+
+## Citation
+
+If you use this work please cite (placeholder BibTeX):
+
+```bibtex
+@phdthesis{Elmas2025UAVEfficiency,
+  title={Towards Efficient 3D Reconstruction from UAV Imagery: Evaluation of OpenCV Feature Detection, Description and Matching Combinations},
+  author={Ammar Abbas Elmas},
+  school={PhD Thesis},
+  year={2025}
+}
+```
+
+## Acknowledgements
+
+Supported by TÜBİTAK BİDEB 2211-A National PhD Scholarship Program.
+
+## License
+
+Academic / research use permitted. (Add explicit LICENSE file if required.)
+
+---
+
+## Results
 
 ## Dataset Links
 
