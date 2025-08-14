@@ -58,19 +58,6 @@ The work systematically benchmarks almost all feasible OpenCV detector–descrip
 - `arrays/` cached NumPy metric arrays (timings, rates, scores)
 - `html/` published dashboards
 
-## Citation
-
-If you use this work please cite (placeholder BibTeX):
-
-```bibtex
-@phdthesis{Elmas2025UAVEfficiency,
-  title={Towards Efficient 3D Reconstruction from UAV Imagery: Evaluation of OpenCV Feature Detection, Description and Matching Combinations},
-  author={Ammar Abbas Elmas},
-  school={PhD Thesis},
-  year={2025}
-}
-```
-
 ## Results
 
 ## Dataset Links
@@ -87,11 +74,11 @@ If you use this work please cite (placeholder BibTeX):
 
 | Method Combination | PNG | HTML |
 |--------------------|-----|------|
-|GFTT_H BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_9GFTT_H_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_9GFTT_H_11BEBLID_ham_bf.html)|
+|GFTT_H BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_9GFTTDetector_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_9GFTTDetector_11BEBLID_ham_bf.html)|
 |STAR BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_10STAR_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_10STAR_11BEBLID_ham_bf.html)|
-|AGAST BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_7AGAST_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_7AGAST_11BEBLID_ham_bf.html)|
+|AGAST BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_7AgastFeatureDetector_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_7AgastFeatureDetector_11BEBLID_ham_bf.html)|
 |ORB BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_11BEBLID_ham_bf.html)|
-|GFTT BRISK|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTT_3BRISK_l2_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTT_3BRISK_l2_bf.html)|
+|GFTT BRISK|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_3BRISK_l2_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_3BRISK_l2_bf.html)|
 |ORB DAISY|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_5DAISY_l2_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_5DAISY_l2_bf.html)|
 
 ## Combined Detection/Descriptor Visualization Table (Efficiency Top 30)
@@ -127,6 +114,19 @@ If you use this work please cite (placeholder BibTeX):
 | GFTT + TEBLID | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_12TEBLID_ham_bf.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_12TEBLID_ham_bf.html) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_12TEBLID_ham_bf.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_12TEBLID_ham_bf.html) |  |
 | GFTT + DAISY (BF) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_5DAISY_l2_bf.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_5DAISY_l2_bf.html) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_5DAISY_l2_bf.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_5DAISY_l2_bf.html) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/uav/8_8GFTTDetector_5DAISY_l2_bf.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/uav/8_8GFTTDetector_5DAISY_l2_bf.html) |
 | GFTT + DAISY (FLANN) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_5DAISY_l2_flann.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_8GFTTDetector_5DAISY_l2_flann.html) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_5DAISY_l2_flann.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/airsim/2_8GFTTDetector_5DAISY_l2_flann.html) | [PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/uav/8_8GFTTDetector_5DAISY_l2_flann.png), [HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/uav/8_8GFTTDetector_5DAISY_l2_flann.html) |
+
+## Citation
+
+If you use this work please cite (placeholder BibTeX):
+
+```bibtex
+@phdthesis{Elmas2025UAVEfficiency,
+  title={Towards Efficient 3D Reconstruction from UAV Imagery: Evaluation of OpenCV Feature Detection, Description and Matching Combinations},
+  author={Ammar Abbas Elmas},
+  school={PhD Thesis},
+  year={2025}
+}
+```
 
 ## Acknowledgements
 
