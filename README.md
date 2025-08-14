@@ -4,7 +4,7 @@ This repository contains the experimental framework, datasets links, evaluation 
 
 Towards Efficient 3D Reconstruction from UAV Imagery: Evaluation of OpenCV Feature Detection, Description and Matching Combinations.
 
-The work systematically benchmarks (nearly) all feasible OpenCV detector–descriptor–matcher combinations across synthetic, benchmark (Oxford), curated UAV, AirSim (multi‑layer simulated), and full real UAV image sets (Pix4D Small Building) and integrates them into a COLMAP / pycolmap sparse reconstruction pipeline. A composite, objectively weighted Efficiency Score balances quality and computational cost (multi‑platform: server vs mobile CPUs) to recommend practical pipelines.
+The work systematically benchmarks almost all feasible OpenCV detector–descriptor–matcher combinations across Synthetic, Oxford, UAV, AirSim, and Drone and integrates them into a COLMAP / pycolmap sparse reconstruction pipeline. A composite, objectively weighted Efficiency Score balances quality and computational cost (multi‑platform: server vs mobile CPUs) to recommend practical pipelines.
 
 ## Key Objectives
 
@@ -83,7 +83,18 @@ If you use this work please cite (placeholder BibTeX):
 | **UAV**       | [uav](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav.html)                      | [uavAll](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavAll.html)                                                                                                                | [uavTiming](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uavTiming.html)                                                                                                                        | [uav Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Correlation.html)                      | [uav Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Efficiency.html)                    | [uav Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Heatmap.html)                      | [uav Violin](https://abbaselmas.github.io/Phd-Evaluation/html/uav/uav_Violin.html)                    |
 | **AirSim**    | [airsim](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim.html)             | [airsimAll](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimAll.html)                                                                                                       | [airsimTiming](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsimTiming.html)                                                                                                               | [airsim Correlation](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Correlation.html)             | [airsim Efficiency](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Efficiency.html)           | [airsim Heatmap](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Heatmap.html)             | [airsim Violin](https://abbaselmas.github.io/Phd-Evaluation/html/airsim/airsim_Violin.html)           |
 
-## Combined Detection/Descriptor Visualization Table
+## Recommendations
+
+| Method Combination | PNG | HTML |
+|--------------------|-----|------|
+|GFTT_H BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2GFTT_H_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2GFTT_H_11BEBLID_ham_bf.html)|
+|STAR BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2STAR_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2STAR_11BEBLID_ham_bf.html)|
+|AGAST BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2AGAST_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2AGAST_11BEBLID_ham_bf.html)|
+|ORB BEBLID|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_11BEBLID_ham_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_11BEBLID_ham_bf.html)|
+|GFTT BRISK|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2GFTT_3BRISK_l2_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2GFTT_3BRISK_l2_bf.html)|
+|ORB DAISY|[PNG](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_5DAISY_l2_bf.png)|[HTML](https://abbaselmas.github.io/Phd-Evaluation/draws/drone/17_2ORB_5DAISY_l2_bf.html)|
+
+## Combined Detection/Descriptor Visualization Table (Efficiency Top 30)
 
 | Detector-Descriptor Combination | Drone | AirSim | UAV |
 |---------------------------------|-------|--------|-----|
@@ -123,4 +134,4 @@ Supported by TÜBİTAK BİDEB 2211-A National PhD Scholarship Program.
 
 ## License
 
-Academic / research use permitted. (Add explicit LICENSE file if required.)
+Academic / research use permitted.
