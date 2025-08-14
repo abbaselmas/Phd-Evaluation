@@ -21,12 +21,12 @@ The work systematically benchmarks almost all feasible OpenCV detector–descrip
 2. Cross-platform timing and inlier-normalized (per 1K inliers) efficiency comparison.
 3. Objective multi-weight fusion Efficiency Score (Entropy / PCA / CRITIC / Variance).
 4. Integration of alternative OpenCV pipelines into COLMAP workflow via pycolmap.
-5. Multi-layer AirSim synthetic acquisition design (grid densities + angle schema).
+5. Multi-layer AirSim synthetic image acquisition.
 6. Single‑image controlled synthetic transformation dataset (intensity, scale, rotation).
-7. Curated real UAV pair dataset plus full Pix4D sequence benchmark.
-8. Interactive Plotly dashboards (timing, correlations, efficiency heatmaps, violin, sparse model visuals).
+7. Curated UAV dataset from Pix4D projects.
+8. Interactive Plotly dashboards (timing, correlations, efficiency heatmaps, violin plots).
 9. Parameter optimization strategy for fair detector/descriptor comparison.
-10. Public release enabling replication and extension.
+10. Public release enabling reproducibility.
 
 ## Datasets
 
@@ -47,7 +47,7 @@ The work systematically benchmarks almost all feasible OpenCV detector–descrip
 5. Weighting & Efficiency Score: Normalize metrics, compute unsupervised weights (Entropy, PCA, CRITIC, Variance), aggregate with fusion strategy to produce composite ranking.
 6. Visualization: Plotly interactive HTML (correlation matrices, timing bars, heatmaps, violin, efficiency tables, sparse model comparisons).
 
-## Repository Structure (Simplified)
+## Repository Structure
 
 - `main.py` / pipeline orchestration
 - `drone.py`, `uav.py`, `airsim.py`, `synthetic.py`, `oxfordAffine.py` dataset handlers
